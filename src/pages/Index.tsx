@@ -20,7 +20,7 @@ const Index = () => {
       {/* Hero Section */}
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
         <div className="text-center max-w-2xl mx-auto">
-          <h1 className="text-6xl md:text-8xl font-bold text-black mb-8 animate-fade-in" style={{ fontFamily: "'Dancing Script', cursive" }}>
+          <h1 className="text-6xl md:text-8xl font-bold text-black mb-8 animate-fade-in" style={{ fontFamily: "'Pacifico', cursive", letterSpacing: '0.05em' }}>
             САЙТ ЖЕЛАНИЙ
           </h1>
           
