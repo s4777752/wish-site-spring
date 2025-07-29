@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,8 +9,39 @@ const Index = () => {
   const [wish, setWish] = useState('');
   const [showPayment, setShowPayment] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const amounts = [250, 500, 1000, 1500, 2000, 2500];
+
+  const handlePayment = () => {
+    setShowConfetti(true);
+    setTimeout(() => setShowConfetti(false), 5000);
+  };
+
+  useEffect(() => {
+    if (showConfetti) {
+      const confettiCount = 50;
+      const confetti = [];
+      
+      for (let i = 0; i < confettiCount; i++) {
+        const confettiPiece = document.createElement('div');
+        confettiPiece.className = 'confetti-piece';
+        confettiPiece.style.left = Math.random() * 100 + '%';
+        confettiPiece.style.animationDelay = Math.random() * 3 + 's';
+        confettiPiece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        document.body.appendChild(confettiPiece);
+        confetti.push(confettiPiece);
+      }
+      
+      setTimeout(() => {
+        confetti.forEach(piece => {
+          if (piece.parentNode) {
+            piece.parentNode.removeChild(piece);
+          }
+        });
+      }, 5000);
+    }
+  }, [showConfetti]);
 
   const handleWishSubmit = () => {
     if (wish.trim()) {
@@ -19,7 +50,41 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <>
+      <style>{`
+        .confetti-piece {
+          position: fixed;
+          width: 10px;
+          height: 10px;
+          background: linear-gradient(45deg, #c0c0c0, #e5e5e5, #b8b8b8);
+          top: -10px;
+          z-index: 1000;
+          animation: confetti-fall linear forwards;
+          opacity: 0.9;
+        }
+        
+        .confetti-piece:nth-child(odd) {
+          background: linear-gradient(45deg, #d3d3d3, #silver, #a8a8a8);
+          border-radius: 50%;
+        }
+        
+        .confetti-piece:nth-child(even) {
+          background: linear-gradient(45deg, #c9c9c9, #f0f0f0, #b0b0b0);
+          transform: rotate(45deg);
+        }
+        
+        @keyframes confetti-fall {
+          0% {
+            transform: translateY(-100vh) rotate(0deg);
+            opacity: 1;
+          }
+          100% {
+            transform: translateY(100vh) rotate(720deg);
+            opacity: 0;
+          }
+        }
+      `}</style>
+      <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <div className="flex flex-col items-center justify-center min-h-screen px-4">
         <div className="text-center max-w-2xl mx-auto">
@@ -87,7 +152,10 @@ const Index = () => {
                           <p className="text-gray-600">За исполнение желания</p>
                         </div>
                         
-                        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-6 rounded-lg">
+                        <Button 
+                          onClick={handlePayment}
+                          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-6 rounded-lg"
+                        >
                           <Icon name="Sparkles" size={20} className="mr-2" />
                           Оплатить {selectedAmount} руб
                         </Button>
@@ -190,7 +258,8 @@ const Index = () => {
           </p>
         </div>
       </footer>
-    </div>
+      </div>
+    </>
   );
 };
 
