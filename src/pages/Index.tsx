@@ -39,7 +39,7 @@ const Index = () => {
               
               <Button 
                 onClick={handleWishSubmit}
-                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg transition-all hover:scale-105"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-none transition-all hover:scale-105"
                 disabled={!wish.trim()}
               >
                 ОК
