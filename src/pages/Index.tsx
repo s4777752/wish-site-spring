@@ -8,6 +8,9 @@ import Icon from '@/components/ui/icon';
 const Index = () => {
   const [wish, setWish] = useState('');
   const [showPayment, setShowPayment] = useState(false);
+  const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+
+  const amounts = [250, 500, 1000, 1500, 2000, 2500];
 
   const handleWishSubmit = () => {
     if (wish.trim()) {
@@ -63,37 +66,39 @@ const Index = () => {
                 </p>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer border-2 hover:border-indigo-300">
-                    <div className="flex items-center space-x-3">
-                      <Icon name="CreditCard" size={24} className="text-indigo-600" />
-                      <div>
-                        <h3 className="font-semibold">Банковская карта</h3>
-                        <p className="text-sm text-gray-600">Visa, MasterCard</p>
-                      </div>
-                    </div>
-                  </Card>
-                  
-                  <Card className="p-4 hover:shadow-md transition-shadow cursor-pointer border-2 hover:border-indigo-300">
-                    <div className="flex items-center space-x-3">
-                      <Icon name="Smartphone" size={24} className="text-indigo-600" />
-                      <div>
-                        <h3 className="font-semibold">СБП</h3>
-                        <p className="text-sm text-gray-600">Система быстрых платежей</p>
-                      </div>
-                    </div>
-                  </Card>
+                <div className="text-center mb-6">
+                  <h3 className="text-xl font-semibold mb-4">Выберите сумму оплаты</h3>
                 </div>
                 
-                <div className="text-center py-4">
-                  <div className="text-3xl font-bold text-indigo-600 mb-2">₽ 999</div>
-                  <p className="text-gray-600">За исполнение желания</p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                  {amounts.map((amount) => (
+                    <button
+                      key={amount}
+                      onClick={() => setSelectedAmount(amount)}
+                      className={`p-4 rounded-lg border-2 text-lg font-semibold transition-all hover:scale-105 ${
+                        selectedAmount === amount
+                          ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                          : 'border-gray-300 bg-white text-gray-700 hover:border-indigo-300'
+                      }`}
+                    >
+                      ₽ {amount}
+                    </button>
+                  ))}
                 </div>
                 
-                <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-6 rounded-lg">
-                  <Icon name="Sparkles" size={20} className="mr-2" />
-                  Оплатить и загадать желание
-                </Button>
+                {selectedAmount && (
+                  <div className="space-y-4">
+                    <div className="text-center py-4 bg-gray-50 rounded-lg">
+                      <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {selectedAmount}</div>
+                      <p className="text-gray-600">За исполнение желания</p>
+                    </div>
+                    
+                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-6 rounded-lg">
+                      <Icon name="Sparkles" size={20} className="mr-2" />
+                      Оплатить {selectedAmount} руб
+                    </Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
