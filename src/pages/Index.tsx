@@ -47,63 +47,61 @@ const Index = () => {
               >
                 ОК
               </Button>
+              
+              {/* Payment Section - показывается сразу на той же странице */}
+              {showPayment && (
+                <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
+                  <CardHeader className="text-center">
+                    <CardTitle className="text-2xl font-bold text-black mb-4">
+                      Страница оплаты
+                    </CardTitle>
+                    <p className="text-gray-600">
+                      Ваше желание: "{wish}"
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-semibold mb-4">Выберите сумму оплаты</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                      {amounts.map((amount) => (
+                        <button
+                          key={amount}
+                          onClick={() => setSelectedAmount(amount)}
+                          className={`p-4 rounded-lg border-2 text-lg font-semibold transition-all hover:scale-105 ${
+                            selectedAmount === amount
+                              ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
+                              : 'border-gray-300 bg-white text-gray-700 hover:border-indigo-300'
+                          }`}
+                        >
+                          ₽ {amount}
+                        </button>
+                      ))}
+                    </div>
+                    
+                    {selectedAmount && (
+                      <div className="space-y-4">
+                        <div className="text-center py-4 bg-gray-50 rounded-lg">
+                          <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {selectedAmount}</div>
+                          <p className="text-gray-600">За исполнение желания</p>
+                        </div>
+                        
+                        <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-6 rounded-lg">
+                          <Icon name="Sparkles" size={20} className="mr-2" />
+                          Оплатить {selectedAmount} руб
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Payment Section */}
-      {showPayment && (
-        <div className="py-20 px-4 bg-gray-50">
-          <div className="max-w-2xl mx-auto">
-            <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in">
-              <CardHeader className="text-center">
-                <CardTitle className="text-3xl font-bold text-black mb-4">
-                  Страница оплаты
-                </CardTitle>
-                <p className="text-gray-600">
-                  Ваше желание: "{wish}"
-                </p>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="text-center mb-6">
-                  <h3 className="text-xl font-semibold mb-4">Выберите сумму оплаты</h3>
-                </div>
-                
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                  {amounts.map((amount) => (
-                    <button
-                      key={amount}
-                      onClick={() => setSelectedAmount(amount)}
-                      className={`p-4 rounded-lg border-2 text-lg font-semibold transition-all hover:scale-105 ${
-                        selectedAmount === amount
-                          ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                          : 'border-gray-300 bg-white text-gray-700 hover:border-indigo-300'
-                      }`}
-                    >
-                      ₽ {amount}
-                    </button>
-                  ))}
-                </div>
-                
-                {selectedAmount && (
-                  <div className="space-y-4">
-                    <div className="text-center py-4 bg-gray-50 rounded-lg">
-                      <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {selectedAmount}</div>
-                      <p className="text-gray-600">За исполнение желания</p>
-                    </div>
-                    
-                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-6 rounded-lg">
-                      <Icon name="Sparkles" size={20} className="mr-2" />
-                      Оплатить {selectedAmount} руб
-                    </Button>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      )}
+
 
       {/* Rules Section */}
       <div className="py-20 px-4">
