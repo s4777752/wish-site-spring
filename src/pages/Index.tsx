@@ -15,32 +15,55 @@ const Index = () => {
 
   const handlePayment = () => {
     setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 5000);
   };
 
   useEffect(() => {
+    let confettiInterval: NodeJS.Timeout;
+    
     if (showConfetti) {
-      const confettiCount = 50;
-      const confetti = [];
+      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43', '#10ac84', '#ee5a6f', '#c44569', '#786fa6', '#f8b500'];
       
-      for (let i = 0; i < confettiCount; i++) {
+      const createConfetti = () => {
         const confettiPiece = document.createElement('div');
-        confettiPiece.className = 'confetti-piece';
+        const size = Math.random() * 8 + 4; // от 4px до 12px
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const shape = Math.random() > 0.5 ? 'circle' : 'square';
+        
+        confettiPiece.style.position = 'fixed';
+        confettiPiece.style.width = size + 'px';
+        confettiPiece.style.height = size + 'px';
+        confettiPiece.style.backgroundColor = color;
         confettiPiece.style.left = Math.random() * 100 + '%';
-        confettiPiece.style.animationDelay = Math.random() * 3 + 's';
-        confettiPiece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+        confettiPiece.style.top = '-20px';
+        confettiPiece.style.zIndex = '1000';
+        confettiPiece.style.pointerEvents = 'none';
+        confettiPiece.style.borderRadius = shape === 'circle' ? '50%' : '0';
+        
+        const duration = Math.random() * 4 + 3; // от 3s до 7s
+        const rotation = Math.random() * 360;
+        
+        confettiPiece.style.animation = `confetti-fall ${duration}s linear infinite`;
+        confettiPiece.style.transform = `rotate(${rotation}deg)`;
+        
         document.body.appendChild(confettiPiece);
-        confetti.push(confettiPiece);
-      }
-      
-      setTimeout(() => {
-        confetti.forEach(piece => {
-          if (piece.parentNode) {
-            piece.parentNode.removeChild(piece);
+        
+        // Удаляем элемент после анимации
+        setTimeout(() => {
+          if (confettiPiece.parentNode) {
+            confettiPiece.parentNode.removeChild(confettiPiece);
           }
-        });
-      }, 5000);
+        }, duration * 1000);
+      };
+      
+      // Создаем конфетти каждые 100мс
+      confettiInterval = setInterval(createConfetti, 100);
     }
+    
+    return () => {
+      if (confettiInterval) {
+        clearInterval(confettiInterval);
+      }
+    };
   }, [showConfetti]);
 
   const handleWishSubmit = () => {
@@ -52,35 +75,14 @@ const Index = () => {
   return (
     <>
       <style>{`
-        .confetti-piece {
-          position: fixed;
-          width: 10px;
-          height: 10px;
-          background: linear-gradient(45deg, #c0c0c0, #e5e5e5, #b8b8b8);
-          top: -10px;
-          z-index: 1000;
-          animation: confetti-fall linear forwards;
-          opacity: 0.9;
-        }
-        
-        .confetti-piece:nth-child(odd) {
-          background: linear-gradient(45deg, #d3d3d3, #silver, #a8a8a8);
-          border-radius: 50%;
-        }
-        
-        .confetti-piece:nth-child(even) {
-          background: linear-gradient(45deg, #c9c9c9, #f0f0f0, #b0b0b0);
-          transform: rotate(45deg);
-        }
-        
         @keyframes confetti-fall {
           0% {
-            transform: translateY(-100vh) rotate(0deg);
+            transform: translateY(-20px) rotate(0deg);
             opacity: 1;
           }
           100% {
             transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
+            opacity: 0.3;
           }
         }
       `}</style>
