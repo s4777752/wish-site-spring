@@ -16,9 +16,7 @@ const Index = () => {
     number: '',
     expiry: '',
     cvv: '',
-    name: '',
-    terminal: '',
-    password: ''
+    name: ''
   });
 
   const amounts = [250, 500, 1000, 1500, 2000, 2500];
@@ -246,34 +244,6 @@ const Index = () => {
                                   className="text-lg"
                                 />
                               </div>
-                              
-                              <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Терминал
-                                  </label>
-                                  <Input
-                                    type="text"
-                                    placeholder="1753877385684DEMO"
-                                    value={cardData.terminal}
-                                    onChange={(e) => setCardData({...cardData, terminal: e.target.value})}
-                                    className="text-lg"
-                                  />
-                                </div>
-                                
-                                <div>
-                                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                                    Пароль
-                                  </label>
-                                  <Input
-                                    type="password"
-                                    placeholder="YIGIgjO7hbNyPy!"
-                                    value={cardData.password}
-                                    onChange={(e) => setCardData({...cardData, password: e.target.value})}
-                                    className="text-lg"
-                                  />
-                                </div>
-                              </div>
                             </div>
                             
                             <div className="flex space-x-3">
@@ -286,7 +256,7 @@ const Index = () => {
                               </Button>
                               <Button 
                                 onClick={handlePayment}
-                                disabled={!cardData.number || !cardData.expiry || !cardData.cvv || !cardData.name || !cardData.terminal || !cardData.password}
+                                disabled={!cardData.number || !cardData.expiry || !cardData.cvv || !cardData.name}
                                 className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
                               >
                                 <Icon name="Sparkles" size={20} className="mr-2" />
