@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
@@ -10,6 +11,13 @@ const Index = () => {
   const [showPayment, setShowPayment] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showCardForm, setShowCardForm] = useState(false);
+  const [cardData, setCardData] = useState({
+    number: '',
+    expiry: '',
+    cvv: '',
+    name: ''
+  });
 
   const amounts = [250, 500, 1000, 1500, 2000, 2500];
 
@@ -154,13 +162,109 @@ const Index = () => {
                           <p className="text-gray-600">За исполнение желания</p>
                         </div>
                         
-                        <Button 
-                          onClick={handlePayment}
-                          className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-lg py-6 rounded-lg"
-                        >
-                          <Icon name="Sparkles" size={20} className="mr-2" />
-                          Оплатить {selectedAmount} руб
-                        </Button>
+                        {!showCardForm ? (
+                          <Button 
+                            onClick={() => setShowCardForm(true)}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg"
+                          >
+                            <Icon name="CreditCard" size={20} className="mr-2" />
+                            Оплатить картой
+                          </Button>
+                        ) : (
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-1 gap-4">
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                  Номер карты
+                                </label>
+                                <Input
+                                  type="text"
+                                  placeholder="1234 5678 9012 3456"
+                                  value={cardData.number}
+                                  onChange={(e) => {
+                                    let value = e.target.value.replace(/\D/g, '');
+                                    value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+                                    if (value.length <= 19) {
+                                      setCardData({...cardData, number: value});
+                                    }
+                                  }}
+                                  className="text-lg"
+                                />
+                              </div>
+                              
+                              <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    Срок действия
+                                  </label>
+                                  <Input
+                                    type="text"
+                                    placeholder="ММ/ГГ"
+                                    value={cardData.expiry}
+                                    onChange={(e) => {
+                                      let value = e.target.value.replace(/\D/g, '');
+                                      if (value.length >= 2) {
+                                        value = value.substring(0,2) + '/' + value.substring(2,4);
+                                      }
+                                      if (value.length <= 5) {
+                                        setCardData({...cardData, expiry: value});
+                                      }
+                                    }}
+                                    className="text-lg"
+                                  />
+                                </div>
+                                
+                                <div>
+                                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                                    CVV
+                                  </label>
+                                  <Input
+                                    type="text"
+                                    placeholder="123"
+                                    maxLength={3}
+                                    value={cardData.cvv}
+                                    onChange={(e) => {
+                                      const value = e.target.value.replace(/\D/g, '');
+                                      setCardData({...cardData, cvv: value});
+                                    }}
+                                    className="text-lg"
+                                  />
+                                </div>
+                              </div>
+                              
+                              <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-2">
+                                  Имя на карте
+                                </label>
+                                <Input
+                                  type="text"
+                                  placeholder="IVAN PETROV"
+                                  value={cardData.name}
+                                  onChange={(e) => setCardData({...cardData, name: e.target.value.toUpperCase()})}
+                                  className="text-lg"
+                                />
+                              </div>
+                            </div>
+                            
+                            <div className="flex space-x-3">
+                              <Button 
+                                onClick={() => setShowCardForm(false)}
+                                variant="outline"
+                                className="flex-1"
+                              >
+                                Назад
+                              </Button>
+                              <Button 
+                                onClick={handlePayment}
+                                disabled={!cardData.number || !cardData.expiry || !cardData.cvv || !cardData.name}
+                                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                              >
+                                <Icon name="Sparkles" size={20} className="mr-2" />
+                                Оплатить {selectedAmount} ₽
+                              </Button>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </CardContent>
