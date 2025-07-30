@@ -12,16 +12,11 @@ const Index = () => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
-  const [showSBPForm, setShowSBPForm] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [selectedBank, setSelectedBank] = useState('');
   const [cardData, setCardData] = useState({
     number: '',
     expiry: '',
     cvv: '',
-    name: '',
-    terminal: '',
-    password: ''
+    name: ''
   });
 
   const amounts = [250, 500, 1000, 1500, 2000, 2500];
@@ -167,105 +162,14 @@ const Index = () => {
                           <p className="text-gray-600">За исполнение желания</p>
                         </div>
                         
-                        {!showCardForm && !showSBPForm ? (
-                          <div className="space-y-3">
-                            <Button 
-                              onClick={() => setShowSBPForm(true)}
-                              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg py-6 rounded-lg"
-                            >
-                              <Icon name="Smartphone" size={20} className="mr-2" />
-                              СБП (Быстрые платежи)
-                            </Button>
-                            <Button 
-                              onClick={() => setShowCardForm(true)}
-                              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg"
-                            >
-                              <Icon name="CreditCard" size={20} className="mr-2" />
-                              Оплатить картой
-                            </Button>
-                          </div>
-                        ) : showSBPForm ? (
-                          <div className="space-y-4">
-                            <div className="text-center mb-4">
-                              <h4 className="text-lg font-semibold text-blue-600 mb-2">Система быстрых платежей</h4>
-                              <p className="text-sm text-gray-600">Оплата по номеру телефона через банковское приложение</p>
-                            </div>
-                            
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Номер телефона
-                              </label>
-                              <Input
-                                type="tel"
-                                placeholder="+7 (___) ___-__-__"
-                                value={phoneNumber}
-                                onChange={(e) => {
-                                  let value = e.target.value.replace(/\D/g, '');
-                                  if (value.startsWith('8')) value = '7' + value.slice(1);
-                                  if (value.startsWith('7') && value.length <= 11) {
-                                    const formatted = value.length > 1 ? 
-                                      `+7 (${value.slice(1, 4)}) ${value.slice(4, 7)}-${value.slice(7, 9)}-${value.slice(9, 11)}` :
-                                      value;
-                                    setPhoneNumber(formatted);
-                                  } else if (value.length <= 11) {
-                                    setPhoneNumber(value);
-                                  }
-                                }}
-                                className="text-lg"
-                              />
-                            </div>
-                            
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-2">
-                                Выберите банк
-                              </label>
-                              <div className="grid grid-cols-2 gap-3">
-                                {[
-                                  { name: 'Сбербанк', icon: '🟢' },
-                                  { name: 'ВТБ', icon: '🔵' },
-                                  { name: 'Тинькофф', icon: '🟡' },
-                                  { name: 'Альфа-Банк', icon: '🔴' },
-                                  { name: 'Газпромбанк', icon: '⚫' },
-                                  { name: 'Другой банк', icon: '💳' }
-                                ].map((bank) => (
-                                  <button
-                                    key={bank.name}
-                                    onClick={() => setSelectedBank(bank.name)}
-                                    className={`p-3 rounded-lg border-2 text-sm font-medium transition-all hover:scale-105 ${
-                                      selectedBank === bank.name
-                                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                        : 'border-gray-300 bg-white text-gray-700 hover:border-blue-300'
-                                    }`}
-                                  >
-                                    <div className="text-lg mb-1">{bank.icon}</div>
-                                    {bank.name}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                            
-                            <div className="flex space-x-3">
-                              <Button 
-                                onClick={() => {
-                                  setShowSBPForm(false);
-                                  setPhoneNumber('');
-                                  setSelectedBank('');
-                                }}
-                                variant="outline"
-                                className="flex-1"
-                              >
-                                Назад
-                              </Button>
-                              <Button 
-                                onClick={handlePayment}
-                                disabled={!phoneNumber.includes('+7') || !selectedBank}
-                                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                              >
-                                <Icon name="Smartphone" size={20} className="mr-2" />
-                                Оплатить {selectedAmount} ₽
-                              </Button>
-                            </div>
-                          </div>
+                        {!showCardForm ? (
+                          <Button 
+                            onClick={() => setShowCardForm(true)}
+                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg"
+                          >
+                            <Icon name="CreditCard" size={20} className="mr-2" />
+                            Оплатить картой
+                          </Button>
                         ) : (
                           <div className="space-y-4">
                             <div className="grid grid-cols-1 gap-4">
@@ -344,17 +248,7 @@ const Index = () => {
                             
                             <div className="flex space-x-3">
                               <Button 
-                                onClick={() => {
-                                  setShowCardForm(false);
-                                  setCardData({
-                                    number: '',
-                                    expiry: '',
-                                    cvv: '',
-                                    name: '',
-                                    terminal: '',
-                                    password: ''
-                                  });
-                                }}
+                                onClick={() => setShowCardForm(false)}
                                 variant="outline"
                                 className="flex-1"
                               >
