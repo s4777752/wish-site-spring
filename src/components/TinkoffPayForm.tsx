@@ -46,7 +46,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
           if (receiptInput) {
             receiptInput.value = JSON.stringify({
               "EmailCompany": "mail@poehali.dev",
-              "Taxation": "patent",
+              "Taxation": "usn_income",
               "FfdVersion": "1.2",
               "Items": [
                 {
