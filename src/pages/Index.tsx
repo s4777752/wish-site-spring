@@ -169,23 +169,14 @@ const Index = () => {
                           <p className="text-gray-600">За исполнение желания</p>
                         </div>
                         
-                        {!showCardForm && !showSBPForm && !showTinkoffForm ? (
-                          <div className="space-y-3">
-                            <Button 
-                              onClick={() => setShowTinkoffForm(true)}
-                              className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
-                            >
-                              <Icon name="Banknote" size={20} className="mr-2" />
-                              Тинькофф Эквайринг
-                            </Button>
-                            <Button 
-                              onClick={() => setShowSBPForm(true)}
-                              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-lg py-6 rounded-lg"
-                            >
-                              <Icon name="Smartphone" size={20} className="mr-2" />
-                              СБП (Быстрые платежи)
-                            </Button>
-                          </div>
+                        {!showTinkoffForm ? (
+                          <Button 
+                            onClick={() => setShowTinkoffForm(true)}
+                            className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
+                          >
+                            <Icon name="Banknote" size={20} className="mr-2" />
+                            Тинькофф Эквайринг
+                          </Button>
                         ) : showTinkoffForm ? (
                           <div className="space-y-4">
                             <TinkoffPayForm 
