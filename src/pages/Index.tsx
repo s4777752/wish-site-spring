@@ -185,13 +185,6 @@ const Index = () => {
                               <Icon name="Smartphone" size={20} className="mr-2" />
                               СБП (Быстрые платежи)
                             </Button>
-                            <Button 
-                              onClick={() => setShowCardForm(true)}
-                              className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg"
-                            >
-                              <Icon name="CreditCard" size={20} className="mr-2" />
-                              Оплатить картой
-                            </Button>
                           </div>
                         ) : showTinkoffForm ? (
                           <div className="space-y-4">
