@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface TinkoffPayFormProps {
   amount: number;
@@ -12,25 +12,76 @@ declare global {
 }
 
 const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComplete }) => {
+  const formRef = useRef<HTMLFormElement>(null);
+
   useEffect(() => {
     // Генерируем уникальный номер заказа
     const orderId = Date.now().toString();
-    const orderInput = document.querySelector('input[name="order"]') as HTMLInputElement;
-    if (orderInput) {
-      orderInput.value = orderId;
-    }
-  }, []);
+    if (formRef.current) {
+      const orderInput = formRef.current.querySelector('input[name="order"]') as HTMLInputElement;
+      if (orderInput) {
+        orderInput.value = orderId;
+      }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (window.pay) {
-      window.pay(e.currentTarget);
-      // Симулируем успешную оплату для демо
-      setTimeout(() => {
-        onPaymentComplete();
-      }, 2000);
+      // Добавляем обработчик формы
+      const handleFormSubmit = (e: Event) => {
+        e.preventDefault();
+        const form = e.target as HTMLFormElement;
+        const formData = new FormData(form);
+        
+        const description = formData.get('description') as string;
+        const amount = formData.get('amount') as string;
+        const email = formData.get('email') as string;
+        const phone = formData.get('phone') as string;
+        const receipt = formData.get('receipt') as string;
+
+        // Если нужен чек
+        if (receipt !== null) {
+          if (!email && !phone) {
+            alert("Поле E-mail или Phone не должно быть пустым");
+            return;
+          }
+
+          const receiptInput = form.querySelector('input[name="receipt"]') as HTMLInputElement;
+          if (receiptInput) {
+            receiptInput.value = JSON.stringify({
+              "EmailCompany": "mail@poehali.dev",
+              "Taxation": "patent",
+              "FfdVersion": "1.2",
+              "Items": [
+                {
+                  "Name": description || "Исполнение желания",
+                  "Price": Math.round(parseFloat(amount) * 100),
+                  "Quantity": 1.00,
+                  "Amount": Math.round(parseFloat(amount) * 100),
+                  "PaymentMethod": "full_prepayment",
+                  "PaymentObject": "service",
+                  "Tax": "none",
+                  "MeasurementUnit": "pc"
+                }
+              ]
+            });
+          }
+        }
+
+        if (window.pay) {
+          window.pay(form);
+          // Симулируем успешную оплату для демо
+          setTimeout(() => {
+            onPaymentComplete();
+          }, 3000);
+        }
+      };
+
+      formRef.current.addEventListener('submit', handleFormSubmit);
+      
+      return () => {
+        if (formRef.current) {
+          formRef.current.removeEventListener('submit', handleFormSubmit);
+        }
+      };
     }
-  };
+  }, [amount, onPaymentComplete]);
 
   return (
     <>
@@ -89,9 +140,10 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
       </div>
 
       <form 
+        ref={formRef}
         className="payform-tbank" 
-        name="payform-tbank" 
-        onSubmit={handleSubmit}
+        name="payform-tbank"
+        id="payform-tbank"
       >
         <input 
           className="payform-tbank-row" 
@@ -114,8 +166,16 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
         <input 
           className="payform-tbank-row" 
           type="hidden" 
+          name="receipt" 
+          value="" 
+        />
+        <input 
+          className="payform-tbank-row" 
+          type="text" 
+          placeholder="Сумма заказа"
           name="amount" 
-          value={(amount * 100).toString()} // Тинькофф требует сумму в копейках
+          defaultValue={amount.toString()}
+          required
         />
         <input 
           className="payform-tbank-row" 
