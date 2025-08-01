@@ -6,6 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
 import TinkoffPayForm from '@/components/TinkoffPayForm';
+import SEO from '@/components/SEO';
+import StructuredData from '@/components/StructuredData';
+import Analytics from '@/components/Analytics';
 
 const Index = () => {
   const [wish, setWish] = useState('');
@@ -46,6 +49,12 @@ const Index = () => {
 
   const handlePayment = () => {
     setShowConfetti(true);
+    
+    // Отслеживаем исполнение желания в аналитике
+    const amount = getAmountFromIntensity(wishIntensity);
+    if (window.trackWish) {
+      window.trackWish(amount, wishIntensity);
+    }
   };
 
   useEffect(() => {
@@ -105,6 +114,25 @@ const Index = () => {
 
   return (
     <>
+      {/* SEO компоненты */}
+      <SEO 
+        title="Сайт желаний - Исполни своё желание | сайт-желаний.рф"
+        description="Загадайте желание и поверьте в его исполнение. Энергетический вклад через безопасную оплату. Тысячи исполненных желаний на сайт-желаний.рф"
+        keywords="желания, исполнение желаний, загадать желание, магия, энергия, исполнить мечту, сайт желаний"
+        canonical="https://сайт-желаний.рф"
+      />
+      <StructuredData 
+        type="WebSite"
+        name="Сайт желаний"
+        description="Загадайте желание и поверьте в его исполнение. Энергетический вклад через безопасную оплату."
+        url="https://сайт-желаний.рф"
+      />
+      <Analytics 
+        googleAnalyticsId="G-XXXXXXXXXX"
+        yandexMetrikaId="12345678"
+        environment="production"
+      />
+      
       <style>{`
         @keyframes confetti-fall {
           0% {
