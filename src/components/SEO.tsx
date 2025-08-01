@@ -51,7 +51,7 @@ const SEO = ({
       { name: 'twitter:image', content: ogImage },
       
       // Яндекс
-      { name: 'yandex-verification', content: 'YOUR_YANDEX_VERIFICATION_CODE' },
+      { name: 'yandex-verification', content: '1dd7ed960d8a6dd1' },
       
       // Google
       { name: 'google-site-verification', content: 'YOUR_GOOGLE_VERIFICATION_CODE' },
