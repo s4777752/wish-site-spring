@@ -136,11 +136,8 @@ const Index = () => {
           wish={wish}
           setWish={setWish}
           onSubmit={handleWishSubmit}
-        />
-
-        {/* Payment Section */}
-        {showPayment && (
-          <div className="max-w-lg mx-auto px-4 mb-8">
+          showPayment={showPayment}
+          paymentSection={
             <PaymentSection
               wish={wish}
               wishIntensity={wishIntensity}
@@ -155,8 +152,8 @@ const Index = () => {
                 onPaymentComplete={handlePayment}
               />
             </PaymentSection>
-          </div>
-        )}
+          }
+        />
 
         {/* Rules Section */}
         <RulesSection />

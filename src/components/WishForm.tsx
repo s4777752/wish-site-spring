@@ -5,9 +5,11 @@ interface WishFormProps {
   wish: string;
   setWish: (wish: string) => void;
   onSubmit: () => void;
+  showPayment: boolean;
+  paymentSection?: React.ReactNode;
 }
 
-const WishForm = ({ wish, setWish, onSubmit }: WishFormProps) => {
+const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection }: WishFormProps) => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen px-4">
       <div className="text-center max-w-2xl mx-auto">
@@ -35,6 +37,13 @@ const WishForm = ({ wish, setWish, onSubmit }: WishFormProps) => {
             >
               ОК
             </Button>
+            
+            {/* Payment Section - показывается рядом с кнопкой ОК */}
+            {showPayment && paymentSection && (
+              <div className="mt-8">
+                {paymentSection}
+              </div>
+            )}
           </div>
         </div>
       </div>
