@@ -200,11 +200,9 @@ const Terms = () => {
         <p className="text-gray-600 mb-4">
           Дата последнего обновления: 1 августа 2025 года
         </p>
-        <p className="text-sm text-gray-500">
-          ИП Иванов Иван Иванович, ИНН: 123456789012<br/>
-          Адрес: г. Москва, ул. Примерная, д. 1<br/>
-          Email: support@site-zhelaniy.ru | Телефон: +7 (800) 123-45-67
-        </p>
+        <p className="text-gray-500 font-normal text-xs">ИП ПАКЛИН СЕРГЕЙ ВАСИЛЬЕВИЧ        ИНН 594200005879
+Краснодарский край, г.Сочи , ул.Красноармейская 9 , оф 6
+эл.почта : unix7777@ya.ru</p>
       </div>
 
             </CardContent>
