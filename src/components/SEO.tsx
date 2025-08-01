@@ -54,7 +54,7 @@ const SEO = ({
       { name: 'yandex-verification', content: '1dd7ed960d8a6dd1' },
       
       // Google
-      { name: 'google-site-verification', content: 'YOUR_GOOGLE_VERIFICATION_CODE' },
+      { name: 'google-site-verification', content: 'pIGNRKC4wrlB_zCPTk7PYX8HwhrVGESlIkAJZcsHXgE' },
       
       // Дополнительные теги для лучшего SEO
       { name: 'theme-color', content: '#4f46e5' },
