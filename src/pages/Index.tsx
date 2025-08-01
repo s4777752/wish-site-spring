@@ -11,6 +11,7 @@ const Index = () => {
   const [wish, setWish] = useState('');
   const [showPayment, setShowPayment] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
+  const [wishIntensity, setWishIntensity] = useState(5);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
   const [showSBPForm, setShowSBPForm] = useState(false);
@@ -26,7 +27,22 @@ const Index = () => {
     password: ''
   });
 
-  const amounts = [250, 500, 1000, 1500, 2000, 2500];
+  // Функция для расчета суммы по интенсивности
+  const getAmountFromIntensity = (intensity: number) => intensity * 100;
+  
+  // Функция для получения цвета по интенсивности (от светло-зеленого до темно-зеленого)
+  const getColorFromIntensity = (intensity: number) => {
+    const lightGreen = { r: 144, g: 238, b: 144 }; // светло-зеленый
+    const darkGreen = { r: 0, g: 100, b: 0 }; // темно-зеленый
+    
+    const ratio = (intensity - 1) / 9; // нормализуем от 0 до 1
+    
+    const r = Math.round(lightGreen.r + (darkGreen.r - lightGreen.r) * ratio);
+    const g = Math.round(lightGreen.g + (darkGreen.g - lightGreen.g) * ratio);
+    const b = Math.round(lightGreen.b + (darkGreen.b - lightGreen.b) * ratio);
+    
+    return `rgb(${r}, ${g}, ${b})`;
+  };
 
   const handlePayment = () => {
     setShowConfetti(true);
@@ -143,30 +159,100 @@ const Index = () => {
                   </CardHeader>
                   <CardContent className="space-y-6">
                     <div className="text-center mb-6">
-                      <h3 className="text-xl font-semibold mb-4">Выберите сумму оплаты</h3>
+                      <h3 className="text-xl font-semibold mb-4">Укажите силу вашего желания</h3>
+                      <p className="text-gray-600 text-sm">Чем сильнее желание, тем больше энергии вы вкладываете в его исполнение</p>
                     </div>
                     
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-                      {amounts.map((amount) => (
-                        <button
-                          key={amount}
-                          onClick={() => setSelectedAmount(amount)}
-                          className={`p-4 rounded-lg border-2 text-lg font-semibold transition-all hover:scale-105 ${
-                            selectedAmount === amount
-                              ? 'border-indigo-500 bg-indigo-50 text-indigo-700'
-                              : 'border-gray-300 bg-white text-gray-700 hover:border-indigo-300'
-                          }`}
-                        >
-                          ₽ {amount}
-                        </button>
-                      ))}
+                    <div className="space-y-6 mb-6">
+                      {/* Индикатор силы желания */}
+                      <div className="space-y-4">
+                        <div className="flex justify-between items-center text-sm text-gray-600">
+                          <span>Слабое желание</span>
+                          <span>Сильное желание</span>
+                        </div>
+                        
+                        <div className="relative">
+                          <input
+                            type="range"
+                            min="1"
+                            max="10"
+                            value={wishIntensity}
+                            onChange={(e) => {
+                              const intensity = parseInt(e.target.value);
+                              setWishIntensity(intensity);
+                              setSelectedAmount(getAmountFromIntensity(intensity));
+                            }}
+                            className="w-full h-3 rounded-lg appearance-none cursor-pointer"
+                            style={{
+                              background: `linear-gradient(to right, 
+                                rgb(144, 238, 144) 0%, 
+                                rgb(124, 252, 0) 20%, 
+                                rgb(50, 205, 50) 40%, 
+                                rgb(34, 139, 34) 60%, 
+                                rgb(0, 128, 0) 80%, 
+                                rgb(0, 100, 0) 100%)`
+                            }}
+                          />
+                          <style>{`
+                            input[type="range"]::-webkit-slider-thumb {
+                              appearance: none;
+                              width: 24px;
+                              height: 24px;
+                              border-radius: 50%;
+                              background: ${getColorFromIntensity(wishIntensity)};
+                              border: 3px solid white;
+                              box-shadow: 0 0 10px rgba(0,0,0,0.3);
+                              cursor: pointer;
+                            }
+                            input[type="range"]::-moz-range-thumb {
+                              width: 24px;
+                              height: 24px;
+                              border-radius: 50%;
+                              background: ${getColorFromIntensity(wishIntensity)};
+                              border: 3px solid white;
+                              box-shadow: 0 0 10px rgba(0,0,0,0.3);
+                              cursor: pointer;
+                            }
+                          `}</style>
+                        </div>
+                        
+                        <div className="flex justify-between text-xs text-gray-500">
+                          {[1,2,3,4,5,6,7,8,9,10].map(num => (
+                            <span key={num} className={wishIntensity === num ? 'font-bold text-gray-800' : ''}>
+                              {num}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Визуальная карточка с силой желания */}
+                      <div 
+                        className="p-6 rounded-xl border-3 text-center transition-all duration-300"
+                        style={{
+                          backgroundColor: getColorFromIntensity(wishIntensity) + '20',
+                          borderColor: getColorFromIntensity(wishIntensity)
+                        }}
+                      >
+                        <div className="text-3xl font-bold mb-2" style={{ color: getColorFromIntensity(wishIntensity) }}>
+                          Сила: {wishIntensity}/10
+                        </div>
+                        <div className="text-lg text-gray-700 mb-1">
+                          Энергия желания: <span className="font-semibold">{getAmountFromIntensity(wishIntensity)} ₽</span>
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {wishIntensity <= 3 && "Легкое желание - небольшая энергия"}
+                          {wishIntensity >= 4 && wishIntensity <= 6 && "Умеренное желание - средняя энергия"}
+                          {wishIntensity >= 7 && wishIntensity <= 8 && "Сильное желание - большая энергия"}
+                          {wishIntensity >= 9 && "Очень сильное желание - максимальная энергия"}
+                        </div>
+                      </div>
                     </div>
                     
-                    {selectedAmount && (
+                    {wishIntensity && (
                       <div className="space-y-4">
                         <div className="text-center py-4 bg-gray-50 rounded-lg">
-                          <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {selectedAmount}</div>
-                          <p className="text-gray-600">За исполнение желания</p>
+                          <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {getAmountFromIntensity(wishIntensity)}</div>
+                          <p className="text-gray-600">Энергетический вклад в исполнение желания</p>
                         </div>
                         
                         {!showTinkoffForm ? (
@@ -180,7 +266,7 @@ const Index = () => {
                         ) : showTinkoffForm ? (
                           <div className="space-y-4">
                             <TinkoffPayForm 
-                              amount={selectedAmount!} 
+                              amount={getAmountFromIntensity(wishIntensity)} 
                               onPaymentComplete={handlePayment}
                             />
                             <Button 
@@ -269,7 +355,7 @@ const Index = () => {
                                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
                               >
                                 <Icon name="Smartphone" size={20} className="mr-2" />
-                                Оплатить {selectedAmount} ₽
+                                Оплатить {getAmountFromIntensity(wishIntensity)} ₽
                               </Button>
                             </div>
                           </div>
@@ -363,7 +449,7 @@ const Index = () => {
                                 className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
                               >
                                 <Icon name="Sparkles" size={20} className="mr-2" />
-                                Оплатить {selectedAmount} ₽
+                                Оплатить {getAmountFromIntensity(wishIntensity)} ₽
                               </Button>
                             </div>
                           </div>
