@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 
 const Terms = () => {
-  useEffect(() => {
-    document.title = 'Пользовательское соглашение - САЙТ ЖЕЛАНИЙ';
-  }, []);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50">
       <div className="container mx-auto px-4 py-12">
