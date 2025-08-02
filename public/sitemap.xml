@@ -6,64 +6,64 @@
   
   <!-- Главная страница -->
   <url>
-    <loc>https://сайт-желаний.рф/</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
   <!-- Страница исполнения желаний -->
   <url>
-    <loc>https://сайт-желаний.рф/wishes</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/wishes</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Страница о нас -->
   <url>
-    <loc>https://сайт-желаний.рф/about</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/about</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <!-- Страница контактов -->
   <url>
-    <loc>https://сайт-желаний.рф/contact</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/contact</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <!-- Страница отзывов -->
   <url>
-    <loc>https://сайт-желаний.рф/reviews</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/reviews</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <!-- Страница FAQ -->
   <url>
-    <loc>https://сайт-желаний.рф/faq</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/faq</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <!-- Политика конфиденциальности -->
   <url>
-    <loc>https://сайт-желаний.рф/privacy</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/privacy</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <!-- Пользовательское соглашение -->
   <url>
-    <loc>https://сайт-желаний.рф/terms</loc>
-    <lastmod>2024-08-01</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/terms</loc>
+    <lastmod>2025-08-02</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

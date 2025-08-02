@@ -10,10 +10,10 @@ interface StructuredDataProps {
 
 const StructuredData = ({
   type = 'WebSite',
-  name = 'Сайт желаний',
-  description = 'Загадайте желание и поверьте в его исполнение. Энергетический вклад через безопасную оплату.',
-  url = 'https://сайт-желаний.рф',
-  logo = 'https://сайт-желаний.рф/logo.png'
+  name = 'САЙТ ЖЕЛАНИЙ',
+  description = 'Загадайте желание онлайн на официальном Сайте Желаний. Энергетический вклад через безопасную оплату поможет вашему желанию исполниться. Тысячи счастливых пользователей уже исполнили свои мечты!',
+  url = 'https://wish-site-spring.poehali.dev',
+  logo = 'https://cdn.poehali.dev/intertnal/img/og.png'
 }: StructuredDataProps) => {
   
   useEffect(() => {
@@ -26,7 +26,7 @@ const StructuredData = ({
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": name,
-      "alternateName": "сайт-желаний.рф",
+      "alternateName": "Сайт Желаний",
       "description": description,
       "url": url,
       "potentialAction": {
