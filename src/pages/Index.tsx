@@ -45,42 +45,111 @@ const Index = () => {
     let confettiInterval: NodeJS.Timeout;
     
     if (showConfetti) {
-      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43', '#10ac84', '#ee5a6f', '#c44569', '#786fa6', '#f8b500'];
+      const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43', '#10ac84', '#ee5a6f', '#c44569', '#786fa6', '#f8b500', '#a55eea', '#26de81', '#fd79a8', '#fdcb6e', '#e17055'];
+      const shapes = ['circle', 'square', 'star', 'heart', 'diamond'];
       
       const createConfetti = () => {
         const confettiPiece = document.createElement('div');
-        const size = Math.random() * 8 + 4; // от 4px до 12px
+        const size = Math.random() * 12 + 6; // от 6px до 18px
         const color = colors[Math.floor(Math.random() * colors.length)];
-        const shape = Math.random() > 0.5 ? 'circle' : 'square';
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
         
         confettiPiece.style.position = 'fixed';
         confettiPiece.style.width = size + 'px';
         confettiPiece.style.height = size + 'px';
-        confettiPiece.style.backgroundColor = color;
         confettiPiece.style.left = Math.random() * 100 + '%';
-        confettiPiece.style.top = '-20px';
+        confettiPiece.style.top = '-30px';
         confettiPiece.style.zIndex = '1000';
         confettiPiece.style.pointerEvents = 'none';
-        confettiPiece.style.borderRadius = shape === 'circle' ? '50%' : '0';
         
-        const duration = Math.random() * 4 + 3; // от 3s до 7s
-        const rotation = Math.random() * 360;
+        // Разные фигуры
+        switch(shape) {
+          case 'circle':
+            confettiPiece.style.backgroundColor = color;
+            confettiPiece.style.borderRadius = '50%';
+            break;
+          case 'square':
+            confettiPiece.style.backgroundColor = color;
+            confettiPiece.style.borderRadius = '0';
+            break;
+          case 'star':
+            confettiPiece.innerHTML = '⭐';
+            confettiPiece.style.fontSize = size + 'px';
+            confettiPiece.style.lineHeight = '1';
+            break;
+          case 'heart':
+            confettiPiece.innerHTML = '💖';
+            confettiPiece.style.fontSize = size + 'px';
+            confettiPiece.style.lineHeight = '1';
+            break;
+          case 'diamond':
+            confettiPiece.innerHTML = '💎';
+            confettiPiece.style.fontSize = size + 'px';
+            confettiPiece.style.lineHeight = '1';
+            break;
+        }
         
-        confettiPiece.style.animation = `confetti-fall ${duration}s linear infinite`;
-        confettiPiece.style.transform = `rotate(${rotation}deg)`;
+        // Разная скорость падения
+        const duration = Math.random() * 6 + 2; // от 2s до 8s
+        const rotationSpeed = Math.random() * 1440 + 360; // от 360° до 1800°
+        const horizontalDrift = (Math.random() - 0.5) * 200; // боковое движение
+        
+        // Создаем уникальную анимацию для каждого элемента
+        const animationName = `confetti-fall-${Date.now()}-${Math.random()}`;
+        const keyframes = `
+          @keyframes ${animationName} {
+            0% {
+              transform: translateY(-30px) translateX(0px) rotate(0deg);
+              opacity: 1;
+            }
+            100% {
+              transform: translateY(100vh) translateX(${horizontalDrift}px) rotate(${rotationSpeed}deg);
+              opacity: 0.2;
+            }
+          }
+        `;
+        
+        // Добавляем keyframes в стили
+        const style = document.createElement('style');
+        style.textContent = keyframes;
+        document.head.appendChild(style);
+        
+        confettiPiece.style.animation = `${animationName} ${duration}s ease-in infinite`;
         
         document.body.appendChild(confettiPiece);
         
-        // Удаляем элемент после анимации
+        // Удаляем элемент и стили после анимации
         setTimeout(() => {
           if (confettiPiece.parentNode) {
             confettiPiece.parentNode.removeChild(confettiPiece);
           }
+          if (style.parentNode) {
+            style.parentNode.removeChild(style);
+          }
         }, duration * 1000);
       };
       
-      // Создаем конфетти каждые 100мс
-      confettiInterval = setInterval(createConfetti, 100);
+      // Создаем конфетти с разной частотой
+      const createBurst = () => {
+        // Создаем группу из 3-8 элементов сразу
+        const burstSize = Math.random() * 6 + 3;
+        for (let i = 0; i < burstSize; i++) {
+          setTimeout(createConfetti, i * 50);
+        }
+      };
+      
+      // Создаем взрывы конфетти каждые 200-500мс
+      const scheduleNext = () => {
+        const delay = Math.random() * 300 + 200;
+        setTimeout(() => {
+          if (showConfetti) {
+            createBurst();
+            scheduleNext();
+          }
+        }, delay);
+      };
+      
+      scheduleNext();
     }
     
     return () => {
@@ -118,16 +187,7 @@ const Index = () => {
       />
       
       <style>{`
-        @keyframes confetti-fall {
-          0% {
-            transform: translateY(-20px) rotate(0deg);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0.3;
-          }
-        }
+        /* Базовые стили для конфетти будут создаваться динамически */
       `}</style>
 
       <div className="min-h-screen bg-white">
