@@ -234,12 +234,6 @@ const Index = () => {
         {/* Footer */}
         <footer className="border-t border-gray-200 py-8">
           <div className="max-w-4xl mx-auto px-4 text-center">
-            <button 
-              onClick={testConfetti}
-              className="mb-4 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-sm"
-            >
-              🎉 Тест конфетти
-            </button>
             <p className="text-gray-600">
               © 2024 Сайт Желаний. Все права защищены.
             </p>
