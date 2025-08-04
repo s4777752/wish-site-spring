@@ -18,13 +18,12 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
     let intervalId: NodeJS.Timeout;
 
     // Снежные символы
-    const snowflakes = ['❄️', '❅', '❆', '⛄', '🌨️', '☃️', '❄', '✻', '✼', '❋'];
+    const snowflakes = ['❄️', '❅', '❆', '❄', '✻', '✼', '❋'];
     
-    // Нежные зимние цвета
-    const colors = [
-      '#FFFFFF', '#F0F8FF', '#E6F3FF', '#DDEEFF', '#CCE7FF',
-      '#B3D9FF', '#87CEEB', '#ADD8E6', '#E0F6FF', '#F5FAFF',
-      '#FFFFFF', '#FAFAFA', '#F8F8FF', '#F0F0F0'
+    // Синие цвета для снежинок
+    const blueColors = [
+      '#0066FF', '#0080FF', '#0099FF', '#00AAFF', '#1E90FF',
+      '#4169E1', '#6495ED', '#4682B4', '#5F9EA0', '#87CEEB'
     ];
 
     const createSnowflake = () => {
@@ -32,12 +31,12 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
       
       // Случайные параметры для каждой снежинки
       const snowSymbol = snowflakes[Math.floor(Math.random() * snowflakes.length)];
-      const color = colors[Math.floor(Math.random() * colors.length)];
+      const color = blueColors[Math.floor(Math.random() * blueColors.length)];
       const size = Math.random() * 15 + 8; // от 8px до 23px
       const startX = Math.random() * 100;
-      const fallDuration = Math.random() * 15000 + 10000; // от 10 до 25 секунд (очень медленно)
-      const rotationSpeed = Math.random() * 180 + 90; // мягкое вращение от 90° до 270°
-      const horizontalDrift = (Math.random() - 0.5) * 150; // плавное боковое движение
+      const fallDuration = 12000; // ОДИНАКОВАЯ скорость - 12 секунд для всех
+      const rotationSpeed = 180; // ОДИНАКОВОЕ вращение - 180° для всех
+      const horizontalDrift = (Math.random() - 0.5) * 100; // небольшое боковое движение
       
       // Базовые стили
       snowflake.style.position = 'fixed';
@@ -54,16 +53,16 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
       snowflake.style.fontSize = size + 'px';
       snowflake.style.color = color;
       snowflake.style.lineHeight = '1';
-      snowflake.style.textShadow = '0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(200,230,255,0.5)';
+      snowflake.style.textShadow = `0 0 20px ${color}80, 0 0 40px ${color}50`;
       snowflake.style.display = 'flex';
       snowflake.style.alignItems = 'center';
       snowflake.style.justifyContent = 'center';
-      snowflake.style.filter = 'drop-shadow(0 0 8px rgba(255,255,255,0.7))';
+      snowflake.style.filter = `drop-shadow(0 0 8px ${color}70)`;
       
       // Создаём уникальную плавную анимацию
       const animationId = `snow-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const swayAmount = Math.random() * 60 + 30; // плавное качание
-      const swaySpeed = Math.random() * 2 + 1; // скорость качания
+      const swayAmount = 40; // ОДИНАКОВОЕ качание для всех
+      const swaySpeed = 1.5; // ОДИНАКОВАЯ скорость качания
       
       const keyframes = `
         @keyframes ${animationId} {
