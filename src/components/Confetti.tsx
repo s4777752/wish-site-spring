@@ -2,10 +2,9 @@ import { useEffect } from 'react';
 
 interface ConfettiProps {
   isActive: boolean;
-  duration?: number;
 }
 
-const Confetti = ({ isActive, duration = 10000 }: ConfettiProps) => {
+const Confetti = ({ isActive }: ConfettiProps) => {
   useEffect(() => {
     if (!isActive) return;
 
@@ -139,10 +138,10 @@ const Confetti = ({ isActive, duration = 10000 }: ConfettiProps) => {
         }
       }, Math.random() * 400 + 200); // от 200мс до 600мс между взрывами
       
-      // Останавливаем через заданное время
-      setTimeout(() => {
-        clearInterval(interval);
-      }, duration);
+      // УБИРАЕМ timeout - конфетти падает бесконечно!
+      // setTimeout(() => {
+      //   clearInterval(interval);
+      // }, duration);
       
       return interval;
     };
@@ -152,7 +151,7 @@ const Confetti = ({ isActive, duration = 10000 }: ConfettiProps) => {
     return () => {
       clearInterval(intervalId);
     };
-  }, [isActive, duration]);
+  }, [isActive]);
 
   return null;
 };

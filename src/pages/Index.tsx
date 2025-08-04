@@ -35,10 +35,8 @@ const Index = () => {
   const handlePayment = () => {
     setShowConfetti(true);
     
-    // Останавливаем конфетти через 10 секунд
-    setTimeout(() => {
-      setShowConfetti(false);
-    }, 10000);
+    // Конфетти теперь падает постоянно без остановки!
+    // setTimeout убран - конфетти будет идти бесконечно
     
     // Отслеживаем исполнение желания в аналитике
     const amount = getAmountFromIntensity(wishIntensity);
@@ -82,7 +80,7 @@ const Index = () => {
 
       <div className="min-h-screen bg-white">
         {/* Конфетти компонент */}
-        <Confetti isActive={showConfetti} duration={10000} />
+        <Confetti isActive={showConfetti} />
         
         {/* Hero Section */}
         <WishForm 
