@@ -6,106 +6,88 @@ interface SimpleConfettiProps {
 
 const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
   useEffect(() => {
-    console.log('SimpleConfetti useEffect вызван, isActive:', isActive);
+    console.log('Snow useEffect вызван, isActive:', isActive);
     
     if (!isActive) {
-      console.log('Конфетти не активно, выходим');
+      console.log('Снег не активен, выходим');
       return;
     }
 
-    console.log('Запускаем красивое конфетти!');
+    console.log('Запускаем красивый снег!');
 
     let intervalId: NodeJS.Timeout;
 
-    // 25+ ярких цветов
+    // Снежные символы
+    const snowflakes = ['❄️', '❅', '❆', '⛄', '🌨️', '☃️', '❄', '✻', '✼', '❋'];
+    
+    // Нежные зимние цвета
     const colors = [
-      '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FECA57',
-      '#FF9FF3', '#54A0FF', '#5F27CD', '#00D2D3', '#FF9F43',
-      '#10AC84', '#EE5A6F', '#C44569', '#786FA6', '#F8B500',
-      '#A55EEA', '#26DE81', '#FD79A8', '#FDCB6E', '#E17055',
-      '#FFD700', '#FF69B4', '#00CED1', '#32CD32', '#FF4500',
-      '#DA70D6', '#87CEEB', '#FFA500', '#FF1493', '#00FF7F'
+      '#FFFFFF', '#F0F8FF', '#E6F3FF', '#DDEEFF', '#CCE7FF',
+      '#B3D9FF', '#87CEEB', '#ADD8E6', '#E0F6FF', '#F5FAFF',
+      '#FFFFFF', '#FAFAFA', '#F8F8FF', '#F0F0F0'
     ];
 
-    // Разные фигуры
-    const shapes = [
-      { type: 'circle', emoji: null },
-      { type: 'square', emoji: null },
-      { type: 'emoji', emoji: '⭐' },
-      { type: 'emoji', emoji: '💖' },
-      { type: 'emoji', emoji: '💎' },
-      { type: 'emoji', emoji: '✨' },
-      { type: 'emoji', emoji: '🎉' },
-      { type: 'emoji', emoji: '🌟' },
-      { type: 'emoji', emoji: '🎊' },
-      { type: 'emoji', emoji: '💫' }
-    ];
-
-    const createConfetti = () => {
-      const confetti = document.createElement('div');
+    const createSnowflake = () => {
+      const snowflake = document.createElement('div');
       
-      // Случайные параметры
-      const shape = shapes[Math.floor(Math.random() * shapes.length)];
+      // Случайные параметры для каждой снежинки
+      const snowSymbol = snowflakes[Math.floor(Math.random() * snowflakes.length)];
       const color = colors[Math.floor(Math.random() * colors.length)];
-      const size = Math.random() * 20 + 10; // от 10px до 30px
+      const size = Math.random() * 15 + 8; // от 8px до 23px
       const startX = Math.random() * 100;
-      const fallDuration = Math.random() * 8000 + 6000; // от 6 до 14 секунд (медленно!)
-      const rotationSpeed = Math.random() * 720 + 360; // от 360° до 1080°
-      const horizontalDrift = (Math.random() - 0.5) * 300; // боковое движение
+      const fallDuration = Math.random() * 15000 + 10000; // от 10 до 25 секунд (очень медленно)
+      const rotationSpeed = Math.random() * 180 + 90; // мягкое вращение от 90° до 270°
+      const horizontalDrift = (Math.random() - 0.5) * 150; // плавное боковое движение
       
       // Базовые стили
-      confetti.style.position = 'fixed';
-      confetti.style.left = startX + '%';
-      confetti.style.top = '-50px';
-      confetti.style.width = size + 'px';
-      confetti.style.height = size + 'px';
-      confetti.style.zIndex = '10000';
-      confetti.style.pointerEvents = 'none';
+      snowflake.style.position = 'fixed';
+      snowflake.style.left = startX + '%';
+      snowflake.style.top = '-50px';
+      snowflake.style.width = size + 'px';
+      snowflake.style.height = size + 'px';
+      snowflake.style.zIndex = '10000';
+      snowflake.style.pointerEvents = 'none';
+      snowflake.style.userSelect = 'none';
       
-      // Применяем форму
-      if (shape.type === 'circle') {
-        confetti.style.backgroundColor = color;
-        confetti.style.borderRadius = '50%';
-        confetti.style.boxShadow = `0 0 10px ${color}60`;
-      } else if (shape.type === 'square') {
-        confetti.style.backgroundColor = color;
-        confetti.style.borderRadius = '3px';
-        confetti.style.boxShadow = `0 0 10px ${color}60`;
-      } else if (shape.type === 'emoji') {
-        confetti.innerHTML = shape.emoji || '⭐';
-        confetti.style.fontSize = size + 'px';
-        confetti.style.lineHeight = '1';
-        confetti.style.textShadow = '0 0 15px rgba(255,255,255,0.8)';
-        confetti.style.display = 'flex';
-        confetti.style.alignItems = 'center';
-        confetti.style.justifyContent = 'center';
-      }
+      // Стилизация снежинки
+      snowflake.innerHTML = snowSymbol;
+      snowflake.style.fontSize = size + 'px';
+      snowflake.style.color = color;
+      snowflake.style.lineHeight = '1';
+      snowflake.style.textShadow = '0 0 20px rgba(255,255,255,0.9), 0 0 40px rgba(200,230,255,0.5)';
+      snowflake.style.display = 'flex';
+      snowflake.style.alignItems = 'center';
+      snowflake.style.justifyContent = 'center';
+      snowflake.style.filter = 'drop-shadow(0 0 8px rgba(255,255,255,0.7))';
       
-      // Создаём уникальную анимацию для каждой частицы
-      const animationId = `confetti-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const swayAmount = Math.random() * 100 + 50; // качание из стороны в сторону
+      // Создаём уникальную плавную анимацию
+      const animationId = `snow-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const swayAmount = Math.random() * 60 + 30; // плавное качание
+      const swaySpeed = Math.random() * 2 + 1; // скорость качания
       
       const keyframes = `
         @keyframes ${animationId} {
           0% {
             transform: translateY(-50px) translateX(0px) rotate(0deg);
-            opacity: 1;
+            opacity: 0;
           }
-          20% {
-            transform: translateY(20vh) translateX(${swayAmount * 0.3}px) rotate(${rotationSpeed * 0.2}deg);
-            opacity: 0.95;
-          }
-          40% {
-            transform: translateY(40vh) translateX(${-swayAmount * 0.5}px) rotate(${rotationSpeed * 0.4}deg);
-            opacity: 0.9;
-          }
-          60% {
-            transform: translateY(60vh) translateX(${swayAmount * 0.7}px) rotate(${rotationSpeed * 0.6}deg);
+          10% {
             opacity: 0.8;
           }
-          80% {
-            transform: translateY(80vh) translateX(${-swayAmount * 0.3}px) rotate(${rotationSpeed * 0.8}deg);
-            opacity: 0.6;
+          25% {
+            transform: translateY(25vh) translateX(${Math.sin(swaySpeed * 0.25) * swayAmount}px) rotate(${rotationSpeed * 0.25}deg);
+            opacity: 1;
+          }
+          50% {
+            transform: translateY(50vh) translateX(${Math.sin(swaySpeed * 0.5) * swayAmount}px) rotate(${rotationSpeed * 0.5}deg);
+            opacity: 0.9;
+          }
+          75% {
+            transform: translateY(75vh) translateX(${Math.sin(swaySpeed * 0.75) * swayAmount}px) rotate(${rotationSpeed * 0.75}deg);
+            opacity: 0.7;
+          }
+          90% {
+            opacity: 0.4;
           }
           100% {
             transform: translateY(110vh) translateX(${horizontalDrift}px) rotate(${rotationSpeed}deg);
@@ -119,43 +101,47 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
       styleElement.textContent = keyframes;
       document.head.appendChild(styleElement);
       
-      // Применяем анимацию с медленной скоростью
-      confetti.style.animation = `${animationId} ${fallDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+      // Применяем плавную анимацию
+      snowflake.style.animation = `${animationId} ${fallDuration}ms cubic-bezier(0.15, 0.5, 0.3, 0.9) forwards`;
       
-      document.body.appendChild(confetti);
+      document.body.appendChild(snowflake);
       
       // Удаляем элемент после анимации
       setTimeout(() => {
-        if (confetti.parentNode) {
-          confetti.parentNode.removeChild(confetti);
+        if (snowflake.parentNode) {
+          snowflake.parentNode.removeChild(snowflake);
         }
         if (styleElement.parentNode) {
           styleElement.parentNode.removeChild(styleElement);
         }
-      }, fallDuration + 1000);
+      }, fallDuration + 2000);
     };
 
-    const createBurst = () => {
-      // Создаём группу из 4-8 частиц
-      const burstSize = Math.random() * 5 + 4;
+    const createSnowBurst = () => {
+      // Создаём небольшую группу снежинок
+      const burstSize = Math.random() * 3 + 2; // от 2 до 5 снежинок
       
       for (let i = 0; i < burstSize; i++) {
         setTimeout(() => {
-          createConfetti();
-        }, i * Math.random() * 200);
+          createSnowflake();
+        }, i * Math.random() * 500); // плавные интервалы
       }
     };
 
-    // Создаём конфетти с разными интервалами
+    // Создаём снег с приятными интервалами
     intervalId = setInterval(() => {
-      createBurst();
-    }, Math.random() * 600 + 400); // от 400мс до 1000мс между взрывами
+      createSnowBurst();
+    }, Math.random() * 1200 + 800); // от 800мс до 2000мс между группами
     
-    // Сразу создаём первую волну
-    createBurst();
+    // Сразу создаём первые снежинки
+    createSnowBurst();
+    
+    // Добавляем дополнительные снежинки через небольшие интервалы
+    setTimeout(() => createSnowBurst(), 500);
+    setTimeout(() => createSnowBurst(), 1000);
 
     return () => {
-      console.log('Очищаем интервал конфетти');
+      console.log('Очищаем интервал снега');
       if (intervalId) {
         clearInterval(intervalId);
       }
