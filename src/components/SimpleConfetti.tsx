@@ -43,9 +43,9 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
       const color = colors[Math.floor(Math.random() * colors.length)];
       const size = Math.random() * 8 + 6; // небольшой размер: от 6px до 14px
       const startX = Math.random() * 100;
-      const fallDuration = 8000; // плавное падение 8 секунд
+      const fallDuration = 10000; // ОДИНАКОВАЯ плавная скорость - 10 секунд для всех
       const rotationSpeed = 360; // одинаковое плавное вращение
-      const horizontalDrift = (Math.random() - 0.5) * 80; // небольшое боковое движение
+      const horizontalDrift = 0; // БЕЗ бокового движения - только прямое падение
       
       // Базовые стили
       confetti.style.position = 'fixed';
@@ -99,9 +99,8 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
           break;
       }
       
-      // Создаём плавную анимацию
+      // Создаём ИДЕАЛЬНО плавную анимацию БЕЗ рывков
       const animationId = `confetti-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      const swayAmount = 30; // небольшое плавное качание
       
       const keyframes = `
         @keyframes ${animationId} {
@@ -109,26 +108,14 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
             transform: translateY(-30px) translateX(0px) rotate(0deg);
             opacity: 0;
           }
-          10% {
+          5% {
             opacity: 1;
           }
-          25% {
-            transform: translateY(25vh) translateX(${swayAmount * 0.5}px) rotate(${rotationSpeed * 0.25}deg);
+          95% {
             opacity: 1;
-          }
-          50% {
-            transform: translateY(50vh) translateX(${-swayAmount * 0.3}px) rotate(${rotationSpeed * 0.5}deg);
-            opacity: 0.9;
-          }
-          75% {
-            transform: translateY(75vh) translateX(${swayAmount * 0.2}px) rotate(${rotationSpeed * 0.75}deg);
-            opacity: 0.7;
-          }
-          90% {
-            opacity: 0.4;
           }
           100% {
-            transform: translateY(105vh) translateX(${horizontalDrift}px) rotate(${rotationSpeed}deg);
+            transform: translateY(110vh) translateX(0px) rotate(${rotationSpeed}deg);
             opacity: 0;
           }
         }
@@ -139,8 +126,8 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
       styleElement.textContent = keyframes;
       document.head.appendChild(styleElement);
       
-      // Применяем плавную анимацию
-      confetti.style.animation = `${animationId} ${fallDuration}ms cubic-bezier(0.2, 0.6, 0.4, 0.9) forwards`;
+      // Применяем ЛИНЕЙНУЮ анимацию без ускорений
+      confetti.style.animation = `${animationId} ${fallDuration}ms linear forwards`;
       
       document.body.appendChild(confetti);
       
