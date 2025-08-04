@@ -6,7 +6,7 @@ import WishForm from '@/components/WishForm';
 import PaymentSection from '@/components/PaymentSection';
 import PaymentMethods from '@/components/PaymentMethods';
 import RulesSection from '@/components/RulesSection';
-import Confetti from '@/components/Confetti';
+import SimpleConfetti from '@/components/SimpleConfetti';
 
 const Index = () => {
   const [wish, setWish] = useState('');
@@ -80,7 +80,7 @@ const Index = () => {
 
       <div className="min-h-screen bg-white">
         {/* Конфетти компонент */}
-        <Confetti isActive={showConfetti} />
+        <SimpleConfetti isActive={showConfetti} />
         
         {/* Hero Section */}
         <WishForm 
@@ -88,6 +88,10 @@ const Index = () => {
           setWish={setWish}
           onSubmit={handleWishSubmit}
           showPayment={showPayment}
+          onConfettiStart={() => {
+            console.log('Запускаю конфетти прямо сейчас!');
+            setShowConfetti(true);
+          }}
           paymentSection={
             <PaymentSection
               wish={wish}
