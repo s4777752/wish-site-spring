@@ -200,9 +200,8 @@ const Terms = () => {
         <p className="text-gray-600 mb-4">
           Дата последнего обновления: 1 августа 2025 года
         </p>
-        <p className="text-gray-500 font-normal text-xs">ИП ПАКЛИН СЕРГЕЙ ВАСИЛЬЕВИЧ        ИНН 594200005879
-Краснодарский край, г.Сочи , ул.Красноармейская 9 , оф 6
-эл.почта : unix7777@ya.ru</p>
+        <p className="text-gray-500 font-normal text-xs">ИП ПАКЛИН СЕРГЕЙ ВАСИЛЬЕВИЧ, ИНН 594200005879 
+ОГРН 305591619400016, эл.почта : unix7777@ya.ru</p>
       </div>
 
             </CardContent>
