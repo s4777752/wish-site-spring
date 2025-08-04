@@ -41,7 +41,7 @@ const SimpleConfetti = ({ isActive }: SimpleConfettiProps) => {
       // Параметры для небольшого конфетти
       const shape = shapes[Math.floor(Math.random() * shapes.length)];
       const color = colors[Math.floor(Math.random() * colors.length)];
-      const size = Math.random() * 8 + 6; // небольшой размер: от 6px до 14px
+      const size = Math.random() * 4 + 4; // маленький размер: от 4px до 8px
       const startX = Math.random() * 100;
       const fallDuration = 10000; // ОДИНАКОВАЯ плавная скорость - 10 секунд для всех
       const rotationSpeed = 360; // одинаковое плавное вращение
