@@ -31,7 +31,10 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection }: Wish
             />
             
             <Button 
-              onClick={onSubmit}
+              onClick={() => {
+                onSubmit();
+                console.log('ОК кнопка нажата!');
+              }}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg transition-all hover:scale-105 shadow-lg hover:shadow-xl"
               disabled={!wish.trim()}
             >

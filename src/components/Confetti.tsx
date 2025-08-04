@@ -8,6 +8,8 @@ const Confetti = ({ isActive }: ConfettiProps) => {
   useEffect(() => {
     if (!isActive) return;
 
+    let intervalId: NodeJS.Timeout;
+
     const colors = [
       '#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', 
       '#ff9ff3', '#54a0ff', '#5f27cd', '#00d2d3', '#ff9f43', 
@@ -26,11 +28,10 @@ const Confetti = ({ isActive }: ConfettiProps) => {
 
     const createConfettiPiece = () => {
       const confettiPiece = document.createElement('div');
-      const size = Math.random() * 15 + 8; // от 8px до 23px
+      const size = Math.random() * 15 + 8;
       const color = colors[Math.floor(Math.random() * colors.length)];
       const shape = shapes[Math.floor(Math.random() * shapes.length)];
       
-      // Позиционирование
       confettiPiece.style.position = 'fixed';
       confettiPiece.style.width = size + 'px';
       confettiPiece.style.height = size + 'px';
@@ -64,9 +65,9 @@ const Confetti = ({ isActive }: ConfettiProps) => {
       
       // Параметры анимации
       const fallDuration = Math.random() * 4 + 3; // от 3s до 7s
-      const rotationSpeed = Math.random() * 720 + 360; // от 360° до 1080°
-      const horizontalDrift = (Math.random() - 0.5) * 300; // боковое движение
-      const swayAmount = Math.random() * 50 + 25; // качание
+      const rotationSpeed = Math.random() * 720 + 360;
+      const horizontalDrift = (Math.random() - 0.5) * 300;
+      const swayAmount = Math.random() * 50 + 25;
       
       // Уникальная анимация для каждой частицы
       const animationId = `confetti-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -117,39 +118,26 @@ const Confetti = ({ isActive }: ConfettiProps) => {
     };
 
     const createBurst = () => {
-      // Случайное количество частиц в burst
-      const burstSize = Math.random() * 8 + 5; // от 5 до 13 частиц
+      const burstSize = Math.random() * 8 + 5;
       
       for (let i = 0; i < burstSize; i++) {
         setTimeout(() => {
           createConfettiPiece();
-        }, i * Math.random() * 100); // случайная задержка до 100мс
+        }, i * Math.random() * 100);
       }
     };
 
-    const startConfetti = () => {
-      createBurst(); // Начальный взрыв
-      
-      const interval = setInterval(() => {
-        if (isActive) {
-          createBurst();
-        } else {
-          clearInterval(interval);
-        }
-      }, Math.random() * 400 + 200); // от 200мс до 600мс между взрывами
-      
-      // УБИРАЕМ timeout - конфетти падает бесконечно!
-      // setTimeout(() => {
-      //   clearInterval(interval);
-      // }, duration);
-      
-      return interval;
-    };
-
-    const intervalId = startConfetti();
+    // Запускаем конфетти
+    createBurst(); // Начальный взрыв
+    
+    intervalId = setInterval(() => {
+      createBurst();
+    }, Math.random() * 400 + 200);
     
     return () => {
-      clearInterval(intervalId);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
     };
   }, [isActive]);
 
