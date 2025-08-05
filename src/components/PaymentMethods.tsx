@@ -30,6 +30,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
       <Button 
         onClick={() => setShowTinkoffForm(true)}
         className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
+        aria-label="Выбрать оплату через Тинькофф Эквайринг"
       >
         <Icon name="Banknote" size={20} className="mr-2" />
         Тинькофф Эквайринг
@@ -84,7 +85,12 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
               }
             }}
             className="text-lg"
+            aria-required="true"
+            aria-describedby="phone-help"
           />
+          <div id="phone-help" className="text-xs text-gray-500 mt-1">
+            Введите номер телефона в формате +7 (999) 999-99-99
+          </div>
         </div>
         
         <div>
@@ -108,6 +114,9 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-300 bg-white text-gray-700 hover:border-blue-300'
                 }`}
+                role="radio"
+                aria-checked={selectedBank === bank.name}
+                aria-label={`Выбрать банк ${bank.name}`}
               >
                 <div className="text-lg mb-1">{bank.icon}</div>
                 {bank.name}
@@ -161,6 +170,9 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
                 }
               }}
               className="text-lg"
+              aria-required="true"
+              aria-label="Номер банковской карты"
+              autoComplete="cc-number"
             />
           </div>
           
@@ -183,6 +195,9 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
                   }
                 }}
                 className="text-lg"
+                aria-required="true"
+                aria-label="Срок действия карты"
+                autoComplete="cc-exp"
               />
             </div>
             
@@ -191,7 +206,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
                 CVV
               </label>
               <Input
-                type="text"
+                type="password"
                 placeholder="123"
                 maxLength={3}
                 value={cardData.cvv}
@@ -200,6 +215,9 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
                   setCardData({...cardData, cvv: value});
                 }}
                 className="text-lg"
+                aria-required="true"
+                aria-label="CVV код безопасности"
+                autoComplete="cc-csc"
               />
             </div>
           </div>
@@ -214,6 +232,9 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
               value={cardData.name}
               onChange={(e) => setCardData({...cardData, name: e.target.value.toUpperCase()})}
               className="text-lg"
+              aria-required="true"
+              aria-label="Имя держателя карты"
+              autoComplete="cc-name"
             />
           </div>
         </div>

@@ -78,7 +78,7 @@ const Index = () => {
         /* Базовые стили для конфетти будут создаваться динамически */
       `}</style>
 
-      <div className="min-h-screen bg-white">
+      <main className="min-h-screen bg-white">
         {/* Конфетти компонент */}
         <SimpleConfetti isActive={showConfetti} />
         
@@ -121,7 +121,7 @@ const Index = () => {
             </p>
           </div>
         </footer>
-      </div>
+      </main>
     </>
   );
 };

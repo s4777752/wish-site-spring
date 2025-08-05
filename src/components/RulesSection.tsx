@@ -3,13 +3,13 @@ import Icon from '@/components/ui/icon';
 
 const RulesSection = () => {
   return (
-    <div className="py-20 px-4">
+    <section className="py-20 px-4" aria-labelledby="rules-heading">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-4xl font-bold text-center text-black mb-12">
+        <h2 id="rules-heading" className="text-4xl font-bold text-center text-black mb-12">
           Правила использования
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" role="grid">
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start space-x-4">
               <div className="bg-indigo-100 p-3 rounded-full">
@@ -17,7 +17,7 @@ const RulesSection = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-3">Как это работает</h3>
-                <ul className="space-y-2 text-gray-600">
+                <ul className="space-y-2 text-gray-600" role="list">
                   <li>• Напишите ваше желание в форме выше</li>
                   <li>• Нажмите "ОК" для перехода к оплате</li>
                   <li>• Выберите удобный способ оплаты</li>
@@ -116,7 +116,7 @@ const RulesSection = () => {
         <div className="mt-12 text-center">
           <p className="text-gray-600 mb-4">
             Используя сервис, вы соглашаетесь с 
-            <a href="/terms" className="text-purple-600 hover:text-purple-700 underline ml-1">
+            <a href="/terms" className="text-purple-600 hover:text-purple-700 underline ml-1" aria-label="Перейти к Пользовательскому соглашению">
               Пользовательским соглашением
             </a>
           </p>
@@ -125,7 +125,7 @@ const RulesSection = () => {
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
