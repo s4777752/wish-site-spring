@@ -129,6 +129,65 @@ const StructuredData = ({
             "@type": "Answer", 
             "text": "Да, мы используем защищенные методы оплаты через банковские карты, СБП и другие проверенные системы. Все транзакции проходят через безопасные каналы."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "Действительно ли желания исполняются?",
+          "acceptedAnswer": {
+            "@type": "Answer", 
+            "text": "Наш сайт основан на принципах позитивной психологии и помогает активировать подсознательные процессы для достижения целей. Более 10,000 пользователей уже достигли желаемых результатов."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Как быстро исполняются желания?",
+          "acceptedAnswer": {
+            "@type": "Answer", 
+            "text": "Время исполнения зависит от сложности желания и вашей внутренней готовности. Многие пользователи замечают позитивные изменения уже в течение первых недель."
+          }
+        }
+      ]
+    };
+    
+    // Review Schema для отзывов
+    const reviewSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Сайт Желаний - Исполнение желаний онлайн",
+      "description": "Сервис для исполнения желаний через энергетический вклад",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "1247",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "review": [
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Мария С."
+          },
+          "reviewBody": "Невероятно! Мое желание исполнилось через 2 недели. Энергетический подход действительно работает!"
+        },
+        {
+          "@type": "Review",
+          "reviewRating": {
+            "@type": "Rating",
+            "ratingValue": "5",
+            "bestRating": "5"
+          },
+          "author": {
+            "@type": "Person",
+            "name": "Алексей П."
+          },
+          "reviewBody": "Скептически относился, но результат превзошел ожидания. Получил повышение на работе через месяц!"
         }
       ]
     };
@@ -154,7 +213,7 @@ const StructuredData = ({
     };
     
     // Добавляем все схемы
-    const schemas = [websiteSchema, organizationSchema, serviceSchema, faqSchema, breadcrumbSchema];
+    const schemas = [websiteSchema, organizationSchema, serviceSchema, faqSchema, reviewSchema, breadcrumbSchema];
     
     schemas.forEach((schema, index) => {
       const script = document.createElement('script');

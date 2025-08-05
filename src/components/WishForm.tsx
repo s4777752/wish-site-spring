@@ -20,12 +20,12 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection, onConf
         
         <div className="space-y-6 animate-fade-in">
           <p id="wish-description" className="text-lg text-gray-600 mb-8">
-            Напишите желания после "ОК" оплата
+            🌟 Загадайте желание сейчас и исполните мечту уже сегодня! После "ОК" - выбирайте силу вашего желания
           </p>
           
           <div className="max-w-lg mx-auto space-y-4">
             <Textarea
-              placeholder="Напишите ваше желание..."
+              placeholder="Например: 'Я хочу получить повышение на работе', 'Мне нужно найти любовь всей жизни', 'Хочу улучшить свое здоровье'..."
               value={wish}
               onChange={(e) => setWish(e.target.value)}
               className="min-h-[120px] text-lg border-2 border-gray-200 focus:border-indigo-500 transition-colors"

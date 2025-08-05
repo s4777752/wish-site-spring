@@ -1,5 +1,5 @@
-# Robots.txt для wish-site-spring.poehali.dev
-# Этот файл определяет правила для поисковых роботов
+# Robots.txt для САЙТ ЖЕЛАНИЙ
+# Исполнение желаний онлайн - https://wish-site-spring.poehali.dev
 
 User-agent: *
 Allow: /
@@ -11,18 +11,27 @@ Allow: /contact
 Allow: /reviews
 Allow: /faq
 
-# Запрещаем индексацию служебных файлов и директорий
-Disallow: /assets/
+# Запрещаем индексацию технических файлов
 Disallow: /src/
 Disallow: /node_modules/
 Disallow: /*.js$
-Disallow: /*.css$
-Disallow: /*.json$
-Disallow: /private/
-Disallow: /admin/
-Disallow: /api/
-Disallow: /temp/
-Disallow: /tmp/
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /*.map$
+Disallow: /vite.config.*
+Disallow: /package*.json
+Disallow: /tsconfig*.json
+Disallow: /.env*
+
+# Разрешаем CSS и изображения
+Allow: /*.css$
+Allow: /*.png$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.gif$
+Allow: /*.svg$
+Allow: /*.webp$
+Allow: /*.ico$
 
 # Запрещаем индексацию дубликатов
 Disallow: /*?utm_*
@@ -35,27 +44,28 @@ Allow: /
 Crawl-delay: 1
 
 # Специальные правила для Яндекс
-User-agent: Yandex
-Allow: /
-Crawl-delay: 1
-
 User-agent: YandexBot
 Allow: /
-Crawl-delay: 1
-
-# Специальные правила для Mail.ru
-User-agent: Mail.RU_Bot
-Allow: /
 Crawl-delay: 2
+Clean-param: utm_source&utm_medium&utm_campaign&utm_term&utm_content
 
-# Запрещаем сканирование некоторым ботам
+User-agent: Bingbot
+Crawl-delay: 3
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+# Запрещаем плохих ботов
 User-agent: SemrushBot
 Disallow: /
 
-User-agent: AhrefsBot
+User-agent: MJ12bot
 Disallow: /
 
-User-agent: MJ12bot
+User-agent: DotBot
 Disallow: /
 
 # Указываем расположение sitemap
