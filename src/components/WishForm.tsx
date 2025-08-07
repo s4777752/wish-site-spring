@@ -19,7 +19,9 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection, onConf
         </h1>
         
         <div className="space-y-6 animate-fade-in">
-          <p id="wish-description" className="text-lg text-gray-600 mb-8">После "ОК" - выбирайте силу вашего желания</p>
+          <p id="wish-description" className="text-lg text-gray-600 mb-8">
+            🌟 Загадайте желание сейчас и исполните мечту уже сегодня! После "ОК" - выбирайте силу вашего желания
+          </p>
           
           <div className="max-w-lg mx-auto space-y-4">
             <Textarea
