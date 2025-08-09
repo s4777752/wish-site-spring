@@ -209,13 +209,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
           name="email" 
           required 
         />
-        <input 
-          className="payform-tbank-row" 
-          type="tel" 
-          placeholder="Контактный телефон" 
-          name="phone" 
-          required 
-        />
+
         
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
           <div className="flex items-center">
