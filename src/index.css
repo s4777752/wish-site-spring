@@ -181,6 +181,28 @@
   animation: pulse-scale 3s ease-in-out infinite;
 }
 
+@keyframes comet-fly {
+  0% {
+    transform: translateX(-200px) translateY(-200px) rotate(45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(calc(100vw + 200px)) translateY(calc(100vh + 200px))
+      rotate(45deg);
+    opacity: 0;
+  }
+}
+
 .animate-star-twinkle {
   animation: star-twinkle 4s ease-in-out infinite;
+}
+
+.animate-comet {
+  animation: comet-fly 4s linear infinite;
 }

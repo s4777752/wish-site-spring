@@ -16,6 +16,15 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
     }))
   );
 
+  const [comets] = useState(() =>
+    Array.from({ length: 3 }, (_, i) => ({
+      id: i,
+      animationDelay: Math.random() * 15 + 5, // от 5 до 20 секунд
+      size: Math.random() * 3 + 2,
+      opacity: Math.random() * 0.5 + 0.5
+    }))
+  );
+
   const [fragments] = useState(() =>
     Array.from({ length: 25 }, (_, i) => ({
       id: i,
@@ -57,6 +66,40 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
             background: 'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0.3) 100%)'
           }}
         />
+      ))}
+
+      {/* Кометы */}
+      {!isBreaking && comets.map(comet => (
+        <div
+          key={`comet-${comet.id}`}
+          className="absolute animate-comet pointer-events-none"
+          style={{
+            animationDelay: `${comet.animationDelay}s`,
+            opacity: comet.opacity
+          }}
+        >
+          {/* Ядро кометы */}
+          <div
+            className="absolute bg-white rounded-full"
+            style={{
+              width: `${comet.size}px`,
+              height: `${comet.size}px`,
+              boxShadow: `0 0 ${comet.size * 2}px rgba(255, 255, 255, 0.8)`
+            }}
+          />
+          {/* Хвост кометы */}
+          <div
+            className="absolute bg-gradient-to-r from-white/80 via-white/40 to-transparent"
+            style={{
+              width: `${comet.size * 15}px`,
+              height: `${comet.size / 2}px`,
+              left: `${-comet.size * 15}px`,
+              top: `${comet.size / 4}px`,
+              borderRadius: `${comet.size * 2}px`,
+              filter: 'blur(1px)'
+            }}
+          />
+        </div>
       ))}
 
       {/* Центральное сияние */}
