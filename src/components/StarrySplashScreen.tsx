@@ -16,6 +16,15 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
     }))
   );
 
+  const [fallingStars] = useState(() =>
+    Array.from({ length: 1 }, (_, i) => ({
+      id: i,
+      animationDelay: Math.random() * 10 + 3, // от 3 до 13 секунд
+      size: Math.random() * 3 + 2,
+      opacity: Math.random() * 0.5 + 0.5
+    }))
+  );
+
   const [fragments] = useState(() =>
     Array.from({ length: 25 }, (_, i) => ({
       id: i,
@@ -39,39 +48,64 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
       }`}
       onClick={handleClick}
       style={{
-        background: 'radial-gradient(circle at center, #1a0033 0%, #000011 50%, #000000 100%)'
+        background: 'radial-gradient(circle at center, #000000 0%, #000000 50%, #000000 100%)'
       }}
     >
       {/* Звезды */}
       {stars.map(star => (
         <div
           key={star.id}
-          className="absolute bg-white rounded-full animate-pulse"
+          className="absolute bg-white rounded-full animate-star-twinkle"
           style={{
             left: `${star.left}%`,
             top: `${star.top}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
             animationDelay: `${star.animationDelay}s`,
-            boxShadow: '0 0 6px rgba(255, 255, 255, 0.8)'
+            boxShadow: `0 0 ${star.size * 3}px rgba(255, 255, 255, 0.9), 0 0 ${star.size * 6}px rgba(255, 255, 255, 0.4)`,
+            background: 'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0.3) 100%)'
           }}
         />
+      ))}
+
+      {/* Падающие звёзды */}
+      {!isBreaking && fallingStars.map(star => (
+        <div
+          key={`falling-star-${star.id}`}
+          className="absolute animate-falling-star pointer-events-none"
+          style={{
+            animationDelay: `${star.animationDelay}s`,
+            opacity: star.opacity,
+            top: `${Math.random() * 30}%`,
+            right: `${Math.random() * 30}%`
+          }}
+        >
+          {/* Ядро звезды без хвоста */}
+          <div
+            className="absolute bg-white rounded-full"
+            style={{
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              boxShadow: `0 0 ${star.size * 4}px rgba(255, 255, 255, 0.9), 0 0 ${star.size * 8}px rgba(255, 255, 255, 0.4)`
+            }}
+          />
+        </div>
       ))}
 
       {/* Центральное сияние */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div 
-          className="w-96 h-96 rounded-full opacity-30"
+          className="w-96 h-96 rounded-full opacity-20"
           style={{
-            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(138, 43, 226, 0.2) 40%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%)'
           }}
         />
       </div>
 
       {/* Текст приглашения */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-pulse">
-          ✨ САЙТ ЖЕЛАНИЙ ✨
+        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-zoom-in animate-pulse-scale">
+          САЙТ ЖЕЛАНИЙ
         </h1>
         <p className="text-xl md:text-2xl opacity-80 animate-bounce">
           Нажмите, чтобы войти
