@@ -46,15 +46,14 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
       {stars.map(star => (
         <div
           key={star.id}
-          className="absolute bg-white rounded-full animate-star-twinkle"
+          className="absolute bg-white rounded-full animate-pulse"
           style={{
             left: `${star.left}%`,
             top: `${star.top}%`,
             width: `${star.size}px`,
             height: `${star.size}px`,
             animationDelay: `${star.animationDelay}s`,
-            boxShadow: `0 0 ${star.size * 3}px rgba(255, 255, 255, 0.9), 0 0 ${star.size * 6}px rgba(255, 255, 255, 0.4)`,
-            background: 'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0.3) 100%)'
+            boxShadow: '0 0 6px rgba(255, 255, 255, 0.8)'
           }}
         />
       ))}
@@ -71,7 +70,7 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
 
       {/* Текст приглашения */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-zoom-in animate-pulse-scale">
+        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-pulse">
           САЙТ ЖЕЛАНИЙ
         </h1>
         <p className="text-xl md:text-2xl opacity-80 animate-bounce">
