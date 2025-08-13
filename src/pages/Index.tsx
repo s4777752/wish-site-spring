@@ -126,12 +126,6 @@ const Index = () => {
         {/* Rules Section */}
         <RulesSection />
 
-        {/* Test Payment Button */}
-        <div className="max-w-4xl mx-auto px-4 py-8 text-center">
-          <h3 className="text-2xl font-bold mb-4">Тестовая кнопка оплаты</h3>
-          <PaymentButton />
-        </div>
-
         {/* Footer */}
         <footer className="border-t border-gray-200 py-8">
           <div className="max-w-4xl mx-auto px-4 text-center">
