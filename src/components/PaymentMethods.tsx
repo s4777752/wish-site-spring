@@ -28,7 +28,13 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   });
 
   const handlePaymentSuccess = () => {
-    setShowAnimation(true);
+    // Имитируем переход на банковскую страницу и возврат
+    alert('Перенаправляем на страницу банка для завершения оплаты...');
+    
+    // Через 3 секунды показываем заставку (имитация возврата с банка)
+    setTimeout(() => {
+      setShowAnimation(true);
+    }, 3000);
   };
 
   const handleAnimationComplete = () => {
@@ -154,7 +160,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
           >
             <Icon name="Smartphone" size={20} className="mr-2" />
-            Оплатить {getAmountFromIntensity(wishIntensity)} ₽
+            Перейти к оплате {getAmountFromIntensity(wishIntensity)} ₽
           </Button>
         </div>
       </div>
@@ -264,7 +270,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
             className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
           >
             <Icon name="Sparkles" size={20} className="mr-2" />
-            Оплатить {getAmountFromIntensity(wishIntensity)} ₽
+            Перейти к оплате {getAmountFromIntensity(wishIntensity)} ₽
           </Button>
         </div>
       </div>
