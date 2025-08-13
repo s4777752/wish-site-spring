@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import TinkoffPayForm from '@/components/TinkoffPayForm';
+import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -14,7 +15,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
   const [showSBPForm, setShowSBPForm] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
-
+  const [showAnimation, setShowAnimation] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedBank, setSelectedBank] = useState('');
   const [cardData, setCardData] = useState({
@@ -27,37 +28,24 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   });
 
   const handlePaymentSuccess = () => {
+    setShowAnimation(true);
+  };
+
+  const handleAnimationComplete = () => {
+    setShowAnimation(false);
     onPaymentComplete();
   };
 
   if (!showTinkoffForm && !showSBPForm && !showCardForm) {
     return (
-      <div className="space-y-4">
-        <Button 
-          onClick={() => setShowTinkoffForm(true)}
-          className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
-          aria-label="Выбрать оплату через Тинькофф Эквайринг"
-        >
-          <Icon name="Banknote" size={20} className="mr-2" />
-          Тинькофф Эквайринг
-        </Button>
-        <Button 
-          onClick={() => setShowSBPForm(true)}
-          className="w-full bg-blue-500 hover:bg-blue-600 text-white text-lg py-6 rounded-lg"
-          aria-label="Выбрать оплату через СБП"
-        >
-          <Icon name="Smartphone" size={20} className="mr-2" />
-          Система быстрых платежей
-        </Button>
-        <Button 
-          onClick={() => setShowCardForm(true)}
-          className="w-full bg-emerald-500 hover:bg-emerald-600 text-white text-lg py-6 rounded-lg"
-          aria-label="Оплата картой"
-        >
-          <Icon name="CreditCard" size={20} className="mr-2" />
-          Банковская карта
-        </Button>
-      </div>
+      <Button 
+        onClick={() => setShowTinkoffForm(true)}
+        className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
+        aria-label="Выбрать оплату через Тинькофф Эквайринг"
+      >
+        <Icon name="Banknote" size={20} className="mr-2" />
+        Тинькофф Эквайринг
+      </Button>
     );
   }
 
@@ -283,7 +271,13 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
     );
   }
 
-  return null;
+  return (
+    <>
+      {showAnimation && (
+        <PaymentSuccessAnimation onComplete={handleAnimationComplete} />
+      )}
+    </>
+  );
 };
 
 export default PaymentMethods;
