@@ -118,11 +118,11 @@ const PaymentSuccessAnimation = ({ onComplete }: PaymentSuccessAnimationProps) =
 
           {/* Текст */}
           <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-            <h1 className="text-3xl md:text-5xl font-bold mb-8 animate-zoom-in animate-pulse-scale">
-              ВАШЕ ЖЕЛАНИЕ
+            <h1 className="text-4xl md:text-6xl font-bold mb-4 animate-zoom-in animate-pulse-scale text-green-400">
+              ОПЛАЧЕНО
             </h1>
-            <h2 className="text-3xl md:text-5xl font-bold mb-8 animate-zoom-in animate-pulse-scale text-green-400" style={{ animationDelay: '0.5s' }}>
-              АКТИВИРОВАНО
+            <h2 className="text-2xl md:text-4xl font-bold mb-8 animate-zoom-in animate-pulse-scale" style={{ animationDelay: '0.5s' }}>
+              ВАШЕ ЖЕЛАНИЕ АКТИВИРОВАНО
             </h2>
             <p className="text-lg md:text-xl opacity-80 animate-bounce" style={{ animationDelay: '1s' }}>
               Нажмите, чтобы продолжить
