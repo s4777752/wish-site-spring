@@ -5,7 +5,7 @@ import Analytics from '@/components/Analytics';
 import WishForm from '@/components/WishForm';
 import PaymentSection from '@/components/PaymentSection';
 import PaymentMethods from '@/components/PaymentMethods';
-import PaymentButton from '@/components/PaymentButton';
+import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
 import RulesSection from '@/components/RulesSection';
 import SimpleConfetti from '@/components/SimpleConfetti';
 import StarrySplashScreen from '@/components/StarrySplashScreen';
@@ -17,6 +17,7 @@ const Index = () => {
   const [wishIntensity, setWishIntensity] = useState(5);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+  const [showPaymentAnimation, setShowPaymentAnimation] = useState(false);
 
   // Функция для расчета суммы по интенсивности
   const getAmountFromIntensity = (intensity: number) => intensity * 100;
@@ -36,10 +37,12 @@ const Index = () => {
   };
 
   const handlePayment = () => {
+    setShowPaymentAnimation(true);
+  };
+
+  const handlePaymentAnimationComplete = () => {
+    setShowPaymentAnimation(false);
     setShowConfetti(true);
-    
-    // Конфетти теперь падает постоянно без остановки!
-    // setTimeout убран - конфетти будет идти бесконечно
     
     // Отслеживаем исполнение желания в аналитике
     const amount = getAmountFromIntensity(wishIntensity);
@@ -92,6 +95,11 @@ const Index = () => {
       `}</style>
 
       <main className="min-h-screen bg-white">
+        {/* Анимация успешной оплаты */}
+        {showPaymentAnimation && (
+          <PaymentSuccessAnimation onComplete={handlePaymentAnimationComplete} />
+        )}
+        
         {/* Конфетти компонент */}
         <SimpleConfetti isActive={showConfetti} />
         
