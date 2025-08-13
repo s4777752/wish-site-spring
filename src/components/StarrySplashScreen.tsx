@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface StarrySplashScreenProps {
   onComplete: () => void;
@@ -19,7 +19,7 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
   const [fallingStars] = useState(() =>
     Array.from({ length: 1 }, (_, i) => ({
       id: i,
-      animationDelay: Math.random() * 10 + 3, // от 3 до 13 секунд
+      animationDelay: Math.random() * 10 + 3,
       size: Math.random() * 3 + 2,
       opacity: Math.random() * 0.5 + 0.5
     }))
@@ -37,18 +37,17 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
   );
 
   const handleClick = () => {
-    if (isBreaking) return; // предотвращаем повторные клики
-    console.log('Splash clicked, starting break animation');
+    if (isBreaking) return;
     setIsBreaking(true);
-    // Немедленно вызываем onComplete для тестирования
-    onComplete();
+    setTimeout(() => {
+      onComplete();
+    }, 1500);
   };
 
   return (
     <div 
       className="fixed inset-0 z-50 cursor-pointer bg-black"
       onClick={handleClick}
-
     >
       {/* Звезды */}
       {stars.map(star => (
@@ -79,7 +78,6 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
             right: `${Math.random() * 30}%`
           }}
         >
-          {/* Ядро звезды без хвоста */}
           <div
             className="absolute bg-white rounded-full"
             style={{
