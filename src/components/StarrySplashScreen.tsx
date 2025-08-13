@@ -39,7 +39,7 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
       }`}
       onClick={handleClick}
       style={{
-        background: 'radial-gradient(circle at center, #000000 0%, #000000 50%, #000000 100%)'
+        background: 'radial-gradient(circle at center, #1a0033 0%, #000011 50%, #000000 100%)'
       }}
     >
       {/* Звезды */}
@@ -61,9 +61,9 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
       {/* Центральное сияние */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div 
-          className="w-96 h-96 rounded-full opacity-20"
+          className="w-96 h-96 rounded-full opacity-30"
           style={{
-            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 40%, transparent 70%)'
+            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(138, 43, 226, 0.2) 40%, transparent 70%)'
           }}
         />
       </div>
@@ -71,7 +71,7 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
       {/* Текст приглашения */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-pulse">
-          САЙТ ЖЕЛАНИЙ
+          ✨ САЙТ ЖЕЛАНИЙ ✨
         </h1>
         <p className="text-xl md:text-2xl opacity-80 animate-bounce">
           Нажмите, чтобы войти
