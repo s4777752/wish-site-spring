@@ -114,7 +114,7 @@ export default {
 						opacity: '0.8' 
 					},
 					'100%': { 
-						transform: 'rotate(360deg) scale(0) translateX(200px) translateY(200px)', 
+						transform: 'rotate(360deg) scale(0) translateX(var(--velocity-x)) translateY(var(--velocity-y))', 
 						opacity: '0' 
 					}
 				},
