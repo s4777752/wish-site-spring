@@ -38,8 +38,10 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
 
   const handleClick = () => {
     if (isBreaking) return; // предотвращаем повторные клики
+    console.log('Splash clicked, starting break animation');
     setIsBreaking(true);
     setTimeout(() => {
+      console.log('Animation complete, calling onComplete');
       onComplete();
     }, 1500);
   };
