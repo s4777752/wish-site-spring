@@ -27,7 +27,14 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   });
 
   const handlePaymentSuccess = () => {
+    // Только для карт вызываем анимацию
     onPaymentComplete();
+  };
+
+  const handleOtherPayment = () => {
+    // Для СБП и других способов без анимации
+    // Можно добавить простое уведомление
+    alert('Спасибо! Ваша оплата обработана.');
   };
 
   if (!showTinkoffForm && !showSBPForm && !showCardForm) {
@@ -161,7 +168,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
             Назад
           </Button>
           <Button 
-            onClick={handlePaymentSuccess}
+            onClick={handleOtherPayment}
             disabled={!phoneNumber.includes('+7') || !selectedBank}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
           >
