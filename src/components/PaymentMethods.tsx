@@ -32,9 +32,8 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   };
 
   const handleOtherPayment = () => {
-    // Для СБП и других способов без анимации
-    // Можно добавить простое уведомление
-    alert('Спасибо! Ваша оплата обработана.');
+    // Для всех способов показываем анимацию
+    onPaymentComplete();
   };
 
   if (!showTinkoffForm && !showSBPForm && !showCardForm) {
