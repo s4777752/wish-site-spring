@@ -7,7 +7,6 @@ import PaymentSection from '@/components/PaymentSection';
 import PaymentMethods from '@/components/PaymentMethods';
 import RulesSection from '@/components/RulesSection';
 import SimpleConfetti from '@/components/SimpleConfetti';
-import StarrySplashScreen from '@/components/StarrySplashScreen';
 
 const Index = () => {
   const [wish, setWish] = useState('');
@@ -15,7 +14,6 @@ const Index = () => {
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
   const [wishIntensity, setWishIntensity] = useState(5);
   const [showConfetti, setShowConfetti] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
 
   // Функция для расчета суммы по интенсивности
   const getAmountFromIntensity = (intensity: number) => intensity * 100;
@@ -54,16 +52,6 @@ const Index = () => {
       setShowPayment(true);
     }
   };
-
-  // Обработчик завершения заставки
-  const handleSplashComplete = () => {
-    setShowSplash(false);
-  };
-
-  // Если показываем заставку, отображаем только её
-  if (showSplash) {
-    return <StarrySplashScreen onComplete={handleSplashComplete} />;
-  }
 
   return (
     <>
