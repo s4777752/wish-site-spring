@@ -46,13 +46,9 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
 
   return (
     <div 
-      className={`fixed inset-0 z-50 cursor-pointer transition-opacity duration-500 ${
-        isBreaking ? 'opacity-0' : 'opacity-100'
-      }`}
+      className="fixed inset-0 z-50 cursor-pointer bg-black"
       onClick={handleClick}
-      style={{
-        background: 'radial-gradient(circle at center, #000000 0%, #000000 50%, #000000 100%)'
-      }}
+
     >
       {/* Звезды */}
       {stars.map(star => (
