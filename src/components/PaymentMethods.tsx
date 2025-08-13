@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import TinkoffPayForm from '@/components/TinkoffPayForm';
+import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -14,6 +15,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
   const [showSBPForm, setShowSBPForm] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedBank, setSelectedBank] = useState('');
   const [cardData, setCardData] = useState({
@@ -24,6 +26,15 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
     terminal: '',
     password: ''
   });
+
+  const handlePaymentSuccess = () => {
+    setShowAnimation(true);
+  };
+
+  const handleAnimationComplete = () => {
+    setShowAnimation(false);
+    onPaymentComplete();
+  };
 
   if (!showTinkoffForm && !showSBPForm && !showCardForm) {
     return (
@@ -138,7 +149,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
             Назад
           </Button>
           <Button 
-            onClick={onPaymentComplete}
+            onClick={handlePaymentSuccess}
             disabled={!phoneNumber.includes('+7') || !selectedBank}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
           >
@@ -248,7 +259,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
             Назад
           </Button>
           <Button 
-            onClick={onPaymentComplete}
+            onClick={handlePaymentSuccess}
             disabled={!cardData.number || !cardData.expiry || !cardData.cvv || !cardData.name}
             className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
           >
@@ -260,7 +271,13 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
     );
   }
 
-  return null;
+  return (
+    <>
+      {showAnimation && (
+        <PaymentSuccessAnimation onComplete={handleAnimationComplete} />
+      )}
+    </>
+  );
 };
 
 export default PaymentMethods;
