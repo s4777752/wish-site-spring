@@ -27,12 +27,6 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   });
 
   const handlePaymentSuccess = () => {
-    // Только для карт вызываем анимацию
-    onPaymentComplete();
-  };
-
-  const handleOtherPayment = () => {
-    // Для всех способов показываем анимацию
     onPaymentComplete();
   };
 
@@ -167,7 +161,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
             Назад
           </Button>
           <Button 
-            onClick={handleOtherPayment}
+            onClick={handlePaymentSuccess}
             disabled={!phoneNumber.includes('+7') || !selectedBank}
             className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
           >

@@ -66,12 +66,12 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
 
         if (window.pay) {
           window.pay(form);
-          // Показываем анимацию после успешной оплаты
+          // Симулируем успешную оплату для демо
           setTimeout(() => {
             onPaymentComplete();
           }, 1000);
         } else {
-          // Для демо тоже показываем анимацию
+          // Если нет Tinkoff API, сразу вызываем успешную оплату для демо
           setTimeout(() => {
             onPaymentComplete();
           }, 500);
