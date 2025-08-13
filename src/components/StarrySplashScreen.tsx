@@ -16,7 +16,7 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
     }))
   );
 
-  const [comets] = useState(() =>
+  const [fallingStars] = useState(() =>
     Array.from({ length: 3 }, (_, i) => ({
       id: i,
       animationDelay: Math.random() * 15 + 5, // от 5 до 20 секунд
@@ -68,35 +68,38 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
         />
       ))}
 
-      {/* Кометы */}
-      {!isBreaking && comets.map(comet => (
+      {/* Падающие звёзды */}
+      {!isBreaking && fallingStars.map(star => (
         <div
-          key={`comet-${comet.id}`}
-          className="absolute animate-comet pointer-events-none"
+          key={`falling-star-${star.id}`}
+          className="absolute animate-falling-star pointer-events-none"
           style={{
-            animationDelay: `${comet.animationDelay}s`,
-            opacity: comet.opacity
+            animationDelay: `${star.animationDelay}s`,
+            opacity: star.opacity,
+            top: `${Math.random() * 30}%`,
+            right: `${Math.random() * 30}%`
           }}
         >
-          {/* Ядро кометы */}
+          {/* Ядро звезды */}
           <div
             className="absolute bg-white rounded-full"
             style={{
-              width: `${comet.size}px`,
-              height: `${comet.size}px`,
-              boxShadow: `0 0 ${comet.size * 2}px rgba(255, 255, 255, 0.8)`
+              width: `${star.size}px`,
+              height: `${star.size}px`,
+              boxShadow: `0 0 ${star.size * 3}px rgba(255, 255, 255, 0.9)`
             }}
           />
-          {/* Хвост кометы */}
+          {/* Хвост падающей звезды */}
           <div
-            className="absolute bg-gradient-to-r from-white/80 via-white/40 to-transparent"
+            className="absolute bg-gradient-to-br from-white/90 via-white/50 to-transparent"
             style={{
-              width: `${comet.size * 15}px`,
-              height: `${comet.size / 2}px`,
-              left: `${-comet.size * 15}px`,
-              top: `${comet.size / 4}px`,
-              borderRadius: `${comet.size * 2}px`,
-              filter: 'blur(1px)'
+              width: `${star.size * 20}px`,
+              height: `${star.size / 3}px`,
+              right: `${star.size}px`,
+              bottom: `${star.size}px`,
+              borderRadius: `${star.size * 3}px`,
+              filter: 'blur(0.5px)',
+              transform: 'rotate(-45deg)'
             }}
           />
         </div>
