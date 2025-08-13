@@ -17,9 +17,9 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
   );
 
   const [fallingStars] = useState(() =>
-    Array.from({ length: 3 }, (_, i) => ({
+    Array.from({ length: 1 }, (_, i) => ({
       id: i,
-      animationDelay: Math.random() * 15 + 5, // от 5 до 20 секунд
+      animationDelay: Math.random() * 10 + 3, // от 3 до 13 секунд
       size: Math.random() * 3 + 2,
       opacity: Math.random() * 0.5 + 0.5
     }))
@@ -80,26 +80,13 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
             right: `${Math.random() * 30}%`
           }}
         >
-          {/* Ядро звезды */}
+          {/* Ядро звезды без хвоста */}
           <div
             className="absolute bg-white rounded-full"
             style={{
               width: `${star.size}px`,
               height: `${star.size}px`,
-              boxShadow: `0 0 ${star.size * 3}px rgba(255, 255, 255, 0.9)`
-            }}
-          />
-          {/* Хвост падающей звезды */}
-          <div
-            className="absolute bg-gradient-to-br from-white/90 via-white/50 to-transparent"
-            style={{
-              width: `${star.size * 20}px`,
-              height: `${star.size / 3}px`,
-              right: `${star.size}px`,
-              bottom: `${star.size}px`,
-              borderRadius: `${star.size * 3}px`,
-              filter: 'blur(0.5px)',
-              transform: 'rotate(-45deg)'
+              boxShadow: `0 0 ${star.size * 4}px rgba(255, 255, 255, 0.9), 0 0 ${star.size * 8}px rgba(255, 255, 255, 0.4)`
             }}
           />
         </div>
