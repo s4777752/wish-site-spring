@@ -71,7 +71,7 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
       {/* Текст приглашения */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
         <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-pulse">
-          ✨ САЙТ ЖЕЛАНИЙ ✨
+          САЙТ ЖЕЛАНИЙ
         </h1>
         <p className="text-xl md:text-2xl opacity-80 animate-bounce">
           Нажмите, чтобы войти
