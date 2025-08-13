@@ -37,8 +37,11 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
   );
 
   const handleClick = () => {
+    if (isBreaking) return; // предотвращаем повторные клики
     setIsBreaking(true);
-    setTimeout(onComplete, 1500);
+    setTimeout(() => {
+      onComplete();
+    }, 1500);
   };
 
   return (
