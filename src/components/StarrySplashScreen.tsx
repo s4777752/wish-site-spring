@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface StarrySplashScreenProps {
   onComplete: () => void;
@@ -16,15 +16,6 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
     }))
   );
 
-  const [fallingStars] = useState(() =>
-    Array.from({ length: 1 }, (_, i) => ({
-      id: i,
-      animationDelay: Math.random() * 10 + 3,
-      size: Math.random() * 3 + 2,
-      opacity: Math.random() * 0.5 + 0.5
-    }))
-  );
-
   const [fragments] = useState(() =>
     Array.from({ length: 25 }, (_, i) => ({
       id: i,
@@ -37,17 +28,19 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
   );
 
   const handleClick = () => {
-    if (isBreaking) return;
     setIsBreaking(true);
-    setTimeout(() => {
-      onComplete();
-    }, 1500);
+    setTimeout(onComplete, 1500);
   };
 
   return (
     <div 
-      className="fixed inset-0 z-50 cursor-pointer bg-black"
+      className={`fixed inset-0 z-50 cursor-pointer transition-opacity duration-500 ${
+        isBreaking ? 'opacity-0' : 'opacity-100'
+      }`}
       onClick={handleClick}
+      style={{
+        background: 'radial-gradient(circle at center, #000000 0%, #000000 50%, #000000 100%)'
+      }}
     >
       {/* Звезды */}
       {stars.map(star => (
@@ -64,29 +57,6 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
             background: 'radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.8) 70%, rgba(255, 255, 255, 0.3) 100%)'
           }}
         />
-      ))}
-
-      {/* Падающие звёзды */}
-      {!isBreaking && fallingStars.map(star => (
-        <div
-          key={`falling-star-${star.id}`}
-          className="absolute animate-falling-star pointer-events-none"
-          style={{
-            animationDelay: `${star.animationDelay}s`,
-            opacity: star.opacity,
-            top: `${Math.random() * 30}%`,
-            right: `${Math.random() * 30}%`
-          }}
-        >
-          <div
-            className="absolute bg-white rounded-full"
-            style={{
-              width: `${star.size}px`,
-              height: `${star.size}px`,
-              boxShadow: `0 0 ${star.size * 4}px rgba(255, 255, 255, 0.9), 0 0 ${star.size * 8}px rgba(255, 255, 255, 0.4)`
-            }}
-          />
-        </div>
       ))}
 
       {/* Центральное сияние */}

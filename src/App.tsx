@@ -16,7 +16,6 @@ const App = () => {
   const [showSplash, setShowSplash] = useState(true);
 
   const handleSplashComplete = () => {
-    console.log('handleSplashComplete called');
     setShowSplash(false);
   };
 
