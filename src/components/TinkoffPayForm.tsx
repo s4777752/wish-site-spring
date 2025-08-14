@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import PaymentSuccessAnimation from './PaymentSuccessAnimation';
+import React, { useEffect, useRef } from 'react';
 
 interface TinkoffPayFormProps {
   amount: number;
@@ -14,7 +13,6 @@ declare global {
 
 const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComplete }) => {
   const formRef = useRef<HTMLFormElement>(null);
-  const [showAnimation, setShowAnimation] = useState(false);
 
   useEffect(() => {
     // Генерируем уникальный номер заказа
@@ -90,16 +88,10 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
     }
   }, [amount, onPaymentComplete]);
 
-  const handleAnimationComplete = () => {
-    setShowAnimation(false);
-    onPaymentComplete();
-  };
+
 
   return (
     <>
-      {showAnimation && (
-        <PaymentSuccessAnimation onComplete={handleAnimationComplete} />
-      )}
       <style>{`
         .payform-tbank {
           display: -webkit-box;

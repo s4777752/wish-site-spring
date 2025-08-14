@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import TinkoffPayForm from '@/components/TinkoffPayForm';
-import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
+
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -15,7 +15,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
   const [showSBPForm, setShowSBPForm] = useState(false);
   const [showCardForm, setShowCardForm] = useState(false);
-  const [showAnimation, setShowAnimation] = useState(false);
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedBank, setSelectedBank] = useState('');
   const [cardData, setCardData] = useState({
@@ -31,10 +31,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
     setShowAnimation(true);
   };
 
-  const handleAnimationComplete = () => {
-    setShowAnimation(false);
-    onPaymentComplete();
-  };
+
 
   if (!showTinkoffForm && !showSBPForm && !showCardForm) {
     return (
