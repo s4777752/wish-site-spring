@@ -129,6 +129,9 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
           border: 1px solid #FBC520;
           color: #3C2C0B;
           cursor: pointer;
+          padding: 18px 24px;
+          font-size: 17px;
+          font-weight: 600;
         }
         .payform-tbank-btn:hover {
           background-color: #FAB619;
