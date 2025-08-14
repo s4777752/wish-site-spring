@@ -68,19 +68,15 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
 
         if (window.pay) {
           window.pay(form);
-          // Имитируем переход на банковскую страницу и возврат
-          alert('Перенаправляем на страницу банка для завершения оплаты...');
-          
-          // Через 3 секунды завершаем оплату без заставки
+          // Симулируем успешную оплату для демо
           setTimeout(() => {
-            onPaymentComplete();
-          }, 3000);
+            setShowAnimation(true);
+          }, 1000);
         } else {
-          // Для демо тоже имитируем переход на банк
-          alert('Перенаправляем на страницу банка для завершения оплаты...');
+          // Если нет Tinkoff API, сразу вызываем успешную оплату для демо
           setTimeout(() => {
-            onPaymentComplete();
-          }, 3000);
+            setShowAnimation(true);
+          }, 500);
         }
       };
 

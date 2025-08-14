@@ -28,13 +28,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
   });
 
   const handlePaymentSuccess = () => {
-    // Имитируем переход на банковскую страницу и возврат
-    alert('Перенаправляем на страницу банка для завершения оплаты...');
-    
-    // Через 3 секунды завершаем оплату без заставки
-    setTimeout(() => {
-      onPaymentComplete();
-    }, 3000);
+    setShowAnimation(true);
   };
 
   const handleAnimationComplete = () => {
