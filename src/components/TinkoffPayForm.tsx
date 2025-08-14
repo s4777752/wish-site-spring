@@ -102,49 +102,45 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
       )}
       <style>{`
         .payform-tbank {
+          display: -webkit-box;
+          display: -ms-flexbox;
           display: flex;
           margin: 2px auto;
+          -webkit-box-orient: vertical;
+          -webkit-box-direction: normal;
+          -ms-flex-direction: column;
           flex-direction: column;
-          max-width: 100%;
+          max-width: 250px;
         }
         .payform-tbank-row {
-          margin: 8px 0;
-          border-radius: 8px;
+          margin: 2px;
+          border-radius: 4px;
+          -webkit-box-flex: 1;
+          -ms-flex: 1;
           flex: 1;
+          -webkit-transition: 0.3s;
+          -o-transition: 0.3s;
           transition: 0.3s;
-          border: 2px solid #e5e7eb;
-          padding: 12px 16px;
+          border: 1px solid #DFE3F3;
+          padding: 15px;
           outline: none;
-          background-color: #f9fafb;
-          font-size: 16px;
-          font-family: inherit;
+          background-color: #DFE3F3;
+          font-size: 15px;
         }
         .payform-tbank-row:focus {
-          background-color: #ffffff;
-          border: 2px solid #fbbf24;
-          border-radius: 8px;
-          box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.1);
+          background-color: #FFFFFF;
+          border: 1px solid #616871;
+          border-radius: 4px;
         }
         .payform-tbank-btn {
-          background-color: #fbbf24;
-          border: 2px solid #fbbf24;
-          color: #92400e;
-          font-weight: 600;
+          background-color: #FBC520;
+          border: 1px solid #FBC520;
+          color: #3C2C0B;
           cursor: pointer;
-          border-radius: 8px;
-          padding: 16px;
-          font-size: 18px;
-          margin-top: 16px;
-          transition: all 0.3s;
         }
         .payform-tbank-btn:hover {
-          background-color: #f59e0b;
-          border: 2px solid #f59e0b;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
-        }
-        .payform-tbank-btn:active {
-          transform: translateY(0);
+          background-color: #FAB619;
+          border: 1px solid #FAB619;
         }
       `}</style>
       
