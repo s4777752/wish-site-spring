@@ -155,7 +155,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
           className="payform-tbank-row" 
           type="hidden" 
           name="terminalkey" 
-          value="1754297590246" 
+          value="1755185083245DEMO" 
         />
         <input 
           className="payform-tbank-row" 
