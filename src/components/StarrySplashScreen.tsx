@@ -1,20 +1,5 @@
 import { useState, useEffect } from 'react';
 
-const pulseGlowStyle = `
-  @keyframes pulseGlow {
-    0% {
-      opacity: 1;
-      text-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.6);
-      filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.9));
-    }
-    100% {
-      opacity: 0.3;
-      text-shadow: 0 0 5px rgba(255, 255, 255, 0.3), 0 0 10px rgba(255, 255, 255, 0.2), 0 0 15px rgba(255, 255, 255, 0.1);
-      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.3));
-    }
-  }
-`;
-
 interface StarrySplashScreenProps {
   onComplete: () => void;
 }
@@ -57,16 +42,14 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
   };
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: pulseGlowStyle }} />
-      <div 
-        className={`fixed inset-0 z-50 cursor-pointer transition-opacity duration-500 ${
-          isBreaking ? 'opacity-0' : 'opacity-100'
-        }`}
-        onClick={handleClick}
-        style={{
-          background: 'radial-gradient(circle at center, #000000 0%, #000000 50%, #000000 100%)'
-        }}
+    <div 
+      className={`fixed inset-0 z-50 cursor-pointer transition-opacity duration-500 ${
+        isBreaking ? 'opacity-0' : 'opacity-100'
+      }`}
+      onClick={handleClick}
+      style={{
+        background: 'radial-gradient(circle at center, #000000 0%, #000000 50%, #000000 100%)'
+      }}
     >
       {/* Звезды */}
       {stars.map(star => (
@@ -121,11 +104,7 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
 
       {/* Текст приглашения */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-white text-center">
-        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-zoom-in text-white" style={{
-          textShadow: '0 0 20px rgba(255, 255, 255, 1), 0 0 40px rgba(255, 255, 255, 0.8), 0 0 60px rgba(255, 255, 255, 0.6)',
-          filter: 'drop-shadow(0 0 15px rgba(255, 255, 255, 0.9))',
-          animation: 'pulseGlow 2s ease-in-out infinite alternate'
-        }}>
+        <h1 className="text-4xl md:text-6xl font-bold mb-8 animate-zoom-in animate-pulse-scale">
           САЙТ ЖЕЛАНИЙ
         </h1>
         <p className="text-xl md:text-2xl opacity-80 animate-bounce">
@@ -158,7 +137,6 @@ const StarrySplashScreen = ({ onComplete }: StarrySplashScreenProps) => {
         </>
       )}
     </div>
-    </>
   );
 };
 
