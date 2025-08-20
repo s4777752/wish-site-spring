@@ -96,6 +96,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
         <TinkoffPayForm 
           amount={getAmountFromIntensity(wishIntensity)} 
           wish={wish}
+          wishIntensity={wishIntensity}
           onPaymentComplete={onPaymentComplete}
         />
         <Button 

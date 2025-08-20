@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import WishActivated from '@/components/WishActivated';
+import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 
 interface TinkoffPayFormProps {
   amount: number;
   wish: string;
+  wishIntensity: number;
   onPaymentComplete: () => void;
 }
 
@@ -13,7 +15,7 @@ declare global {
   }
 }
 
-const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, onPaymentComplete }) => {
+const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishIntensity, onPaymentComplete }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [showActivated, setShowActivated] = useState(false);
@@ -71,8 +73,30 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, onPayment
         if (window.pay) {
           window.pay(form);
           // Симулируем успешную оплату для демо
-          setTimeout(() => {
+          setTimeout(async () => {
             setPaymentSuccess(true);
+            
+            // Отправляем документ аффирмации после успешной оплаты
+            try {
+              const userEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value || 'user@example.com';
+              const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+              
+              const result = await sendWishAffirmationDocument(
+                wish,
+                wishIntensity,
+                amount,
+                userEmail,
+                '+7 999 123-45-67', // В будущем можно добавить поле телефона в форму
+                userName
+              );
+              
+              if (result.success) {
+                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${userEmail}`);
+              }
+            } catch (error) {
+              console.error('Ошибка при отправке документа аффирмации:', error);
+            }
+            
             // Показываем экран активации через небольшую задержку
             setTimeout(() => {
               setShowActivated(true);
@@ -80,8 +104,30 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, onPayment
           }, 1000);
         } else {
           // Если нет Tinkoff API, сразу вызываем успешную оплату для демо
-          setTimeout(() => {
+          setTimeout(async () => {
             setPaymentSuccess(true);
+            
+            // Отправляем документ аффирмации после успешной оплаты
+            try {
+              const userEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value || 'user@example.com';
+              const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+              
+              const result = await sendWishAffirmationDocument(
+                wish,
+                wishIntensity,
+                amount,
+                userEmail,
+                '+7 999 123-45-67', // В будущем можно добавить поле телефона в форму
+                userName
+              );
+              
+              if (result.success) {
+                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${userEmail}`);
+              }
+            } catch (error) {
+              console.error('Ошибка при отправке документа аффирмации:', error);
+            }
+            
             // Показываем экран активации через небольшую задержку
             setTimeout(() => {
               setShowActivated(true);
