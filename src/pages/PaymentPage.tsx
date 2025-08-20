@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
-import WishActivated from '@/components/WishActivated';
+
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 
 const PaymentPage = () => {
@@ -17,7 +17,7 @@ const PaymentPage = () => {
   const userEmail = searchParams.get('email') || '';
   const whatsappPhone = searchParams.get('phone') || '';
   
-  const [showActivated, setShowActivated] = useState(false);
+
   const [cardNumber, setCardNumber] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
   const [cvv, setCvv] = useState('');
@@ -80,8 +80,8 @@ const PaymentPage = () => {
         console.error('Ошибка при отправке документа аффирмации:', error);
       }
       
-      // Показываем экран активации
-      setShowActivated(true);
+      // Сразу возвращаемся на главную после успешной оплаты
+      navigate('/');
     }, 2000);
   };
 
@@ -89,11 +89,6 @@ const PaymentPage = () => {
   const handleBackToHome = () => {
     navigate('/');
   };
-
-  // Если показываем экран активации
-  if (showActivated) {
-    return <WishActivated wish={wish} onBackToHome={handleBackToHome} />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
