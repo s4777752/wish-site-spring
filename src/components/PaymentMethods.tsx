@@ -58,16 +58,6 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
   if (showTinkoffForm) {
     return (
       <div className="space-y-4">
-        <TinkoffPayForm 
-          amount={getAmountFromIntensity(wishIntensity)} 
-          wish={wish}
-          wishIntensity={wishIntensity}
-          userEmail={userEmail}
-          whatsappPhone={whatsappPhone}
-          onPaymentComplete={onPaymentComplete}
-          onUserDataChange={handleUserDataChange}
-        />
-        
         {/* Кнопка скачивания документа */}
         <Button 
           onClick={() => {
@@ -89,6 +79,16 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
         >
           📄 Скачать документ аффирмации
         </Button>
+        
+        <TinkoffPayForm 
+          amount={getAmountFromIntensity(wishIntensity)} 
+          wish={wish}
+          wishIntensity={wishIntensity}
+          userEmail={userEmail}
+          whatsappPhone={whatsappPhone}
+          onPaymentComplete={onPaymentComplete}
+          onUserDataChange={handleUserDataChange}
+        />
         
         <Button 
           onClick={() => setShowTinkoffForm(false)}
