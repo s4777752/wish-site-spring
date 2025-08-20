@@ -33,6 +33,24 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   const [showDownloadButton, setShowDownloadButton] = useState(false);
   const [documentData, setDocumentData] = useState<DocumentData | null>(null);
 
+  // Тестовая функция для проверки системы
+  const testPaymentSystem = () => {
+    console.log('🧪 ТЕСТИРОВАНИЕ СИСТЕМЫ ОПЛАТЫ');
+    console.log('1. Проверяю загрузку API Тинькофф...');
+    
+    if (typeof window.pay === 'function') {
+      console.log('✅ API Тинькофф загружен успешно');
+    } else {
+      console.log('❌ API Тинькофф не загружен');
+    }
+    
+    console.log('2. Имитирую успешную оплату...');
+    setTimeout(() => {
+      console.log('✅ Тест успешной оплаты - показываю кнопку скачивания');
+      setShowDownloadButton(true);
+    }, 1000);
+  };
+
   useEffect(() => {
     // Генерируем уникальный номер заказа
     const orderId = Date.now().toString();
@@ -270,11 +288,26 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   }
 
   return (
-    <TinkoffForm
-      ref={formRef}
-      amount={amount}
-      onPaymentClick={handlePaymentClick}
-    />
+    <div>
+      {/* Кнопка тестирования (только в dev режиме) */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
+          <h3 className="text-sm font-medium text-yellow-800 mb-2">🧪 Режим тестирования</h3>
+          <button
+            onClick={testPaymentSystem}
+            className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-sm"
+          >
+            Тестировать систему оплаты
+          </button>
+        </div>
+      )}
+      
+      <TinkoffForm
+        ref={formRef}
+        amount={amount}
+        onPaymentClick={handlePaymentClick}
+      />
+    </div>
   );
 };
 
