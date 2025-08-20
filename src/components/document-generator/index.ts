@@ -1,4 +1,4 @@
-export type { DocumentData } from './types';
+export * from './types';
 export { getAffirmationsForWish } from './affirmations';
 export { 
   setupCanvas, 
