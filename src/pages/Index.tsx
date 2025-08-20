@@ -134,6 +134,63 @@ const Index = () => {
         {/* Rules Section */}
         <RulesSection />
 
+        {/* Дополнительные услуги */}
+        <section className="py-16 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-8">
+              ✨ Усильте энергию ваших желаний
+            </h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-3xl">💕</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                  Персональная Аффирмация
+                </h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  Получите красиво оформленный документ с персональными аффирмациями 
+                  для ежедневной практики. Автоматическая отправка на email и WhatsApp.
+                </p>
+                <div className="flex items-center justify-center gap-2 mb-6">
+                  <span className="text-2xl font-bold text-primary">299₽</span>
+                  <span className="text-gray-500 line-through">599₽</span>
+                </div>
+                <a 
+                  href="/affirmation" 
+                  className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full hover:bg-primary/90 transition-colors font-medium"
+                >
+                  <span>🌟</span>
+                  Создать аффирмацию
+                </a>
+              </div>
+
+              <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg">
+                <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <span className="text-3xl">🔮</span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                  Скоро доступно
+                </h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  Индивидуальная консультация по исполнению желаний, 
+                  персональные ритуалы и энергетическая поддержка.
+                </p>
+                <div className="flex items-center justify-center gap-2 mb-6">
+                  <span className="text-gray-500">Уведомим о запуске</span>
+                </div>
+                <button 
+                  disabled
+                  className="inline-flex items-center gap-2 bg-gray-300 text-gray-500 px-6 py-3 rounded-full cursor-not-allowed font-medium"
+                >
+                  <span>⏳</span>
+                  В разработке
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Footer */}
         <footer className="border-t border-gray-200 py-8">
           <div className="max-w-4xl mx-auto px-4 text-center">
