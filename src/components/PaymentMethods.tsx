@@ -67,6 +67,29 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
           onPaymentComplete={onPaymentComplete}
           onUserDataChange={handleUserDataChange}
         />
+        
+        {/* Кнопка скачивания документа */}
+        <Button 
+          onClick={() => {
+            const documentData = {
+              wish: wish,
+              intensity: wishIntensity,
+              amount: getAmountFromIntensity(wishIntensity),
+              email: userEmail || 'user@example.com',
+              userName: 'Пользователь',
+              documentId: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+            };
+            
+            // Импортируем и вызываем функцию генерации
+            import('../components/DocumentGenerator').then(({ generateAndDownloadDocument }) => {
+              generateAndDownloadDocument(documentData);
+            });
+          }}
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 transition-colors duration-200"
+        >
+          📄 Скачать документ аффирмации
+        </Button>
+        
         <Button 
           onClick={() => setShowTinkoffForm(false)}
           variant="outline"
