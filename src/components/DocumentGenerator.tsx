@@ -9,11 +9,7 @@ import {
 } from './document-generator/canvas-setup';
 import { drawHeader } from './document-generator/header-section';
 import { drawWishSection } from './document-generator/wish-section';
-import { 
-  drawAffirmationsSection, 
-  drawPsychologySection, 
-  drawInstructionsSection 
-} from './document-generator/content-sections';
+import { drawAffirmationsSection } from './document-generator/content-sections';
 import { drawFooterInfo, drawSeal, drawBottomText } from './document-generator/footer-section';
 
 export { DocumentData, getAffirmationsForWish };
@@ -50,9 +46,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   drawHeader(ctx, canvas, documentId, activationDateStr);
   
   const affirmationStartY = drawWishSection(ctx, canvas, documentData);
-  const psychologyStartY = drawAffirmationsSection(ctx, canvas, documentData.wish, affirmationStartY);
-  const instructionsStartY = drawPsychologySection(ctx, canvas, psychologyStartY);
-  drawInstructionsSection(ctx, canvas, instructionsStartY);
+  drawAffirmationsSection(ctx, canvas, documentData.wish, affirmationStartY);
   
   drawFooterInfo(ctx, canvas, documentId, activationDateStr);
   drawSeal(ctx, canvas, documentId, currentDate);

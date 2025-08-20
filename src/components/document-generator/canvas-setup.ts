@@ -4,7 +4,7 @@ export function setupCanvas(): { canvas: HTMLCanvasElement; ctx: CanvasRendering
   if (!ctx) return null;
   
   canvas.width = 1200;
-  canvas.height = 2100;
+  canvas.height = 1600;
   
   return { canvas, ctx };
 }
