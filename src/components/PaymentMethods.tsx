@@ -25,51 +25,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
     return (
       <div className="space-y-4">
         {/* Поля для доставки документа */}
-        {(needsWhatsappPhone || needsEmail) && (
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            
-            {needsWhatsappPhone && (
-              <div className="mb-3">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  📱 WhatsApp номер
-                </label>
-                <Input
-                  type="tel"
-                  placeholder="+7 (999) 123-45-67"
-                  value={whatsappPhone}
-                  onChange={(e) => {
-                    let value = e.target.value.replace(/\D/g, '');
-                    if (value.startsWith('8')) value = '7' + value.slice(1);
-                    if (value.startsWith('7') && value.length <= 11) {
-                      const formatted = value.length > 1 ? 
-                        `+7 (${value.slice(1, 4)}) ${value.slice(4, 7)}-${value.slice(7, 9)}-${value.slice(9, 11)}` :
-                        '+7';
-                      setWhatsappPhone(formatted);
-                    }
-                  }}
-                  className="text-base"
-                  required={needsWhatsappPhone}
-                />
-              </div>
-            )}
-            
-            {needsEmail && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  📧 Email адрес
-                </label>
-                <Input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  className="text-base"
-                  required={needsEmail}
-                />
-              </div>
-            )}
-          </div>
-        )}
+
 
         <Button 
           onClick={() => setShowTinkoffForm(true)}
