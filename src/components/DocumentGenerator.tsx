@@ -61,7 +61,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   
   // Размер сертификата (A4 пропорции) - увеличен для новых элементов
   canvas.width = 1200;
-  canvas.height = 1900;
+  canvas.height = 2100;
   
   // Темный фон - градиент от черного к темно-синему
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -330,6 +330,53 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
       if (wrappedLines.length > 1) {
         affirmationY += (wrappedLines.length - 1) * 20;
       }
+    }
+  });
+  
+  // Психологическое описание аффирмаций
+  affirmationY += 60;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 22px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('ПСИХОЛОГИЧЕСКАЯ ОСНОВА АФФИРМАЦИЙ', canvas.width/2, affirmationY);
+  
+  affirmationY += 40;
+  ctx.font = '15px serif';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#cbd5e1';
+  
+  const psychologyDescription = [
+    '• Аффирмации работают через механизм нейропластичности - способность мозга формировать новые нейронные связи',
+    '• Повторение позитивных утверждений активирует префронтальную кору, отвечающую за целеполагание и планирование',
+    '• Визуализация во время произнесения аффирмаций стимулирует зеркальные нейроны, создавая эффект "проживания" желаемого',
+    '• Эмоциональная вовлеченность активирует лимбическую систему, закрепляя новые убеждения в долговременной памяти',
+    '• Регулярная практика в течение 14 дней формирует устойчивые паттерны мышления и поведения',
+    '• Утреннее время оптимально для аффирмаций из-за высокого уровня кортизола и восприимчивости подсознания'
+  ];
+  
+  psychologyDescription.forEach((description, index) => {
+    const cleanDescription = description.replace('•', '').trim();
+    
+    // Синий маркер
+    ctx.fillStyle = '#3b82f6';
+    ctx.beginPath();
+    ctx.arc(150, affirmationY + (index * 28) - 3, 4, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Внутренний светлый круг
+    ctx.fillStyle = '#60a5fa';
+    ctx.beginPath();
+    ctx.arc(150, affirmationY + (index * 28) - 3, 2, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Текст описания
+    ctx.fillStyle = '#cbd5e1';
+    const wrappedDescriptions = wrapText(ctx, cleanDescription, canvas.width - 200);
+    wrappedDescriptions.forEach((wrappedLine, lineIndex) => {
+      ctx.fillText(wrappedLine, 170, affirmationY + (index * 28) + (lineIndex * 16));
+    });
+    if (wrappedDescriptions.length > 1) {
+      affirmationY += (wrappedDescriptions.length - 1) * 16;
     }
   });
   
