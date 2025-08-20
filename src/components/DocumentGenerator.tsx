@@ -1,20 +1,20 @@
+import type { DocumentData } from './document-generator/types';
+import { getAffirmationsForWish } from './document-generator/affirmations';
 import { 
-  DocumentData,
-  getAffirmationsForWish,
   setupCanvas, 
   drawBackground, 
   drawWatermarks, 
   drawBorders, 
-  drawCornerDecorations,
-  drawHeader,
-  drawWishSection,
+  drawCornerDecorations 
+} from './document-generator/canvas-setup';
+import { drawHeader } from './document-generator/header-section';
+import { drawWishSection } from './document-generator/wish-section';
+import { 
   drawAffirmationsSection, 
   drawPsychologySection, 
-  drawInstructionsSection,
-  drawFooterInfo, 
-  drawSeal, 
-  drawBottomText 
-} from './document-generator';
+  drawInstructionsSection 
+} from './document-generator/content-sections';
+import { drawFooterInfo, drawSeal, drawBottomText } from './document-generator/footer-section';
 
 export { DocumentData, getAffirmationsForWish };
 

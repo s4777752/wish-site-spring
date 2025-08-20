@@ -6,3 +6,6 @@ export interface DocumentData {
   userName: string;
   documentId: string;
 }
+
+// Экспорт типа как константы для совместимости с Vite
+export const DocumentDataType = {} as DocumentData;
