@@ -203,6 +203,13 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
           name="name" 
           required 
         />
+        <input 
+          className="payform-tbank-row" 
+          type="email" 
+          placeholder="E-mail" 
+          name="email" 
+          required 
+        />
 
 
         
