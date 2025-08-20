@@ -208,7 +208,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         }
       };
     }
-  }, [amount, onPaymentComplete]);
+  }, [amount, onPaymentComplete, wish, wishIntensity, userEmail, whatsappPhone]);
 
   const processPayment = async (form: HTMLFormElement) => {
     // Независимо от API Тинькофф, обрабатываем "оплату" 
