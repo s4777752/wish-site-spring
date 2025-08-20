@@ -4,45 +4,93 @@ import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
 import TinkoffPayForm from '@/components/TinkoffPayForm';
 
-
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
   wishIntensity: number;
   onPaymentComplete: () => void;
+  deliveryMethod?: 'whatsapp' | 'email' | 'both';
 }
 
-const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComplete }: PaymentMethodsProps) => {
+const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComplete, deliveryMethod = 'whatsapp' }: PaymentMethodsProps) => {
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
-  const [showSBPForm, setShowSBPForm] = useState(false);
-  const [showCardForm, setShowCardForm] = useState(false);
+  const [whatsappPhone, setWhatsappPhone] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [selectedBank, setSelectedBank] = useState('');
-  const [cardData, setCardData] = useState({
-    number: '',
-    expiry: '',
-    cvv: '',
-    name: '',
-    terminal: '',
-    password: ''
-  });
-
-  const handlePaymentSuccess = () => {
-    setShowAnimation(true);
-  };
+  const needsWhatsappPhone = deliveryMethod === 'whatsapp' || deliveryMethod === 'both';
+  const needsEmail = deliveryMethod === 'email' || deliveryMethod === 'both';
 
 
 
-  if (!showTinkoffForm && !showSBPForm && !showCardForm) {
+  if (!showTinkoffForm) {
     return (
-      <Button 
-        onClick={() => setShowTinkoffForm(true)}
-        className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
-        aria-label="Выбрать оплату через Тинькофф Эквайринг"
-      >
-        <Icon name="Banknote" size={20} className="mr-2" />
-        Тинькофф Эквайринг
-      </Button>
+      <div className="space-y-4">
+        {/* Поля для доставки документа */}
+        {(needsWhatsappPhone || needsEmail) && (
+          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+            <h4 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
+              <span>📜</span>
+              Контакты для доставки аффирмации
+            </h4>
+            
+            {needsWhatsappPhone && (
+              <div className="mb-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  📱 WhatsApp номер
+                </label>
+                <Input
+                  type="tel"
+                  placeholder="+7 (999) 123-45-67"
+                  value={whatsappPhone}
+                  onChange={(e) => {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.startsWith('8')) value = '7' + value.slice(1);
+                    if (value.startsWith('7') && value.length <= 11) {
+                      const formatted = value.length > 1 ? 
+                        `+7 (${value.slice(1, 4)}) ${value.slice(4, 7)}-${value.slice(7, 9)}-${value.slice(9, 11)}` :
+                        '+7';
+                      setWhatsappPhone(formatted);
+                    }
+                  }}
+                  className="text-base"
+                  required={needsWhatsappPhone}
+                />
+              </div>
+            )}
+            
+            {needsEmail && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  📧 Email адрес
+                </label>
+                <Input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                  className="text-base"
+                  required={needsEmail}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        <Button 
+          onClick={() => setShowTinkoffForm(true)}
+          disabled={(needsWhatsappPhone && !whatsappPhone.includes('+7 (')) || (needsEmail && !userEmail.includes('@'))}
+          className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+          aria-label="Выбрать оплату через Тинькофф Эквайринг"
+        >
+          <Icon name="Banknote" size={20} className="mr-2" />
+          Тинькофф Эквайринг
+        </Button>
+        
+        {((needsWhatsappPhone && !whatsappPhone.includes('+7 (')) || (needsEmail && !userEmail.includes('@'))) && (
+          <p className="text-sm text-amber-600 text-center">
+            💡 Заполните контакты для получения документа аффирмации
+          </p>
+        )}
+      </div>
     );
   }
 
@@ -64,217 +112,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
     );
   }
 
-  if (showSBPForm) {
-    return (
-      <div className="space-y-4">
-        <div className="text-center mb-4">
-          <h4 className="text-lg font-semibold text-blue-600 mb-2">Система быстрых платежей</h4>
-          <p className="text-sm text-gray-600">Оплата по номеру телефона через банковское приложение</p>
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Номер телефона
-          </label>
-          <Input
-            type="tel"
-            placeholder="+7 (___) ___-__-__"
-            value={phoneNumber}
-            onChange={(e) => {
-              let value = e.target.value.replace(/\D/g, '');
-              if (value.startsWith('8')) value = '7' + value.slice(1);
-              if (value.startsWith('7') && value.length <= 11) {
-                const formatted = value.length > 1 ? 
-                  `+7 (${value.slice(1, 4)}) ${value.slice(4, 7)}-${value.slice(7, 9)}-${value.slice(9, 11)}` :
-                  value;
-                setPhoneNumber(formatted);
-              } else if (value.length <= 11) {
-                setPhoneNumber(value);
-              }
-            }}
-            className="text-lg"
-            aria-required="true"
-            aria-describedby="phone-help"
-          />
-          <div id="phone-help" className="text-xs text-gray-500 mt-1">
-            Введите номер телефона в формате +7 (999) 999-99-99
-          </div>
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Выберите банк
-          </label>
-          <div className="grid grid-cols-2 gap-3">
-            {[
-              { name: 'Сбербанк', icon: '🟢' },
-              { name: 'ВТБ', icon: '🔵' },
-              { name: 'Тинькофф', icon: '🟡' },
-              { name: 'Альфа-Банк', icon: '🔴' },
-              { name: 'Газпромбанк', icon: '⚫' },
-              { name: 'Другой банк', icon: '💳' }
-            ].map((bank) => (
-              <button
-                key={bank.name}
-                onClick={() => setSelectedBank(bank.name)}
-                className={`p-3 rounded-lg border-2 text-sm font-medium transition-all hover:scale-105 ${
-                  selectedBank === bank.name
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-gray-300 bg-white text-gray-700 hover:border-blue-300'
-                }`}
-                role="radio"
-                aria-checked={selectedBank === bank.name}
-                aria-label={`Выбрать банк ${bank.name}`}
-              >
-                <div className="text-lg mb-1">{bank.icon}</div>
-                {bank.name}
-              </button>
-            ))}
-          </div>
-        </div>
-        
-        <div className="flex space-x-3">
-          <Button 
-            onClick={() => {
-              setShowSBPForm(false);
-              setPhoneNumber('');
-              setSelectedBank('');
-            }}
-            variant="outline"
-            className="flex-1"
-          >
-            Назад
-          </Button>
-          <Button 
-            onClick={handlePaymentSuccess}
-            disabled={!phoneNumber.includes('+7') || !selectedBank}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            <Icon name="Smartphone" size={20} className="mr-2" />
-            Оплатить {getAmountFromIntensity(wishIntensity)} ₽
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  if (showCardForm) {
-    return (
-      <div className="space-y-4">
-        <div className="grid grid-cols-1 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Номер карты
-            </label>
-            <Input
-              type="text"
-              placeholder="1234 5678 9012 3456"
-              value={cardData.number}
-              onChange={(e) => {
-                let value = e.target.value.replace(/\D/g, '');
-                value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-                if (value.length <= 19) {
-                  setCardData({...cardData, number: value});
-                }
-              }}
-              className="text-lg"
-              aria-required="true"
-              aria-label="Номер банковской карты"
-              autoComplete="cc-number"
-            />
-          </div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Срок действия
-              </label>
-              <Input
-                type="text"
-                placeholder="ММ/ГГ"
-                value={cardData.expiry}
-                onChange={(e) => {
-                  let value = e.target.value.replace(/\D/g, '');
-                  if (value.length >= 2) {
-                    value = value.substring(0,2) + '/' + value.substring(2,4);
-                  }
-                  if (value.length <= 5) {
-                    setCardData({...cardData, expiry: value});
-                  }
-                }}
-                className="text-lg"
-                aria-required="true"
-                aria-label="Срок действия карты"
-                autoComplete="cc-exp"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                CVV
-              </label>
-              <Input
-                type="password"
-                placeholder="123"
-                maxLength={3}
-                value={cardData.cvv}
-                onChange={(e) => {
-                  const value = e.target.value.replace(/\D/g, '');
-                  setCardData({...cardData, cvv: value});
-                }}
-                className="text-lg"
-                aria-required="true"
-                aria-label="CVV код безопасности"
-                autoComplete="cc-csc"
-              />
-            </div>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Имя на карте
-            </label>
-            <Input
-              type="text"
-              placeholder="IVAN PETROV"
-              value={cardData.name}
-              onChange={(e) => setCardData({...cardData, name: e.target.value.toUpperCase()})}
-              className="text-lg"
-              aria-required="true"
-              aria-label="Имя держателя карты"
-              autoComplete="cc-name"
-            />
-          </div>
-        </div>
-        
-        <div className="flex space-x-3">
-          <Button 
-            onClick={() => setShowCardForm(false)}
-            variant="outline"
-            className="flex-1"
-          >
-            Назад
-          </Button>
-          <Button 
-            onClick={handlePaymentSuccess}
-            disabled={!cardData.number || !cardData.expiry || !cardData.cvv || !cardData.name}
-            className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
-          >
-            <Icon name="Sparkles" size={20} className="mr-2" />
-            Оплатить {getAmountFromIntensity(wishIntensity)} ₽
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <>
-      {showAnimation && (
-        <PaymentSuccessAnimation onComplete={handleAnimationComplete} />
-      )}
-    </>
-  );
+  return null;
 };
 
 export default PaymentMethods;

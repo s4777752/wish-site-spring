@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface PaymentSectionProps {
@@ -19,6 +20,7 @@ const PaymentSection = ({
   getColorFromIntensity,
   children 
 }: PaymentSectionProps) => {
+  const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp' | 'email' | 'both'>('whatsapp');
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -140,7 +142,14 @@ const PaymentSection = ({
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition-all cursor-pointer">
+                <div 
+                  onClick={() => setDeliveryMethod('whatsapp')}
+                  className={`bg-white/80 backdrop-blur-sm rounded-lg p-4 border-2 transition-all cursor-pointer ${
+                    deliveryMethod === 'whatsapp' 
+                      ? 'border-green-500 bg-green-50/50' 
+                      : 'border-gray-200 hover:border-green-300 hover:bg-green-50/50'
+                  }`}
+                >
                   <div className="text-center">
                     <div className="text-3xl mb-2">📱</div>
                     <h5 className="font-semibold text-gray-800 mb-1">WhatsApp</h5>
@@ -153,14 +162,22 @@ const PaymentSection = ({
                         name="delivery" 
                         value="whatsapp" 
                         className="mr-2"
-                        defaultChecked
+                        checked={deliveryMethod === 'whatsapp'}
+                        onChange={() => setDeliveryMethod('whatsapp')}
                       />
                       <span className="text-sm text-green-600 font-medium">Выбрать</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all cursor-pointer">
+                <div 
+                  onClick={() => setDeliveryMethod('email')}
+                  className={`bg-white/80 backdrop-blur-sm rounded-lg p-4 border-2 transition-all cursor-pointer ${
+                    deliveryMethod === 'email' 
+                      ? 'border-blue-500 bg-blue-50/50' 
+                      : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
+                  }`}
+                >
                   <div className="text-center">
                     <div className="text-3xl mb-2">📧</div>
                     <h5 className="font-semibold text-gray-800 mb-1">Email</h5>
@@ -173,6 +190,8 @@ const PaymentSection = ({
                         name="delivery" 
                         value="email" 
                         className="mr-2"
+                        checked={deliveryMethod === 'email'}
+                        onChange={() => setDeliveryMethod('email')}
                       />
                       <span className="text-sm text-blue-600 font-medium">Выбрать</span>
                     </div>
@@ -188,7 +207,7 @@ const PaymentSection = ({
               </div>
             </div>
             
-            {children}
+            {React.cloneElement(children as React.ReactElement, { deliveryMethod })}
           </div>
         )}
       </CardContent>
