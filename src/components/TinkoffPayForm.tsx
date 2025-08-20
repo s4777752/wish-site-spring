@@ -136,6 +136,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
                    event.data.status === 'error') {
             console.log('❌ Ошибка оплаты через Тинькофф');
           }
+        }
       };
 
       // Глобальный обработчик успешной оплаты (если Тинькофф его вызывает)
