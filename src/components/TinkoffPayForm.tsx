@@ -124,6 +124,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
             
             // Показываем кнопку скачивания
             setTimeout(() => {
+              console.log('Показываю кнопку скачивания. DocumentData:', documentData);
               setShowDownloadButton(true);
             }, 1500);
           }, 1000);
@@ -169,6 +170,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
             
             // Показываем кнопку скачивания
             setTimeout(() => {
+              console.log('Показываю кнопку скачивания. DocumentData:', documentData);
               setShowDownloadButton(true);
             }, 1500);
           }, 500);
@@ -268,6 +270,8 @@ Email: ${documentData.email}
 
 
   // Если показываем кнопку скачивания
+  console.log('TinkoffPayForm render. ShowDownloadButton:', showDownloadButton, 'DocumentData:', documentData);
+  
   if (showDownloadButton && documentData) {
     return (
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 text-center">
