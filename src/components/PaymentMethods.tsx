@@ -10,22 +10,12 @@ interface PaymentMethodsProps {
   wish: string;
   onPaymentComplete: () => void;
   deliveryMethod?: 'whatsapp' | 'email' | 'both';
-  onUserDataChange?: (email: string, phone: string) => void;
 }
 
-const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, deliveryMethod = 'whatsapp', onUserDataChange }: PaymentMethodsProps) => {
+const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, deliveryMethod = 'whatsapp' }: PaymentMethodsProps) => {
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
   const [whatsappPhone, setWhatsappPhone] = useState('');
   const [userEmail, setUserEmail] = useState('');
-
-  // Уведомляем родительский компонент об изменении данных пользователя
-  const handleUserDataChange = (email: string, phone: string) => {
-    setUserEmail(email);
-    setWhatsappPhone(phone);
-    if (onUserDataChange) {
-      onUserDataChange(email, phone);
-    }
-  };
 
   const needsWhatsappPhone = deliveryMethod === 'whatsapp' || deliveryMethod === 'both';
   const needsEmail = deliveryMethod === 'email' || deliveryMethod === 'both';
@@ -65,7 +55,6 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
           userEmail={userEmail}
           whatsappPhone={whatsappPhone}
           onPaymentComplete={onPaymentComplete}
-          onUserDataChange={handleUserDataChange}
         />
         <Button 
           onClick={() => setShowTinkoffForm(false)}

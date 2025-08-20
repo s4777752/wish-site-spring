@@ -6,7 +6,6 @@ import WishForm from '@/components/WishForm';
 import PaymentSection from '@/components/PaymentSection';
 import PaymentMethods from '@/components/PaymentMethods';
 import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
-import PaymentSuccessPage from '@/components/PaymentSuccessPage';
 import RulesSection from '@/components/RulesSection';
 import SimpleConfetti from '@/components/SimpleConfetti';
 import StarrySplashScreen from '@/components/StarrySplashScreen';
@@ -21,9 +20,6 @@ const Index = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [showPaymentAnimation, setShowPaymentAnimation] = useState(false);
-  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
-  const [userPhone, setUserPhone] = useState('');
 
 
   // Функция для расчета суммы по интенсивности
@@ -49,7 +45,6 @@ const Index = () => {
 
   const handlePaymentAnimationComplete = async () => {
     setShowPaymentAnimation(false);
-    setShowPaymentSuccess(true);
     
     // Отслеживаем исполнение желания в аналитике
     const amount = getAmountFromIntensity(wishIntensity);
@@ -63,9 +58,9 @@ const Index = () => {
         wish,
         wishIntensity,
         amount,
-        userEmail || 'user@example.com',
-        userPhone || '+7 999 123-45-67',
-        'Пользователь'
+        'user@example.com', // В реальном приложении получаем из формы оплаты
+        '+7 999 123-45-67', // В реальном приложении получаем из формы оплаты
+        'Пользователь' // В реальном приложении получаем из формы
       );
       
       if (result.success) {
@@ -74,6 +69,7 @@ const Index = () => {
     } catch (error) {
       console.error('Ошибка при автоматической отправке документа:', error);
     }
+
   };
 
 
@@ -89,60 +85,11 @@ const Index = () => {
     setShowSplash(false);
   };
 
-  // Обработчик скачивания документа
-  const handleDownloadDocument = async () => {
-    try {
-      const amount = getAmountFromIntensity(wishIntensity);
-      const result = await sendWishAffirmationDocument(
-        wish,
-        wishIntensity,
-        amount,
-        userEmail || 'user@example.com',
-        userPhone || '+7 999 123-45-67',
-        'Пользователь'
-      );
-      
-      if (result.success && result.documentUrl) {
-        // Создаем ссылку для скачивания
-        const link = document.createElement('a');
-        link.href = result.documentUrl;
-        link.download = `affirmation_${result.documentId}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        console.log(`📄 Документ #${result.documentId} скачан`);
-      }
-    } catch (error) {
-      console.error('Ошибка при скачивании документа:', error);
-    }
-  };
-
-  // Обработчик закрытия страницы успешной оплаты
-  const handleClosePaymentSuccess = () => {
-    setShowPaymentSuccess(false);
-    // Сбрасываем форму для нового желания
-    setWish('');
-    setShowPayment(false);
-    setWishIntensity(5);
-  };
-
 
 
   // Если показываем заставку, отображаем только её
   if (showSplash) {
     return <StarrySplashScreen onComplete={handleSplashComplete} />;
-  }
-
-  // Если показываем страницу успешной оплаты, отображаем только её
-  if (showPaymentSuccess) {
-    return (
-      <PaymentSuccessPage
-        amount={getAmountFromIntensity(wishIntensity)}
-        onDownload={handleDownloadDocument}
-        onClose={handleClosePaymentSuccess}
-      />
-    );
   }
 
 
@@ -205,10 +152,6 @@ const Index = () => {
                 wishIntensity={wishIntensity}
                 wish={wish}
                 onPaymentComplete={handlePayment}
-                onUserDataChange={(email, phone) => {
-                  setUserEmail(email);
-                  setUserPhone(phone);
-                }}
               />
             </PaymentSection>
           }
