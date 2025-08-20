@@ -132,15 +132,15 @@ const RulesSection = () => {
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start space-x-4">
               <div className="bg-cyan-100 p-3 rounded-full">
-                <Icon name="Clock" size={24} className="text-cyan-600" />
+                <Icon name="Zap" size={24} className="text-cyan-600" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-3">Сроки исполнения</h3>
+                <h3 className="text-xl font-semibold mb-3">Как работает сайт</h3>
                 <ul className="space-y-2 text-gray-600">
-                  <li>• Простые желания: от 7 до 30 дней</li>
-                  <li>• Средние желания: от 1 до 3 месяцев</li>
-                  <li>• Сложные желания: от 3 до 12 месяцев</li>
-                  <li>• Глобальные изменения: до 2-3 лет</li>
+                  <li>• Сайт автоматически исполняет желания после оплаты</li>
+                  <li>• Энергетический вклад активирует процесс</li>
+                  <li>• Документ аффирмации - дополнительный инструмент</li>
+                  <li>• Аффирмации усиливают и ускоряют результат</li>
                 </ul>
               </div>
             </div>
