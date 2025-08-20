@@ -36,19 +36,47 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   // Тестовая функция для проверки системы
   const testPaymentSystem = () => {
     console.log('🧪 ТЕСТИРОВАНИЕ СИСТЕМЫ ОПЛАТЫ');
-    console.log('1. Проверяю загрузку API Тинькофф...');
+    console.log('1. Проверяю загрузку скриптов...');
     
+    // Проверяем все скрипты на странице
+    const scripts = Array.from(document.querySelectorAll('script[src]'));
+    const tinkoffScript = scripts.find(script => 
+      (script as HTMLScriptElement).src.includes('tinkoff')
+    );
+    
+    if (tinkoffScript) {
+      console.log('📜 Скрипт Тинькофф найден:', (tinkoffScript as HTMLScriptElement).src);
+    } else {
+      console.log('❌ Скрипт Тинькофф не найден');
+    }
+    
+    // Проверяем доступность API
+    console.log('2. Проверяю глобальный объект window.pay...');
     if (typeof window.pay === 'function') {
       console.log('✅ API Тинькофф загружен успешно');
     } else {
-      console.log('❌ API Тинькофф не загружен');
+      console.log('❌ API Тинькофф не загружен или не готов');
+      console.log('window.pay =', window.pay);
     }
     
-    console.log('2. Имитирую успешную оплату...');
+    console.log('3. Имитирую успешную оплату через 2 секунды...');
     setTimeout(() => {
-      console.log('✅ Тест успешной оплаты - показываю кнопку скачивания');
+      console.log('✅ Тест: показываю кнопку скачивания');
+      
+      const emailToSend = userEmail || 'test@example.com';
+      const documentId = `TEST${Date.now()}`;
+      
+      setDocumentData({
+        wish,
+        intensity: wishIntensity,
+        amount,
+        email: emailToSend,
+        userName: 'Тестовый пользователь',
+        documentId
+      });
+      
       setShowDownloadButton(true);
-    }, 1000);
+    }, 2000);
   };
 
   useEffect(() => {
