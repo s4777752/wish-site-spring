@@ -11,6 +11,7 @@ interface TinkoffPayFormProps {
   userEmail: string;
   whatsappPhone: string;
   onPaymentComplete: () => void;
+  onUserDataChange?: (email: string, phone: string) => void;
 }
 
 declare global {
@@ -26,7 +27,8 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   wishIntensity, 
   userEmail, 
   whatsappPhone, 
-  onPaymentComplete 
+  onPaymentComplete,
+  onUserDataChange 
 }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -223,6 +225,11 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       // Получаем данные из формы
       const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
       const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+      
+      // Передаем данные пользователя обратно в родительский компонент
+      if (onUserDataChange && formUserEmail) {
+        onUserDataChange(formUserEmail, whatsappPhone);
+      }
       
       // Используем email из PaymentMethods если он есть, иначе из формы оплаты
       const emailToSend = userEmail || formUserEmail || 'user@example.com';

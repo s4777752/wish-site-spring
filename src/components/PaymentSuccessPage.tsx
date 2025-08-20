@@ -1,0 +1,62 @@
+import React from 'react';
+import Icon from '@/components/ui/icon';
+
+interface PaymentSuccessPageProps {
+  onDownload: () => void;
+  onClose: () => void;
+  amount: number;
+}
+
+const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
+  onDownload,
+  onClose,
+  amount
+}) => {
+  return (
+    <div className="fixed inset-0 bg-gray-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center">
+        {/* Иконка успеха */}
+        <div className="w-20 h-20 mx-auto mb-6 bg-blue-100 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+            <Icon name="Check" className="w-6 h-6 text-white" />
+          </div>
+        </div>
+
+        {/* Заголовок */}
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          Оплачено
+        </h1>
+
+        {/* Сумма */}
+        <div className="text-lg text-gray-600 mb-8">
+          {amount} ₽
+        </div>
+
+        {/* Кнопка скачивания */}
+        <button
+          onClick={onDownload}
+          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 mb-4 flex items-center justify-center gap-2"
+        >
+          <Icon name="Download" size={20} />
+          Скачать документ
+        </button>
+
+        {/* Кнопка закрытия */}
+        <button
+          onClick={onClose}
+          className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
+        >
+          Закрыть окно
+        </button>
+
+        {/* Дополнительная информация */}
+        <p className="text-sm text-gray-500 mt-6">
+          Ваш документ готов к скачиванию. 
+          Если скачивание не началось автоматически, нажмите на кнопку выше.
+        </p>
+      </div>
+    </div>
+  );
+};
+
+export default PaymentSuccessPage;
