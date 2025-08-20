@@ -285,6 +285,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
           type="email" 
           placeholder="E-mail" 
           name="email" 
+          defaultValue={userEmail}
           required 
         />
 
