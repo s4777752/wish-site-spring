@@ -208,11 +208,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
   
-  ctx.font = 'bold 18px serif';
-  ctx.fillStyle = '#000000';
-  ctx.fillText(`Документ №: ${documentId}`, canvas.width/2, 250);
-  
-  // Дата активации (через 24 часа)
+  // Дата активации (через 24 часа) - рассчитываем здесь для использования внизу
   const activationDate = new Date();
   activationDate.setDate(activationDate.getDate() + 1);
   const activationDateStr = activationDate.toLocaleDateString('ru-RU', { 
@@ -222,10 +218,6 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
     hour: '2-digit',
     minute: '2-digit'
   });
-  
-  ctx.font = '16px serif';
-  ctx.fillStyle = '#000000';
-  ctx.fillText(`Дата активации: ${activationDateStr}`, canvas.width/2, 275);
   
   // Декоративная линия под заголовком
   const lineGradient = ctx.createLinearGradient(200, 240, canvas.width - 200, 240);
@@ -388,6 +380,19 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
       affirmationY += (wrappedInstructions.length - 1) * 16;
     }
   });
+  
+  // Информация о документе (слева от печати)
+  const docInfoX = 150;
+  const docInfoY = canvas.height - 280;
+  
+  ctx.fillStyle = '#000000';
+  ctx.font = 'bold 24px serif';
+  ctx.textAlign = 'left';
+  ctx.fillText(`Документ №: ${documentId}`, docInfoX, docInfoY - 20);
+  
+  ctx.font = '20px serif';
+  ctx.fillText(`Дата активации:`, docInfoX, docInfoY + 20);
+  ctx.fillText(activationDateStr, docInfoX, docInfoY + 50);
   
   // Фигурная печать с орнаментом (без звездочек)
   const sealX = canvas.width - 280;
