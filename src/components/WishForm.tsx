@@ -19,7 +19,7 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection, onConf
         </h1>
         
         <div className="space-y-6 animate-fade-in">
-          <p id="wish-description" className="text-lg text-gray-600 mb-8">После "ОК" - выбирайте силу вашего желания, Дополнительно документ Аффирмации будет отправлен на почту или  WhatsApp</p>
+          <p id="wish-description" className="text-lg text-gray-600 mb-8">После "ОК" - выбирайте силу вашего желания, Дополнительно документ Аффирмации можно будет скачать после оплаты.</p>
           
           <div className="max-w-lg mx-auto space-y-4">
             <Textarea
