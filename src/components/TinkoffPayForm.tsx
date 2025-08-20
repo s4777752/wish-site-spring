@@ -232,7 +232,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
           className="payform-tbank-row" 
           type="hidden" 
           name="terminalkey" 
-          value="1755704239246DEMO" 
+          value="1755704239263" 
         />
         <input 
           className="payform-tbank-row" 
