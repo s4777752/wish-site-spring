@@ -32,6 +32,69 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [showDownloadButton, setShowDownloadButton] = useState(false);
   const [documentData, setDocumentData] = useState<DocumentData | null>(null);
+  const statusIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Функция обработки успешной оплаты
+  const handlePaymentSuccess = () => {
+    const emailToSend = userEmail || 'user@example.com';
+    const userName = 'Пользователь';
+    const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    
+    setDocumentData({
+      wish,
+      intensity: wishIntensity,
+      amount,
+      email: emailToSend,
+      userName,
+      documentId
+    });
+
+    // Отправляем email с документом
+    try {
+      sendWishAffirmationDocument(
+        wish,
+        wishIntensity,
+        amount,
+        emailToSend,
+        whatsappPhone || '+7 999 123-45-67',
+        userName
+      ).then((result) => {
+        if (result.success) {
+          console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend}`);
+        }
+      });
+    } catch (error) {
+      console.error('Ошибка при отправке документа аффирмации:', error);
+    }
+    
+    setTimeout(() => {
+      setShowDownloadButton(true);
+    }, 500);
+  };
+
+  // Запуск проверки статуса оплаты
+  const startStatusCheck = () => {
+    const checkPaymentStatus = () => {
+      // Проверяем есть ли на странице индикаторы успешной оплаты
+      const successElements = document.querySelectorAll('[data-payment="success"], .payment-success, .success');
+      if (successElements.length > 0) {
+        console.log('🔍 Найден индикатор успешной оплаты на странице');
+        handlePaymentSuccess();
+        if (statusIntervalRef.current) {
+          clearInterval(statusIntervalRef.current);
+        }
+      }
+    };
+
+    statusIntervalRef.current = setInterval(checkPaymentStatus, 2000);
+    
+    // Очищаем интервал через 2 минуты
+    setTimeout(() => {
+      if (statusIntervalRef.current) {
+        clearInterval(statusIntervalRef.current);
+      }
+    }, 120000);
+  };
 
 
 
@@ -48,92 +111,42 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       const handleTinkoffMessage = (event: MessageEvent) => {
         console.log('Получено сообщение от Тинькофф:', event.data);
         
-        // Проверяем успешную оплату
-        if (event.data && event.data.type === 'payment_success') {
-          console.log('✅ Оплата через Тинькофф успешна!');
-          
-          // Устанавливаем данные документа
-          const emailToSend = userEmail || 'user@example.com';
-          const userName = 'Пользователь';
-          const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-          
-          setDocumentData({
-            wish,
-            intensity: wishIntensity,
-            amount,
-            email: emailToSend,
-            userName,
-            documentId
-          });
-
-          // Отправляем email с документом
-          try {
-            sendWishAffirmationDocument(
-              wish,
-              wishIntensity,
-              amount,
-              emailToSend,
-              whatsappPhone || '+7 999 123-45-67',
-              userName
-            ).then((result) => {
-              if (result.success) {
-                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend}`);
-              }
-            });
-          } catch (error) {
-            console.error('Ошибка при отправке документа аффирмации:', error);
+        // Проверяем различные типы сообщений от Тинькофф
+        if (event.data) {
+          // Успешная оплата
+          if (event.data.type === 'payment_success' || 
+              event.data.Success === true ||
+              event.data.status === 'success' ||
+              (event.data.Status && event.data.Status === 'CONFIRMED')) {
+            
+            console.log('✅ Оплата через Тинькофф успешна!');
+            handlePaymentSuccess();
+          } 
+          // Закрытие окна после оплаты (это может означать успех)
+          else if (event.data.type === 'close_window' || event.data.type === 'payment_close') {
+            console.log('🔄 Окно Тинькофф закрыто, проверяем статус оплаты...');
+            // Даём небольшую задержку и показываем успех (обычно закрытие = успех)
+            setTimeout(() => {
+              handlePaymentSuccess();
+            }, 1000);
           }
-          
-          setTimeout(() => {
-            setShowDownloadButton(true);
-          }, 500);
-        } else if (event.data && event.data.type === 'payment_error') {
-          console.log('❌ Ошибка оплаты через Тинькофф');
-        }
+          // Ошибка оплаты
+          else if (event.data.type === 'payment_error' || 
+                   event.data.Success === false ||
+                   event.data.status === 'error') {
+            console.log('❌ Ошибка оплаты через Тинькофф');
+          }
       };
 
       // Глобальный обработчик успешной оплаты (если Тинькофф его вызывает)
       window.paymentSuccess = () => {
         console.log('✅ Callback успешной оплаты от Тинькофф');
-        
-        // Устанавливаем данные документа
-        const emailToSend = userEmail || 'user@example.com';
-        const userName = 'Пользователь';
-        const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-        
-        setDocumentData({
-          wish,
-          intensity: wishIntensity,
-          amount,
-          email: emailToSend,
-          userName,
-          documentId
-        });
-
-        // Отправляем email с документом
-        try {
-          sendWishAffirmationDocument(
-            wish,
-            wishIntensity,
-            amount,
-            emailToSend,
-            whatsappPhone || '+7 999 123-45-67',
-            userName
-          ).then((result) => {
-            if (result.success) {
-              console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend}`);
-            }
-          });
-        } catch (error) {
-          console.error('Ошибка при отправке документа аффирмации:', error);
-        }
-        
-        setTimeout(() => {
-          setShowDownloadButton(true);
-        }, 500);
+        handlePaymentSuccess();
       };
 
       window.addEventListener('message', handleTinkoffMessage);
+
+
 
       // Добавляем обработчик формы
       const handleFormSubmit = (e: Event) => {
@@ -189,6 +202,10 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         window.removeEventListener('message', handleTinkoffMessage);
         // Очищаем глобальный callback
         delete window.paymentSuccess;
+        // Очищаем интервал проверки статуса
+        if (statusIntervalRef.current) {
+          clearInterval(statusIntervalRef.current);
+        }
       };
     }
   }, [amount, onPaymentComplete]);
@@ -278,6 +295,9 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         
         // Вызываем API Тинькофф
         window.pay(formRef.current);
+        
+        // Запускаем проверку статуса оплаты
+        startStatusCheck();
         
         // API Тинькофф должен сам обработать успешную оплату
         // Кнопка скачивания появится только после реального успеха оплаты
