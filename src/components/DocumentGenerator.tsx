@@ -59,9 +59,9 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
   
-  // Размер сертификата (A4 пропорции)
+  // Размер сертификата (A4 пропорции) - увеличен для новых элементов
   canvas.width = 1200;
-  canvas.height = 1600;
+  canvas.height = 1900;
   
   // Темный фон - градиент от черного к темно-синему
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
@@ -317,6 +317,54 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
       if (wrappedLines.length > 1) {
         affirmationY += (wrappedLines.length - 1) * 20;
       }
+    }
+  });
+  
+  // Правила и инструкция использования
+  affirmationY += 80;
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 24px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('ПРАВИЛА И ИНСТРУКЦИЯ ИСПОЛЬЗОВАНИЯ', canvas.width/2, affirmationY);
+  
+  affirmationY += 50;
+  ctx.font = '14px serif';
+  ctx.textAlign = 'left';
+  ctx.fillStyle = '#e2e8f0';
+  
+  const instructions = [
+    '• Читайте аффирмации каждое утро в течение 21 дня подряд для максимального эффекта',
+    '• Произносите каждую аффирмацию вслух с верой и эмоциональной вовлеченностью',
+    '• Визуализируйте исполнение вашего желания во время чтения аффирмаций',
+    '• Сохраняйте позитивный настрой и избегайте сомнений в процессе работы',
+    '• Документ хранить в сухом месте, избегать попадания прямых солнечных лучей',
+    '• Не давайте документ в чужие руки - это ваша персональная энергетическая матрица',
+    '• После исполнения желания поблагодарите Вселенную и сожгите документ'
+  ];
+  
+  instructions.forEach((instruction, index) => {
+    const cleanInstruction = instruction.replace('•', '').trim();
+    
+    // Синий маркер
+    ctx.fillStyle = '#3b82f6';
+    ctx.beginPath();
+    ctx.arc(150, affirmationY + (index * 30) - 3, 4, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Внутренний светлый круг
+    ctx.fillStyle = '#60a5fa';
+    ctx.beginPath();
+    ctx.arc(150, affirmationY + (index * 30) - 3, 2, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Текст инструкции
+    ctx.fillStyle = '#cbd5e1';
+    const wrappedInstructions = wrapText(ctx, cleanInstruction, canvas.width - 200);
+    wrappedInstructions.forEach((wrappedLine, lineIndex) => {
+      ctx.fillText(wrappedLine, 170, affirmationY + (index * 30) + (lineIndex * 16));
+    });
+    if (wrappedInstructions.length > 1) {
+      affirmationY += (wrappedInstructions.length - 1) * 16;
     }
   });
   
