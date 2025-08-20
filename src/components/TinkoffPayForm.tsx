@@ -16,6 +16,7 @@ interface TinkoffPayFormProps {
 declare global {
   interface Window {
     pay: (form: HTMLFormElement) => void;
+    paymentSuccess: () => void;
   }
 }
 
@@ -40,6 +41,31 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       if (orderInput) {
         orderInput.value = orderId;
       }
+
+      // Слушаем сообщения от Тинькофф о результате оплаты
+      const handleTinkoffMessage = (event: MessageEvent) => {
+        console.log('Получено сообщение от Тинькофф:', event.data);
+        
+        // Проверяем успешную оплату
+        if (event.data && event.data.type === 'payment_success') {
+          console.log('✅ Оплата через Тинькофф успешна!');
+          setTimeout(() => {
+            setShowDownloadButton(true);
+          }, 500);
+        } else if (event.data && event.data.type === 'payment_error') {
+          console.log('❌ Ошибка оплаты через Тинькофф');
+        }
+      };
+
+      // Глобальный обработчик успешной оплаты (если Тинькофф его вызывает)
+      window.paymentSuccess = () => {
+        console.log('✅ Callback успешной оплаты от Тинькофф');
+        setTimeout(() => {
+          setShowDownloadButton(true);
+        }, 500);
+      };
+
+      window.addEventListener('message', handleTinkoffMessage);
 
       // Добавляем обработчик формы
       const handleFormSubmit = (e: Event) => {
@@ -92,6 +118,9 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         if (formRef.current) {
           formRef.current.removeEventListener('submit', handleFormSubmit);
         }
+        window.removeEventListener('message', handleTinkoffMessage);
+        // Очищаем глобальный callback
+        delete window.paymentSuccess;
       };
     }
   }, [amount, onPaymentComplete]);
@@ -160,24 +189,60 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   };
 
   const handlePaymentClick = (formData: { email: string; userName: string }) => {
-    const emailToSend = userEmail || formData.email || 'user@example.com';
-    const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    console.log('Запуск оплаты Тинькофф для:', formData);
     
-    // Сохраняем данные для скачивания
-    setDocumentData({
-      wish,
-      intensity: wishIntensity,
-      amount,
-      email: emailToSend,
-      userName: formData.userName,
-      documentId
-    });
-    
-    // Показываем экран скачивания через 1.5 сек
-    setTimeout(() => {
-      console.log('Показываю кнопку скачивания');
-      setShowDownloadButton(true);
-    }, 1500);
+    // Получаем форму и запускаем API Тинькофф
+    if (formRef.current && window.pay) {
+      try {
+        // Заполняем скрытые поля если нужно
+        const emailToSend = userEmail || formData.email || 'user@example.com';
+        const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+        
+        // Сохраняем данные для будущего использования
+        setDocumentData({
+          wish,
+          intensity: wishIntensity,
+          amount,
+          email: emailToSend,
+          userName: formData.userName,
+          documentId
+        });
+        
+        // Вызываем API Тинькофф
+        window.pay(formRef.current);
+        
+        // API Тинькофф должен сам обработать успешную оплату
+        // Кнопка скачивания появится только после реального успеха оплаты
+        console.log('API Тинькофф запущен. Ожидаем результат оплаты...');
+        
+      } catch (error) {
+        console.error('Ошибка запуска API Тинькофф:', error);
+        // В случае ошибки API показываем кнопку для демо
+        setTimeout(() => {
+          console.log('Показываю кнопку скачивания (fallback)');
+          setShowDownloadButton(true);
+        }, 1500);
+      }
+    } else {
+      console.log('API Тинькофф недоступен, показываю кнопку для демо');
+      // Если нет API Тинькофф - показываем для демо
+      const emailToSend = userEmail || formData.email || 'user@example.com';
+      const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+      
+      setDocumentData({
+        wish,
+        intensity: wishIntensity,
+        amount,
+        email: emailToSend,
+        userName: formData.userName,
+        documentId
+      });
+      
+      setTimeout(() => {
+        console.log('Показываю кнопку скачивания (демо режим)');
+        setShowDownloadButton(true);
+      }, 1500);
+    }
   };
 
   const handleDownload = () => {
