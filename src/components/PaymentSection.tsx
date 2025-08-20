@@ -199,43 +199,7 @@ const PaymentSection = ({
                 </div>
               </div>
 
-              <div className="mt-6 bg-gray-50 p-6 rounded-xl border border-gray-200">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4 text-center">
-                  📋 Контакты для доставки аффирмации
-                </h4>
-                
-                {deliveryMethod === 'whatsapp' && (
-                  <div className="space-y-3">
-                    <label className="block text-sm font-medium text-gray-700">
-                      📱 Номер WhatsApp
-                    </label>
-                    <input 
-                      type="tel" 
-                      placeholder="+7 (999) 123-45-67"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-lg"
-                    />
-                    <p className="text-xs text-gray-500 text-center">
-                      Документ придёт в WhatsApp сразу после оплаты
-                    </p>
-                  </div>
-                )}
-                
-                {deliveryMethod === 'email' && (
-                  <div className="space-y-3">
-                    <label className="block text-sm font-medium text-gray-700">
-                      📧 Email адрес
-                    </label>
-                    <input 
-                      type="email" 
-                      placeholder="example@mail.ru"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-lg"
-                    />
-                    <p className="text-xs text-gray-500 text-center">
-                      PDF документ придёт на почту в течение 5 минут
-                    </p>
-                  </div>
-                )}
-              </div>
+
             </div>
             
             {React.cloneElement(children as React.ReactElement, { deliveryMethod })}
