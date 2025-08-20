@@ -87,65 +87,34 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         orderInput.value = orderId;
       }
 
-      // Следим за изменениями в DOM для обнаружения закрытия iframe Tinkoff
-      const observer = new MutationObserver(() => {
-        const tinkoffIframes = document.querySelectorAll('iframe[src*="tinkoff"], iframe[src*="securepay"]');
-        if (tinkoffIframes.length === 0) {
-          console.log('🔄 iframe Тинькофф исчез - возможно окно закрыто после оплаты');
-          setTimeout(() => {
-            console.log('✅ Считаем что оплата прошла успешно (iframe исчез)');
-            handlePaymentSuccess();
-          }, 1000);
-        }
-      });
-
-      observer.observe(document.body, { 
-        childList: true, 
-        subtree: true 
-      });
-
       // Слушаем сообщения от Тинькофф о результате оплаты
       const handleTinkoffMessage = (event: MessageEvent) => {
-        console.log('Получено сообщение от Тинькофф:', event.data, 'от origin:', event.origin);
+        console.log('Получено сообщение от Тинькофф:', event.data);
         
-        // Проверяем что сообщение от Tinkoff
-        if (event.origin && event.origin.includes('tinkoff.ru')) {
-          // Проверяем различные типы сообщений от Тинькофф
-          if (event.data) {
-            // Успешная оплата
-            if (event.data.type === 'payment_success' || 
-                event.data.Success === true ||
-                event.data.status === 'success' ||
-                event.data.result === 'success' ||
-                (event.data.Status && event.data.Status === 'CONFIRMED')) {
-              
-              console.log('✅ Оплата через Тинькофф успешна!');
+        // Проверяем различные типы сообщений от Тинькофф
+        if (event.data) {
+          // Успешная оплата
+          if (event.data.type === 'payment_success' || 
+              event.data.Success === true ||
+              event.data.status === 'success' ||
+              (event.data.Status && event.data.Status === 'CONFIRMED')) {
+            
+            console.log('✅ Оплата через Тинькофф успешна!');
+            handlePaymentSuccess();
+          } 
+          // Закрытие окна после оплаты (это может означать успех)
+          else if (event.data.type === 'close_window' || event.data.type === 'payment_close') {
+            console.log('🔄 Окно Тинькофф закрыто, проверяем статус оплаты...');
+            // Даём небольшую задержку и показываем успех (обычно закрытие = успех)
+            setTimeout(() => {
               handlePaymentSuccess();
-            } 
-            // Закрытие окна после оплаты - это главный индикатор!
-            else if (event.data.type === 'close' || 
-                     event.data.type === 'close_window' || 
-                     event.data.type === 'payment_close' ||
-                     event.data === 'close' ||
-                     event.data === 'payment_completed') {
-              console.log('🔄 Окно Тинькофф закрыто после оплаты - считаем успешным!');
-              
-              // Сразу перенаправляем на страницу успеха
-              setTimeout(() => {
-                console.log('✅ Предполагаем успешную оплату после закрытия окна');
-                handlePaymentSuccess();
-              }, 500);
-            }
-            // Ошибка оплаты
-            else if (event.data.type === 'payment_error' || 
-                     event.data.Success === false ||
-                     event.data.status === 'error') {
-              console.log('❌ Ошибка оплаты через Тинькофф');
-            }
-            // Любые другие сообщения от Tinkoff (логируем для отладки)
-            else {
-              console.log('📨 Другое сообщение от Тинькофф:', event.data);
-            }
+            }, 1000);
+          }
+          // Ошибка оплаты
+          else if (event.data.type === 'payment_error' || 
+                   event.data.Success === false ||
+                   event.data.status === 'error') {
+            console.log('❌ Ошибка оплаты через Тинькофф');
           }
         }
       };
@@ -218,8 +187,6 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         if (statusIntervalRef.current) {
           clearInterval(statusIntervalRef.current);
         }
-        // Отключаем observer
-        observer.disconnect();
       };
     }
   }, [amount, onPaymentComplete, wish, wishIntensity, userEmail, whatsappPhone]);
@@ -333,26 +300,11 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   console.log('TinkoffPayForm render. Форма Тинькофф готова к работе');
 
   return (
-    <div>
-      <TinkoffForm
-        ref={formRef}
-        amount={amount}
-        onPaymentClick={handlePaymentClick}
-      />
-      
-      {/* Кнопка для случая, когда нужно закрыть окно Tinkoff вручную */}
-      <div className="mt-6 text-center">
-        <button
-          onClick={handlePaymentSuccess}
-          className="bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
-        >
-          ✅ Оплатил - перейти к документу
-        </button>
-        <p className="text-xs text-gray-500 mt-2">
-          Нажмите если окно оплаты закрылось и оплата прошла успешно
-        </p>
-      </div>
-    </div>
+    <TinkoffForm
+      ref={formRef}
+      amount={amount}
+      onPaymentClick={handlePaymentClick}
+    />
   );
 };
 
