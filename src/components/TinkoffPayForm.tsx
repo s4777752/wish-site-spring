@@ -51,6 +51,39 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         // Проверяем успешную оплату
         if (event.data && event.data.type === 'payment_success') {
           console.log('✅ Оплата через Тинькофф успешна!');
+          
+          // Устанавливаем данные документа
+          const emailToSend = userEmail || 'user@example.com';
+          const userName = 'Пользователь';
+          const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+          
+          setDocumentData({
+            wish,
+            intensity: wishIntensity,
+            amount,
+            email: emailToSend,
+            userName,
+            documentId
+          });
+
+          // Отправляем email с документом
+          try {
+            sendWishAffirmationDocument(
+              wish,
+              wishIntensity,
+              amount,
+              emailToSend,
+              whatsappPhone || '+7 999 123-45-67',
+              userName
+            ).then((result) => {
+              if (result.success) {
+                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend}`);
+              }
+            });
+          } catch (error) {
+            console.error('Ошибка при отправке документа аффирмации:', error);
+          }
+          
           setTimeout(() => {
             setShowDownloadButton(true);
           }, 500);
@@ -62,6 +95,39 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       // Глобальный обработчик успешной оплаты (если Тинькофф его вызывает)
       window.paymentSuccess = () => {
         console.log('✅ Callback успешной оплаты от Тинькофф');
+        
+        // Устанавливаем данные документа
+        const emailToSend = userEmail || 'user@example.com';
+        const userName = 'Пользователь';
+        const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+        
+        setDocumentData({
+          wish,
+          intensity: wishIntensity,
+          amount,
+          email: emailToSend,
+          userName,
+          documentId
+        });
+
+        // Отправляем email с документом
+        try {
+          sendWishAffirmationDocument(
+            wish,
+            wishIntensity,
+            amount,
+            emailToSend,
+            whatsappPhone || '+7 999 123-45-67',
+            userName
+          ).then((result) => {
+            if (result.success) {
+              console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend}`);
+            }
+          });
+        } catch (error) {
+          console.error('Ошибка при отправке документа аффирмации:', error);
+        }
+        
         setTimeout(() => {
           setShowDownloadButton(true);
         }, 500);
