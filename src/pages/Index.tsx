@@ -9,6 +9,7 @@ import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
 import RulesSection from '@/components/RulesSection';
 import SimpleConfetti from '@/components/SimpleConfetti';
 import StarrySplashScreen from '@/components/StarrySplashScreen';
+import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 
 const Index = () => {
   const [wish, setWish] = useState('');
@@ -40,7 +41,7 @@ const Index = () => {
     setShowPaymentAnimation(true);
   };
 
-  const handlePaymentAnimationComplete = () => {
+  const handlePaymentAnimationComplete = async () => {
     setShowPaymentAnimation(false);
     setShowConfetti(true);
     
@@ -48,6 +49,24 @@ const Index = () => {
     const amount = getAmountFromIntensity(wishIntensity);
     if (window.trackWish) {
       window.trackWish(amount, wishIntensity);
+    }
+
+    // Автоматически отправляем документ аффирмации после успешной оплаты
+    try {
+      const result = await sendWishAffirmationDocument(
+        wish,
+        wishIntensity,
+        amount,
+        'user@example.com', // В реальном приложении получаем из формы оплаты
+        '+7 999 123-45-67', // В реальном приложении получаем из формы оплаты
+        'Пользователь' // В реальном приложении получаем из формы
+      );
+      
+      if (result.success) {
+        console.log(`✅ Документ аффирмации #${result.documentId} отправлен автоматически после оплаты`);
+      }
+    } catch (error) {
+      console.error('Ошибка при автоматической отправке документа:', error);
     }
   };
 
