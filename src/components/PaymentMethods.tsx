@@ -27,10 +27,6 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
         {/* Поля для доставки документа */}
         {(needsWhatsappPhone || needsEmail) && (
           <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            <h4 className="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-              <span>📜</span>
-              Контакты для доставки аффирмации
-            </h4>
             
             {needsWhatsappPhone && (
               <div className="mb-3">
