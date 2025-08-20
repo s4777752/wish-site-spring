@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
+import PaymentSuccessScreen from '@/components/PaymentSuccessScreen';
+import { DocumentData, generateAndDownloadDocument } from '@/components/DocumentGenerator';
 import TinkoffForm from '@/components/TinkoffForm';
 
 interface TinkoffPayFormProps {
@@ -10,6 +11,7 @@ interface TinkoffPayFormProps {
   userEmail: string;
   whatsappPhone: string;
   onPaymentComplete: () => void;
+  onFinalComplete?: () => void;
 }
 
 declare global {
@@ -25,12 +27,14 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   wishIntensity, 
   userEmail, 
   whatsappPhone, 
-  onPaymentComplete 
+  onPaymentComplete,
+  onFinalComplete 
 }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [showDownloadButton, setShowDownloadButton] = useState(false);
+  const [documentData, setDocumentData] = useState<DocumentData | null>(null);
   const statusIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const navigate = useNavigate();
 
   // Функция обработки успешной оплаты
   const handlePaymentSuccess = () => {
@@ -38,18 +42,36 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
     const userName = 'Пользователь';
     const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
     
-    // Формируем URL с параметрами для страницы успешной оплаты
-    const params = new URLSearchParams({
-      amount: amount.toString(),
-      wish: encodeURIComponent(wish),
-      intensity: wishIntensity.toString(),
+    setDocumentData({
+      wish,
+      intensity: wishIntensity,
+      amount,
       email: emailToSend,
-      phone: whatsappPhone || '',
-      orderId: documentId
+      userName,
+      documentId
     });
 
-    // Перенаправляем на страницу успешной оплаты
-    navigate(`/pay/success?${params.toString()}`);
+    // Отправляем email с документом
+    try {
+      sendWishAffirmationDocument(
+        wish,
+        wishIntensity,
+        amount,
+        emailToSend,
+        whatsappPhone || '+7 999 123-45-67',
+        userName
+      ).then((result) => {
+        if (result.success) {
+          console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend}`);
+        }
+      });
+    } catch (error) {
+      console.error('Ошибка при отправке документа аффирмации:', error);
+    }
+    
+    setTimeout(() => {
+      setShowDownloadButton(true);
+    }, 500);
   };
 
   // Запуск проверки статуса оплаты
@@ -206,8 +228,19 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       
       // Используем email из PaymentMethods если он есть, иначе из формы оплаты
       const emailToSend = userEmail || formUserEmail || 'user@example.com';
+      const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
       
-      console.log('Обрабатываю оплату для:', { wish, intensity: wishIntensity, amount, email: emailToSend, userName });
+      console.log('Сохраняю данные документа:', { wish, intensity: wishIntensity, amount, email: emailToSend, userName, documentId });
+      
+      // Всегда сохраняем данные для скачивания документа
+      setDocumentData({
+        wish,
+        intensity: wishIntensity,
+        amount,
+        email: emailToSend,
+        userName,
+        documentId
+      });
       
       try {
         const result = await sendWishAffirmationDocument(
@@ -226,10 +259,10 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         console.error('Ошибка при отправке документа аффирмации:', error);
       }
       
-      // Перенаправляем на страницу успеха
+      // Показываем кнопку скачивания
       setTimeout(() => {
-        console.log('Перенаправляю на страницу успеха...');
-        handlePaymentSuccess();
+        console.log('Показываю кнопку скачивания...');
+        setShowDownloadButton(true);
       }, 1500);
     }, 1000);
 
@@ -264,10 +297,10 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
         
       } catch (error) {
         console.error('Ошибка запуска API Тинькофф:', error);
-        // В случае ошибки API перенаправляем на страницу успеха
+        // В случае ошибки API показываем кнопку для демо
         setTimeout(() => {
-          console.log('Перенаправляю на страницу успеха (fallback)');
-          handlePaymentSuccess();
+          console.log('Показываю кнопку скачивания (fallback)');
+          setShowDownloadButton(true);
         }, 1500);
       }
     } else {
@@ -292,12 +325,33 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
     }
   };
 
-  const handleBackToHome = () => {
-    onPaymentComplete();
+  const handleDownload = () => {
+    if (documentData) {
+      generateAndDownloadDocument(documentData);
+    }
   };
 
-  // Логика теперь работает через перенаправление на /pay/success
-  console.log('TinkoffPayForm render. Форма Тинькофф готова к работе');
+  const handleBackToHome = () => {
+    setShowDownloadButton(false);
+    if (onFinalComplete) {
+      onFinalComplete();
+    } else {
+      onPaymentComplete();
+    }
+  };
+
+  // Если показываем кнопку скачивания
+  console.log('TinkoffPayForm render. ShowDownloadButton:', showDownloadButton, 'DocumentData:', documentData);
+  
+  if (showDownloadButton && documentData) {
+    return (
+      <PaymentSuccessScreen
+        documentData={documentData}
+        onDownload={handleDownload}
+        onBack={handleBackToHome}
+      />
+    );
+  }
 
   return (
     <TinkoffForm
