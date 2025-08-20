@@ -114,6 +114,40 @@ const RulesSection = () => {
 
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start space-x-4">
+              <div className="bg-teal-100 p-3 rounded-full">
+                <Icon name="Target" size={24} className="text-teal-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Уровни силы желания</h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li>• 1-2: Легкие желания (100-200₽)</li>
+                  <li>• 3-5: Средние желания (300-500₽)</li>
+                  <li>• 6-8: Сильные желания (600-800₽)</li>
+                  <li>• 9-10: Максимальные желания (900-1000₽)</li>
+                </ul>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-start space-x-4">
+              <div className="bg-cyan-100 p-3 rounded-full">
+                <Icon name="Clock" size={24} className="text-cyan-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Сроки исполнения</h3>
+                <ul className="space-y-2 text-gray-600">
+                  <li>• Простые желания: от 7 до 30 дней</li>
+                  <li>• Средние желания: от 1 до 3 месяцев</li>
+                  <li>• Сложные желания: от 3 до 12 месяцев</li>
+                  <li>• Глобальные изменения: до 2-3 лет</li>
+                </ul>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 hover:shadow-lg transition-shadow">
+            <div className="flex items-start space-x-4">
               <div className="bg-amber-100 p-3 rounded-full">
                 <Icon name="Scale" size={24} className="text-amber-600" />
               </div>
