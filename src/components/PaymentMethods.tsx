@@ -7,11 +7,12 @@ import TinkoffPayForm from '@/components/TinkoffPayForm';
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
   wishIntensity: number;
+  wish: string;
   onPaymentComplete: () => void;
   deliveryMethod?: 'whatsapp' | 'email' | 'both';
 }
 
-const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComplete, deliveryMethod = 'whatsapp' }: PaymentMethodsProps) => {
+const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, deliveryMethod = 'whatsapp' }: PaymentMethodsProps) => {
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
   const [whatsappPhone, setWhatsappPhone] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -94,6 +95,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
       <div className="space-y-4">
         <TinkoffPayForm 
           amount={getAmountFromIntensity(wishIntensity)} 
+          wish={wish}
           onPaymentComplete={onPaymentComplete}
         />
         <Button 

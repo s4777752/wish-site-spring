@@ -1,7 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import WishActivated from '@/components/WishActivated';
 
 interface TinkoffPayFormProps {
   amount: number;
+  wish: string;
   onPaymentComplete: () => void;
 }
 
@@ -11,8 +13,10 @@ declare global {
   }
 }
 
-const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComplete }) => {
+const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, onPaymentComplete }) => {
   const formRef = useRef<HTMLFormElement>(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [showActivated, setShowActivated] = useState(false);
 
   useEffect(() => {
     // Генерируем уникальный номер заказа
@@ -68,12 +72,20 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
           window.pay(form);
           // Симулируем успешную оплату для демо
           setTimeout(() => {
-            onPaymentComplete();
+            setPaymentSuccess(true);
+            // Показываем экран активации через небольшую задержку
+            setTimeout(() => {
+              setShowActivated(true);
+            }, 1500);
           }, 1000);
         } else {
           // Если нет Tinkoff API, сразу вызываем успешную оплату для демо
           setTimeout(() => {
-            onPaymentComplete();
+            setPaymentSuccess(true);
+            // Показываем экран активации через небольшую задержку
+            setTimeout(() => {
+              setShowActivated(true);
+            }, 1500);
           }, 500);
         }
       };
@@ -88,6 +100,17 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, onPaymentComple
     }
   }, [amount, onPaymentComplete]);
 
+  // Обработчик возврата на главную после активации
+  const handleBackToHome = () => {
+    setShowActivated(false);
+    setPaymentSuccess(false);
+    onPaymentComplete();
+  };
+
+  // Если показываем экран активации
+  if (showActivated) {
+    return <WishActivated wish={wish} onBackToHome={handleBackToHome} />;
+  }
 
 
   return (
