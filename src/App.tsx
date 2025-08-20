@@ -11,6 +11,7 @@ import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import AffirmationPage from "./pages/AffirmationPage";
 import DocumentPreviewPage from "./pages/DocumentPreviewPage";
+import PaymentPage from "./pages/PaymentPage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/payment" element={<PaymentPage />} />
             <Route path="/affirmation" element={<AffirmationPage />} />
             <Route path="/document" element={<DocumentPreviewPage />} />
             <Route path="/terms" element={<Terms />} />
