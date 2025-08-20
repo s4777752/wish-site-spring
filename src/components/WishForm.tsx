@@ -26,7 +26,7 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection, onConf
               placeholder="Например: 'Я хочу получить повышение на работе', 'Мне нужно найти любовь всей жизни', 'Хочу улучшить свое здоровье'..."
               value={wish}
               onChange={(e) => setWish(e.target.value)}
-              className="min-h-[120px] text-lg border-2 border-gray-200 focus:border-indigo-500 transition-colors"
+              className="min-h-[120px] text-lg border-2 border-gray-300 focus:border-blue-500 transition-colors"
               aria-label="Поле для ввода желания"
               aria-describedby="wish-description"
               aria-required="true"
