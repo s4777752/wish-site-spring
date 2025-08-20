@@ -234,12 +234,16 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
     }, 1000);
 
     // Также пытаемся вызвать API Тинькофф если доступен
-    if (window.pay) {
+    if (window.pay && typeof window.pay === 'function') {
       try {
+        console.log('🏦 Вызываем API Тинькофф...');
         window.pay(form);
+        console.log('🏦 API Тинькофф запущен успешно');
       } catch (error) {
-        console.log('Ошибка API Тинькофф (это нормально для демо):', error);
+        console.log('⚠️ Ошибка API Тинькофф (переходим в демо режим):', error);
       }
+    } else {
+      console.log('⚠️ API Тинькофф недоступен, работаем в демо режиме');
     }
   };
 
@@ -276,7 +280,8 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       const emailToSend = userEmail || formData.email || 'user@example.com';
       const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
       
-      setDocumentData({
+      // В демо режиме просто логируем данные документа
+      console.log('Подготовка документа для демо режима:', {
         wish,
         intensity: wishIntensity,
         amount,
