@@ -202,6 +202,31 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   ctx.fillStyle = '#e2e8f0';
   ctx.fillText('Персональный документ силы', canvas.width/2, 220);
   
+  // Номер документа и дата активации
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  
+  ctx.font = 'bold 18px serif';
+  ctx.fillStyle = '#60a5fa';
+  ctx.fillText(`Документ №: ${documentId}`, canvas.width/2, 250);
+  
+  // Дата активации (через 24 часа)
+  const activationDate = new Date();
+  activationDate.setDate(activationDate.getDate() + 1);
+  const activationDateStr = activationDate.toLocaleDateString('ru-RU', { 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+  
+  ctx.font = '16px serif';
+  ctx.fillStyle = '#fbbf24';
+  ctx.fillText(`Дата активации: ${activationDateStr}`, canvas.width/2, 275);
+  
   // Декоративная линия под заголовком
   const lineGradient = ctx.createLinearGradient(200, 240, canvas.width - 200, 240);
   lineGradient.addColorStop(0, 'transparent');
@@ -221,16 +246,12 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
   
-  // Номер документа
-  ctx.font = '20px monospace';
-  ctx.fillStyle = '#374151'; // Темно-серый
-  ctx.fillText(`№ ${documentId}`, canvas.width/2, 260);
-  ctx.fillText(`Дата активации: ${currentDate}`, canvas.width/2, 290);
+
   
-  // Центральный блок с желанием - темный дизайн
+  // Центральный блок с желанием - темный дизайн  
   const wishBox = {
     x: 120,
-    y: 350,
+    y: 300,
     width: canvas.width - 240,
     height: 180
   };
@@ -446,13 +467,14 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   
   // Текст печати - белый
   ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 16px serif';
+  ctx.font = 'bold 14px serif';
   ctx.textAlign = 'center';
-  ctx.fillText('САЙТ ЖЕЛАНИЙ', sealX, sealY - 5);
-  ctx.font = '14px serif';
-  ctx.fillText('POEHALI.DEV', sealX, sealY + 15);
+  ctx.fillText('САЙТ ЖЕЛАНИЙ', sealX, sealY - 15);
   ctx.font = '12px serif';
-  ctx.fillText(currentDate.split(' ')[2], sealX, sealY + 35);
+  ctx.fillText('POEHALI.DEV', sealX, sealY);
+  ctx.font = '10px serif';
+  ctx.fillText(`№${documentId.slice(-6)}`, sealX, sealY + 15);
+  ctx.fillText(currentDate.split(' ')[2], sealX, sealY + 30);
   
   // Важная надпись внизу
   ctx.fillStyle = '#ef4444';
