@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import AffirmationPage from "./pages/AffirmationPage";
 import DocumentPreviewPage from "./pages/DocumentPreviewPage";
 import TestDocumentPage from "./pages/TestDocumentPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => {
             <Route path="/affirmation" element={<AffirmationPage />} />
             <Route path="/document" element={<DocumentPreviewPage />} />
             <Route path="/test-document" element={<TestDocumentPage />} />
+            <Route path="/pay/success" element={<PaymentSuccessPage />} />
             <Route path="/terms" element={<Terms />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
