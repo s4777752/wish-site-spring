@@ -9,6 +9,7 @@ import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
 import RulesSection from '@/components/RulesSection';
 import SimpleConfetti from '@/components/SimpleConfetti';
 import StarrySplashScreen from '@/components/StarrySplashScreen';
+import WishActivated from '@/components/WishActivated';
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 
 const Index = () => {
@@ -19,6 +20,7 @@ const Index = () => {
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [showPaymentAnimation, setShowPaymentAnimation] = useState(false);
+  const [wishActivated, setWishActivated] = useState(false);
 
   // Функция для расчета суммы по интенсивности
   const getAmountFromIntensity = (intensity: number) => intensity * 100;
@@ -43,7 +45,6 @@ const Index = () => {
 
   const handlePaymentAnimationComplete = async () => {
     setShowPaymentAnimation(false);
-    setShowConfetti(true);
     
     // Отслеживаем исполнение желания в аналитике
     const amount = getAmountFromIntensity(wishIntensity);
@@ -68,6 +69,9 @@ const Index = () => {
     } catch (error) {
       console.error('Ошибка при автоматической отправке документа:', error);
     }
+    
+    // Показываем экран активации желания
+    setWishActivated(true);
   };
 
 
@@ -83,9 +87,23 @@ const Index = () => {
     setShowSplash(false);
   };
 
+  // Обработчик возврата на главную после активации
+  const handleBackToHome = () => {
+    setWishActivated(false);
+    setWish('');
+    setShowPayment(false);
+    setShowConfetti(false);
+    setWishIntensity(5);
+  };
+
   // Если показываем заставку, отображаем только её
   if (showSplash) {
     return <StarrySplashScreen onComplete={handleSplashComplete} />;
+  }
+
+  // Если желание активировано, показываем экран успеха
+  if (wishActivated) {
+    return <WishActivated wish={wish} onBackToHome={handleBackToHome} />;
   }
 
   return (
