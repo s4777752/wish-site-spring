@@ -63,28 +63,28 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   canvas.width = 1200;
   canvas.height = 1600;
   
-  // Фон - градиент от светло-зеленого к белому
+  // Темный фон - градиент от черного к темно-синему
   const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  gradient.addColorStop(0, '#f0fff4'); // Светло-зеленый
-  gradient.addColorStop(0.5, '#ffffff');
-  gradient.addColorStop(1, '#f0f8f0'); // Очень светло-зеленый
+  gradient.addColorStop(0, '#0f172a'); // Очень темно-синий
+  gradient.addColorStop(0.3, '#1e293b'); // Темно-серый
+  gradient.addColorStop(0.7, '#334155'); // Серо-синий
+  gradient.addColorStop(1, '#475569'); // Светло-серый
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   
-  // Водяные знаки по всему документу
+  // Темные водяные знаки
   ctx.save();
-  ctx.globalAlpha = 0.05;
-  ctx.fillStyle = '#22c55e';
-  ctx.font = 'bold 120px serif';
+  ctx.globalAlpha = 0.08;
+  ctx.fillStyle = '#1e40af';
+  ctx.font = 'bold 80px serif';
   ctx.textAlign = 'center';
   
-  // Размещаем водяные знаки в шахматном порядке
   for (let x = 200; x < canvas.width; x += 400) {
     for (let y = 300; y < canvas.height - 200; y += 400) {
       ctx.save();
       ctx.translate(x, y);
-      ctx.rotate(-Math.PI / 6); // Поворот на 30 градусов
-      ctx.fillText('ЖЕЛАНИЯ', 0, 0);
+      ctx.rotate(-Math.PI / 8);
+      ctx.fillText('МАГИЯ', 0, 0);
       ctx.restore();
     }
   }
@@ -93,7 +93,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
     for (let y = 500; y < canvas.height - 200; y += 400) {
       ctx.save();
       ctx.translate(x, y);
-      ctx.rotate(-Math.PI / 6);
+      ctx.rotate(-Math.PI / 8);
       ctx.fillText('СИЛА', 0, 0);
       ctx.restore();
     }
@@ -101,48 +101,65 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   
   ctx.restore();
   
-  // Декоративная рамка - зеленая
+  // Декоративная рамка - синяя
   const borderWidth = 40;
   const borderGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-  borderGradient.addColorStop(0, '#16a34a'); // Темно-зеленый
-  borderGradient.addColorStop(0.5, '#22c55e'); // Зеленый
-  borderGradient.addColorStop(1, '#15803d'); // Темно-зеленый
+  borderGradient.addColorStop(0, '#1e40af'); // Синий
+  borderGradient.addColorStop(0.3, '#3b82f6'); // Светло-синий
+  borderGradient.addColorStop(0.6, '#60a5fa'); // Голубой
+  borderGradient.addColorStop(1, '#1e40af'); // Синий
   
   // Внешняя рамка
   ctx.strokeStyle = borderGradient;
   ctx.lineWidth = borderWidth;
   ctx.strokeRect(borderWidth/2, borderWidth/2, canvas.width - borderWidth, canvas.height - borderWidth);
   
-  // Внутренняя тонкая рамка
-  ctx.strokeStyle = '#166534'; // Темно-зеленый
-  ctx.lineWidth = 3;
+  // Внутренняя рамка
+  ctx.strokeStyle = '#2563eb';
+  ctx.lineWidth = 4;
   ctx.strokeRect(borderWidth + 20, borderWidth + 20, canvas.width - 2*(borderWidth + 20), canvas.height - 2*(borderWidth + 20));
   
-  // Декоративные углы - зеленые
+  // Дополнительная декоративная рамка
+  ctx.strokeStyle = '#1d4ed8';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(borderWidth + 35, borderWidth + 35, canvas.width - 2*(borderWidth + 35), canvas.height - 2*(borderWidth + 35));
+  
+  // Декоративные углы - синие с орнаментом
   const drawCornerDecoration = (x: number, y: number, rotation: number) => {
     ctx.save();
     ctx.translate(x, y);
     ctx.rotate(rotation);
-    ctx.fillStyle = '#22c55e'; // Зеленый
+    
+    // Основная фигура
+    ctx.fillStyle = '#3b82f6';
     ctx.beginPath();
     ctx.moveTo(0, 0);
-    ctx.lineTo(50, 0);
-    ctx.lineTo(30, 20);
-    ctx.lineTo(20, 30);
-    ctx.lineTo(0, 50);
+    ctx.lineTo(70, 0);
+    ctx.quadraticCurveTo(60, 10, 50, 20);
+    ctx.lineTo(40, 30);
+    ctx.quadraticCurveTo(30, 40, 20, 50);
+    ctx.lineTo(10, 60);
+    ctx.quadraticCurveTo(0, 70, 0, 70);
     ctx.closePath();
     ctx.fill();
     
-    // Добавляем внутренний узор
-    ctx.fillStyle = '#16a34a';
+    // Внутренний орнамент 1
+    ctx.fillStyle = '#1e40af';
     ctx.beginPath();
-    ctx.moveTo(10, 10);
-    ctx.lineTo(25, 10);
-    ctx.lineTo(20, 15);
-    ctx.lineTo(15, 20);
-    ctx.lineTo(10, 25);
+    ctx.moveTo(15, 15);
+    ctx.lineTo(45, 15);
+    ctx.lineTo(35, 25);
+    ctx.lineTo(25, 35);
+    ctx.lineTo(15, 45);
     ctx.closePath();
     ctx.fill();
+    
+    // Внутренний орнамент 2
+    ctx.fillStyle = '#60a5fa';
+    ctx.beginPath();
+    ctx.arc(25, 25, 8, 0, Math.PI * 2);
+    ctx.fill();
+    
     ctx.restore();
   };
   
@@ -151,16 +168,58 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   drawCornerDecoration(canvas.width - 80, canvas.height - 80, Math.PI);
   drawCornerDecoration(80, canvas.height - 80, -Math.PI/2);
   
-  // Заголовок - изменен на "АФФИРМАЦИЯ ЖЕЛАНИЙ"
+  // Красивое оформление титульного листа
+  // Фон для заголовка
+  const titleBg = ctx.createLinearGradient(0, 120, 0, 280);
+  titleBg.addColorStop(0, 'rgba(30, 64, 175, 0.4)');
+  titleBg.addColorStop(0.5, 'rgba(59, 130, 246, 0.6)');
+  titleBg.addColorStop(1, 'rgba(30, 64, 175, 0.4)');
+  ctx.fillStyle = titleBg;
+  ctx.fillRect(80, 120, canvas.width - 160, 160);
+  
+  // Обводка для фона заголовка
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(80, 120, canvas.width - 160, 160);
+  
+  // Внутренняя декоративная рамка
+  ctx.strokeStyle = '#60a5fa';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(95, 135, canvas.width - 190, 130);
+  
+  // Заголовок - белый на темном фоне
   ctx.textAlign = 'center';
-  ctx.fillStyle = '#166534'; // Темно-зеленый
-  ctx.font = 'bold 48px serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 52px serif';
+  ctx.shadowColor = 'rgba(0, 0, 0, 0.7)';
+  ctx.shadowBlur = 6;
+  ctx.shadowOffsetX = 3;
+  ctx.shadowOffsetY = 3;
   ctx.fillText('АФФИРМАЦИЯ ЖЕЛАНИЙ', canvas.width/2, 180);
   
   // Подзаголовок
-  ctx.font = 'italic 28px serif';
-  ctx.fillStyle = '#16a34a'; // Зеленый
-  ctx.fillText('Документ квантовой активации энергетических полей', canvas.width/2, 220);
+  ctx.font = 'italic 26px serif';
+  ctx.fillStyle = '#e2e8f0';
+  ctx.fillText('Персональный документ силы', canvas.width/2, 220);
+  
+  // Декоративная линия под заголовком
+  const lineGradient = ctx.createLinearGradient(200, 240, canvas.width - 200, 240);
+  lineGradient.addColorStop(0, 'transparent');
+  lineGradient.addColorStop(0.3, '#60a5fa');
+  lineGradient.addColorStop(0.7, '#60a5fa');
+  lineGradient.addColorStop(1, 'transparent');
+  ctx.strokeStyle = lineGradient;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(200, 240);
+  ctx.lineTo(canvas.width - 200, 240);
+  ctx.stroke();
+  
+  // Сброс тени
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
   
   // Номер документа
   ctx.font = '20px monospace';
@@ -168,46 +227,52 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   ctx.fillText(`№ ${documentId}`, canvas.width/2, 260);
   ctx.fillText(`Дата активации: ${currentDate}`, canvas.width/2, 290);
   
-  // Центральный блок с желанием
+  // Центральный блок с желанием - темный дизайн
   const wishBox = {
     x: 120,
     y: 350,
     width: canvas.width - 240,
-    height: 200
+    height: 180
   };
   
-  // Фон для блока желания - зеленый градиент
+  // Фон для блока желания - темный с синим оттенком
   const wishGradient = ctx.createLinearGradient(wishBox.x, wishBox.y, wishBox.x, wishBox.y + wishBox.height);
-  wishGradient.addColorStop(0, '#f0fdf4'); // Очень светло-зеленый
-  wishGradient.addColorStop(1, '#dcfce7'); // Светло-зеленый
+  wishGradient.addColorStop(0, 'rgba(30, 58, 138, 0.3)');
+  wishGradient.addColorStop(0.5, 'rgba(59, 130, 246, 0.2)');
+  wishGradient.addColorStop(1, 'rgba(30, 58, 138, 0.3)');
   ctx.fillStyle = wishGradient;
   ctx.fillRect(wishBox.x, wishBox.y, wishBox.width, wishBox.height);
   
-  // Рамка блока желания - зеленая
-  ctx.strokeStyle = '#16a34a';
-  ctx.lineWidth = 3;
+  // Рамка блока желания
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 4;
   ctx.strokeRect(wishBox.x, wishBox.y, wishBox.width, wishBox.height);
   
-  // Текст "ВАШЕ ЖЕЛАНИЕ"
-  ctx.fillStyle = '#14532d'; // Темно-зеленый
-  ctx.font = 'bold 24px serif';
-  ctx.fillText('КВАНТОВЫЙ ЗАПРОС ВСЕЛЕННОЙ', canvas.width/2, wishBox.y + 40);
+  // Внутренняя рамка
+  ctx.strokeStyle = '#60a5fa';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(wishBox.x + 15, wishBox.y + 15, wishBox.width - 30, wishBox.height - 30);
+  
+  // Текст "ЖЕЛАНИЕ"
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 30px serif';
+  ctx.fillText('ЖЕЛАНИЕ', canvas.width/2, wishBox.y + 45);
   
   // Само желание (с переносом строк)
-  ctx.fillStyle = '#2c1810';
-  ctx.font = 'italic 22px serif';
+  ctx.fillStyle = '#e2e8f0';
+  ctx.font = 'italic 20px serif';
   const maxWishWidth = wishBox.width - 40;
   const wishLines = wrapText(ctx, documentData.wish, maxWishWidth);
   wishLines.forEach((line, index) => {
-    ctx.fillText(line, canvas.width/2, wishBox.y + 100 + (index * 30));
+    ctx.fillText(line, canvas.width/2, wishBox.y + 90 + (index * 28));
   });
   
   // Параметры документа
   const paramsY = wishBox.y + wishBox.height + 80;
-  ctx.fillStyle = '#16a34a'; // Зеленый
-  ctx.font = 'bold 20px sans-serif';
-  ctx.fillText(`Квантовый уровень силы: ${documentData.intensity}/10`, canvas.width/2, paramsY);
-  ctx.fillText(`Энергетическая инвестиция: ${documentData.amount} ₽`, canvas.width/2, paramsY + 35);
+  ctx.fillStyle = '#60a5fa';
+  ctx.font = 'bold 24px sans-serif';
+  ctx.fillText(`Уровень силы: ${documentData.intensity}/10`, canvas.width/2, paramsY);
+  ctx.fillText(`Энергетический вклад: ${documentData.amount} ₽`, canvas.width/2, paramsY + 40);
   
   // Аффирмации
   const affirmations = getAffirmationsForWish(documentData.wish);
@@ -218,91 +283,138 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   ctx.textAlign = 'left';
   
   let affirmationY = paramsY + 100;
-  ctx.fillStyle = '#14532d'; // Темно-зеленый
-  ctx.font = 'bold 22px serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 28px serif';
   ctx.textAlign = 'center';
-  ctx.fillText('КВАНТОВЫЕ ЭНЕРГЕТИЧЕСКИЕ КОДЫ', canvas.width/2, affirmationY);
+  ctx.fillText('ПЕРСОНАЛЬНЫЕ АФФИРМАЦИИ', canvas.width/2, affirmationY);
   
-  affirmationY += 50;
-  ctx.font = '14px serif'; // Уменьшил размер из-за длинного текста
+  affirmationY += 60;
+  ctx.font = '16px serif';
   ctx.textAlign = 'left';
-  ctx.fillStyle = '#374151'; // Темно-серый
+  ctx.fillStyle = '#e2e8f0';
   
   affirmationLines.forEach((line, index) => {
     const cleanLine = line.replace('•', '').trim();
     if (cleanLine) {
-      // Рисуем зеленый маркер
-      ctx.fillStyle = '#22c55e';
+      // Рисуем синий маркер с двумя кругами
+      ctx.fillStyle = '#3b82f6';
       ctx.beginPath();
-      ctx.arc(150, affirmationY + (index * 35) - 5, 4, 0, Math.PI * 2); // Увеличил маркер и интервал
+      ctx.arc(150, affirmationY + (index * 35) - 5, 6, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Внутренний светлый круг
+      ctx.fillStyle = '#60a5fa';
+      ctx.beginPath();
+      ctx.arc(150, affirmationY + (index * 35) - 5, 3, 0, Math.PI * 2);
       ctx.fill();
       
       // Рисуем текст аффирмации
-      ctx.fillStyle = '#374151';
+      ctx.fillStyle = '#e2e8f0';
       const wrappedLines = wrapText(ctx, cleanLine, canvas.width - 200);
       wrappedLines.forEach((wrappedLine, lineIndex) => {
-        ctx.fillText(wrappedLine, 170, affirmationY + (index * 35) + (lineIndex * 18));
+        ctx.fillText(wrappedLine, 170, affirmationY + (index * 35) + (lineIndex * 20));
       });
       if (wrappedLines.length > 1) {
-        affirmationY += (wrappedLines.length - 1) * 18;
+        affirmationY += (wrappedLines.length - 1) * 20;
       }
     }
   });
   
-  // Печать сайта (внизу справа) - синяя
-  const sealX = canvas.width - 250;
-  const sealY = canvas.height - 250;
-  const sealRadius = 80;
+  // Фигурная печать с орнаментом (без звездочек)
+  const sealX = canvas.width - 280;
+  const sealY = canvas.height - 280;
+  const sealRadius = 90;
   
-  // Круглая печать - синяя
-  ctx.strokeStyle = '#1e40af'; // Синий
-  ctx.lineWidth = 6;
+  // Основная печать - фигурная форма
+  ctx.strokeStyle = '#1e40af';
+  ctx.lineWidth = 8;
   ctx.beginPath();
-  ctx.arc(sealX, sealY, sealRadius, 0, Math.PI * 2);
+  
+  // Создаем фигурную печать из лепестков
+  const petals = 8;
+  for (let i = 0; i < petals; i++) {
+    const angle = (Math.PI * 2 * i) / petals;
+    const petalRadius = sealRadius + Math.sin(angle * 4) * 15;
+    const x = sealX + Math.cos(angle) * petalRadius;
+    const y = sealY + Math.sin(angle) * petalRadius;
+    
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
   ctx.stroke();
   
-  // Внутренний круг печати - светло-синий
-  ctx.strokeStyle = '#3b82f6'; // Светло-синий
+  // Внутреннее фигурное кольцо
+  ctx.strokeStyle = '#3b82f6';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  for (let i = 0; i < petals; i++) {
+    const angle = (Math.PI * 2 * i) / petals;
+    const petalRadius = (sealRadius - 25) + Math.sin(angle * 4) * 8;
+    const x = sealX + Math.cos(angle) * petalRadius;
+    const y = sealY + Math.sin(angle) * petalRadius;
+    
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.stroke();
+  
+  // Центральный круг
+  ctx.strokeStyle = '#60a5fa';
   ctx.lineWidth = 3;
   ctx.beginPath();
-  ctx.arc(sealX, sealY, sealRadius - 20, 0, Math.PI * 2);
+  ctx.arc(sealX, sealY, sealRadius - 45, 0, Math.PI * 2);
   ctx.stroke();
   
-  // Дополнительные декоративные кольца
-  ctx.strokeStyle = '#60a5fa'; // Еще светлее синий
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(sealX, sealY, sealRadius - 35, 0, Math.PI * 2);
-  ctx.stroke();
+  // Декоративные элементы в углах печати
+  const ornamentRadius = 8;
+  for (let i = 0; i < 4; i++) {
+    const angle = (Math.PI * 2 * i) / 4 + Math.PI / 4;
+    const ornX = sealX + Math.cos(angle) * (sealRadius - 15);
+    const ornY = sealY + Math.sin(angle) * (sealRadius - 15);
+    
+    ctx.fillStyle = '#3b82f6';
+    ctx.beginPath();
+    ctx.arc(ornX, ornY, ornamentRadius, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Внутренний светлый круг
+    ctx.fillStyle = '#93c5fd';
+    ctx.beginPath();
+    ctx.arc(ornX, ornY, ornamentRadius - 3, 0, Math.PI * 2);
+    ctx.fill();
+  }
   
-  // Текст печати - синий
+  // Центральный орнамент - ромб
   ctx.fillStyle = '#1e40af';
-  ctx.font = 'bold 14px serif';
-  ctx.textAlign = 'center';
-  ctx.fillText('САЙТ ЖЕЛАНИЙ', sealX, sealY - 10);
-  ctx.font = '12px serif';
-  ctx.fillText('POEHALI.DEV', sealX, sealY + 10);
-  ctx.fillText(currentDate.split(' ')[2], sealX, sealY + 30);
+  ctx.beginPath();
+  ctx.moveTo(sealX, sealY - 20);
+  ctx.lineTo(sealX + 15, sealY);
+  ctx.lineTo(sealX, sealY + 20);
+  ctx.lineTo(sealX - 15, sealY);
+  ctx.closePath();
+  ctx.fill();
   
-  // Звездочки вокруг печати для красоты
-  const stars = ['⭐', '✨', '🌟', '💫'];
-  stars.forEach((star, index) => {
-    const angle = (Math.PI * 2 * index) / stars.length;
-    const starX = sealX + Math.cos(angle) * (sealRadius + 25);
-    const starY = sealY + Math.sin(angle) * (sealRadius + 25);
-    ctx.font = '16px serif';
-    ctx.fillText(star, starX, starY);
-  });
+  // Текст печати - белый
+  ctx.fillStyle = '#ffffff';
+  ctx.font = 'bold 16px serif';
+  ctx.textAlign = 'center';
+  ctx.fillText('САЙТ ЖЕЛАНИЙ', sealX, sealY - 5);
+  ctx.font = '14px serif';
+  ctx.fillText('POEHALI.DEV', sealX, sealY + 15);
+  ctx.font = '12px serif';
+  ctx.fillText(currentDate.split(' ')[2], sealX, sealY + 35);
   
   // Важная надпись внизу
-  ctx.fillStyle = '#dc2626';
-  ctx.font = 'bold 20px serif';
+  ctx.fillStyle = '#ef4444';
+  ctx.font = 'bold 22px serif';
   ctx.textAlign = 'center';
   ctx.fillText('⚠️ ДОКУМЕНТ ДЕЙСТВУЕТ ПОСЛЕ ОПЛАТЫ СИЛЫ ⚠️', canvas.width/2, canvas.height - 100);
   
   // Дополнительная информация
-  ctx.fillStyle = '#666';
-  ctx.font = '14px sans-serif';
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '16px sans-serif';
   ctx.fillText(`Получатель: ${documentData.userName} • Email: ${documentData.email}`, canvas.width/2, canvas.height - 60);
   
   // Скачиваем как изображение
