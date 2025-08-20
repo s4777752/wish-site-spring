@@ -377,6 +377,27 @@ Email: ${documentData.email}
         <p className="text-sm text-gray-600">Безопасная оплата банковской картой</p>
       </div>
 
+      {/* Кнопка для тестирования скачивания */}
+      <button 
+        onClick={(e) => {
+          e.preventDefault();
+          console.log('Тестовая кнопка нажата - показываю экран скачивания');
+          const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+          setDocumentData({
+            wish,
+            intensity: wishIntensity,
+            amount,
+            email: userEmail || 'test@example.com',
+            userName: 'Тестовый пользователь',
+            documentId
+          });
+          setShowDownloadButton(true);
+        }}
+        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-4 rounded-lg mb-4"
+      >
+        🧪 Тест: показать кнопку скачивания
+      </button>
+
       <form 
         ref={formRef}
         className="payform-tbank" 
