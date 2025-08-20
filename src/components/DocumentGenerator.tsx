@@ -209,7 +209,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   ctx.shadowOffsetY = 0;
   
   ctx.font = 'bold 18px serif';
-  ctx.fillStyle = '#60a5fa';
+  ctx.fillStyle = '#000000';
   ctx.fillText(`Документ №: ${documentId}`, canvas.width/2, 250);
   
   // Дата активации (через 24 часа)
@@ -224,7 +224,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   });
   
   ctx.font = '16px serif';
-  ctx.fillStyle = '#fbbf24';
+  ctx.fillStyle = '#000000';
   ctx.fillText(`Дата активации: ${activationDateStr}`, canvas.width/2, 275);
   
   // Декоративная линия под заголовком
