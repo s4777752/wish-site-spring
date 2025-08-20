@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import WishActivated from '@/components/WishActivated';
+
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 
 interface TinkoffPayFormProps {
@@ -20,7 +20,7 @@ declare global {
 const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishIntensity, userEmail, whatsappPhone, onPaymentComplete }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const [showActivated, setShowActivated] = useState(false);
+
 
   useEffect(() => {
     // Генерируем уникальный номер заказа
@@ -102,9 +102,9 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
               console.error('Ошибка при отправке документа аффирмации:', error);
             }
             
-            // Показываем экран активации через небольшую задержку
+            // Завершаем оплату
             setTimeout(() => {
-              setShowActivated(true);
+              onPaymentComplete();
             }, 1500);
           }, 1000);
         } else {
@@ -136,9 +136,9 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
               console.error('Ошибка при отправке документа аффирмации:', error);
             }
             
-            // Показываем экран активации через небольшую задержку
+            // Завершаем оплату
             setTimeout(() => {
-              setShowActivated(true);
+              onPaymentComplete();
             }, 1500);
           }, 500);
         }
@@ -154,17 +154,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
     }
   }, [amount, onPaymentComplete]);
 
-  // Обработчик возврата на главную после активации
-  const handleBackToHome = () => {
-    setShowActivated(false);
-    setPaymentSuccess(false);
-    onPaymentComplete();
-  };
 
-  // Если показываем экран активации
-  if (showActivated) {
-    return <WishActivated wish={wish} onBackToHome={handleBackToHome} />;
-  }
 
 
   return (
