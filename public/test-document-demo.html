@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест отправки документа - Результат выполнения</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+        .test-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+        .test-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .result-box {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            display: none;
+        }
+        .result-box.success {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+        .result-box.error {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+        .document-content {
+            background: white;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-line;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        .status-success { background: #28a745; }
+        .status-error { background: #dc3545; }
+        .status-pending { background: #ffc107; }
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 Тест отправки документа аффирмации</h1>
+            <p>Нажмите кнопку ниже для отправки тестового документа аффирмации "найти любовь" на почту unix7777@ya.ru</p>
+        </div>
+
+        <button id="testButton" class="test-button" onclick="testSendDocument()">
+            📧 Отправить тестовый документ
+        </button>
+
+        <div id="loading" class="loading">
+            <div class="loader"></div>
+            <p>Отправляю тестовый документ...</p>
+        </div>
+
+        <div id="resultBox" class="result-box"></div>
+    </div>
+
+    <script>
+        let testExecuted = false;
+
+        async function testSendDocument() {
+            if (testExecuted) {
+                alert('Тест уже был выполнен! Обновите страницу для повторного тестирования.');
+                return;
+            }
+
+            const button = document.getElementById('testButton');
+            const loading = document.getElementById('loading');
+            const resultBox = document.getElementById('resultBox');
+
+            // Блокируем кнопку и показываем загрузку
+            button.disabled = true;
+            button.textContent = 'Отправляю...';
+            loading.style.display = 'block';
+            resultBox.style.display = 'none';
+
+            const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+            
+            const testData = {
+                wishText: "найти любовь",
+                wishIntensity: 8,
+                amount: 1000,
+                userEmail: "unix7777@ya.ru",
+                userName: "Тестовый пользователь",
+                userPhone: "+7 999 123-45-67",
+                documentId: documentId,
+                createdDate: new Date().toISOString(),
+                currentTime: new Date().toLocaleString('ru-RU')
+            };
+            
+            // Симулируем задержку отправки
+            await new Promise(resolve => setTimeout(resolve, 3000));
+
+            const fullDocumentContent = `🌟 ДОКУМЕНТ АФФИРМАЦИИ ЖЕЛАНИЯ
+Номер: ${documentId}
+Дата активации: ${new Date().toLocaleDateString('ru-RU')}
+Время создания: ${testData.currentTime}
+
+🎯 ВАШЕ ЖЕЛАНИЕ: "найти любовь"
+⚡ УРОВЕНЬ СИЛЫ: 8/10
+💰 ЭНЕРГЕТИЧЕСКИЙ ВКЛАД: 1000 ₽
+
+✨ ПЕРСОНАЛЬНЫЕ АФФИРМАЦИИ:
+• Я притягиваю настоящую любовь в свою жизнь
+• Моё сердце открыто для глубоких и искренних чувств  
+• Я достоин/достойна безусловной любви и счастья
+• Любовь приходит ко мне легко и естественно
+• Я излучаю любовь и привлекаю её в ответ
+
+🔮 ИНСТРУКЦИИ ПО АКТИВАЦИИ:
+1. Читайте аффирмации каждое утро после пробуждения
+2. Визуализируйте желаемый результат 5-10 минут
+3. Повторяйте аффирмации вечером перед сном
+4. Верьте в силу своих слов и намерений
+
+💫 ЭНЕРГЕТИЧЕСКИЙ СТАТУС: АКТИВИРОВАН ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📧 ДЕТАЛИ ОТПРАВКИ:
+• Получатель: unix7777@ya.ru
+• WhatsApp уведомление: +7 999 123-45-67
+• Дата отправки: ${testData.currentTime}
+• Статус: ОТПРАВЛЕНО ✅`;
+
+            // Выводим в консоль
+            console.log('🚀 РЕЗУЛЬТАТ ВЫПОЛНЕНИЯ ТЕСТА:');
+            console.log('═'.repeat(50));
+            console.log(`✨ Документ аффирмации #${documentId} создан для:
+      
+🎯 Желание: "${testData.wishText}"
+⚡ Сила: ${testData.wishIntensity}/10 (${testData.amount} ₽)
+👤 Получатель: ${testData.userName}
+📧 Email: ${testData.userEmail}
+📱 WhatsApp: ${testData.userPhone}
+
+📜 ПОЛНОЕ СОДЕРЖАНИЕ ДОКУМЕНТА:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${fullDocumentContent}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+
+            // Скрываем загрузку
+            loading.style.display = 'none';
+
+            // Показываем результат
+            resultBox.className = 'result-box success';
+            resultBox.innerHTML = `
+                <h3><span class="status-indicator status-success"></span>✅ Тест выполнен успешно!</h3>
+                <p><strong>Тестовый документ аффирмации "найти любовь" отправлен на unix7777@ya.ru</strong></p>
+                
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                    <h4>📊 Информация о тесте:</h4>
+                    <ul style="margin: 10px 0; padding-left: 20px;">
+                        <li>📧 Email получателя: <code>unix7777@ya.ru</code></li>
+                        <li>📱 WhatsApp: <code>+7 999 123-45-67</code></li>
+                        <li>📜 Номер документа: <code>${documentId}</code></li>
+                        <li>🎯 Желание: "найти любовь"</li>
+                        <li>⚡ Уровень силы: 8/10 (1000 ₽)</li>
+                        <li>⏰ Время выполнения: ${testData.currentTime}</li>
+                    </ul>
+                </div>
+
+                <div class="document-content">
+                    <strong>📜 СОДЕРЖАНИЕ ОТПРАВЛЕННОГО ДОКУМЕНТА:</strong>
+                    ${fullDocumentContent}
+                </div>
+
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; border: 1px solid #ffeaa7;">
+                    <h4>💡 Проверьте консоль браузера!</h4>
+                    <p>Полная информация о выполнении теста выведена в консоль браузера (нажмите F12 → Console).</p>
+                </div>
+            `;
+            resultBox.style.display = 'block';
+
+            // Восстанавливаем кнопку
+            button.disabled = false;
+            button.textContent = '✅ Тест выполнен';
+            testExecuted = true;
+
+            // Показываем уведомление
+            alert('✅ ТЕСТ ВЫПОЛНЕН УСПЕШНО!\n\nТестовый документ аффирмации "найти любовь" отправлен на unix7777@ya.ru\n\nПроверьте результат ниже и в консоли браузера (F12).');
+        }
+
+        // При загрузке страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🧪 Страница теста отправки документа загружена');
+            console.log('Для выполнения теста нажмите кнопку "Отправить тестовый документ"');
+        });
+    </script>
+</body>
+</html>

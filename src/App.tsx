@@ -11,6 +11,7 @@ import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import AffirmationPage from "./pages/AffirmationPage";
 import DocumentPreviewPage from "./pages/DocumentPreviewPage";
+import TestDocumentPage from "./pages/TestDocumentPage";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/affirmation" element={<AffirmationPage />} />
             <Route path="/document" element={<DocumentPreviewPage />} />
+            <Route path="/test-document" element={<TestDocumentPage />} />
             <Route path="/terms" element={<Terms />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
