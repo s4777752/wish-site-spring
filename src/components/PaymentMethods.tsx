@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
@@ -14,25 +13,12 @@ interface PaymentMethodsProps {
 }
 
 const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, deliveryMethod = 'whatsapp' }: PaymentMethodsProps) => {
-  const navigate = useNavigate();
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
   const [whatsappPhone, setWhatsappPhone] = useState('');
   const [userEmail, setUserEmail] = useState('');
 
   const needsWhatsappPhone = deliveryMethod === 'whatsapp' || deliveryMethod === 'both';
   const needsEmail = deliveryMethod === 'email' || deliveryMethod === 'both';
-
-  // Обработчик перехода на страницу оплаты
-  const handlePaymentRedirect = () => {
-    const params = new URLSearchParams({
-      wish: wish,
-      amount: getAmountFromIntensity(wishIntensity).toString(),
-      intensity: wishIntensity.toString(),
-      email: userEmail,
-      phone: whatsappPhone
-    });
-    navigate(`/payment?${params.toString()}`);
-  };
 
 
 
@@ -87,7 +73,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
         )}
 
         <Button 
-          onClick={handlePaymentRedirect}
+          onClick={() => setShowTinkoffForm(true)}
           className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
           aria-label="Выбрать оплату через Тинькофф Эквайринг"
         >
