@@ -88,13 +88,24 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
             setPaymentSuccess(true);
             
             // Отправляем документ аффирмации после успешной оплаты
+            const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
+            const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+            
+            // Используем email из PaymentMethods если он есть, иначе из формы оплаты
+            const emailToSend = userEmail || formUserEmail || 'user@example.com';
+            const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+            
+            // Всегда сохраняем данные для скачивания документа
+            setDocumentData({
+              wish,
+              intensity: wishIntensity,
+              amount,
+              email: emailToSend,
+              userName,
+              documentId
+            });
+            
             try {
-              const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
-              const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
-              
-              // Используем email из PaymentMethods если он есть, иначе из формы оплаты
-              const emailToSend = userEmail || formUserEmail || 'user@example.com';
-              
               const result = await sendWishAffirmationDocument(
                 wish,
                 wishIntensity,
@@ -106,16 +117,6 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
               
               if (result.success) {
                 console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend} и ${whatsappPhone}`);
-                
-                // Сохраняем данные для скачивания документа
-                setDocumentData({
-                  wish,
-                  intensity: wishIntensity,
-                  amount,
-                  email: emailToSend,
-                  userName,
-                  documentId: result.documentId
-                });
               }
             } catch (error) {
               console.error('Ошибка при отправке документа аффирмации:', error);
@@ -132,13 +133,24 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
             setPaymentSuccess(true);
             
             // Отправляем документ аффирмации после успешной оплаты
+            const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
+            const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+            
+            // Используем email из PaymentMethods если он есть, иначе из формы оплаты
+            const emailToSend = userEmail || formUserEmail || 'user@example.com';
+            const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+            
+            // Всегда сохраняем данные для скачивания документа
+            setDocumentData({
+              wish,
+              intensity: wishIntensity,
+              amount,
+              email: emailToSend,
+              userName,
+              documentId
+            });
+            
             try {
-              const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
-              const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
-              
-              // Используем email из PaymentMethods если он есть, иначе из формы оплаты
-              const emailToSend = userEmail || formUserEmail || 'user@example.com';
-              
               const result = await sendWishAffirmationDocument(
                 wish,
                 wishIntensity,
@@ -150,16 +162,6 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
               
               if (result.success) {
                 console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend} и ${whatsappPhone}`);
-                
-                // Сохраняем данные для скачивания документа
-                setDocumentData({
-                  wish,
-                  intensity: wishIntensity,
-                  amount,
-                  email: emailToSend,
-                  userName,
-                  documentId: result.documentId
-                });
               }
             } catch (error) {
               console.error('Ошибка при отправке документа аффирмации:', error);
