@@ -43,6 +43,14 @@ const Index = () => {
     setShowPaymentAnimation(true);
   };
 
+  const handlePaymentComplete = () => {
+    // После завершения оплаты показываем заставку и сбрасываем форму
+    setShowSplash(true);
+    setWish('');
+    setShowPayment(false);
+    setWishIntensity(5);
+  };
+
   const handlePaymentAnimationComplete = async () => {
     setShowPaymentAnimation(false);
     
@@ -152,6 +160,7 @@ const Index = () => {
                 wishIntensity={wishIntensity}
                 wish={wish}
                 onPaymentComplete={handlePayment}
+                onFinalComplete={handlePaymentComplete}
               />
             </PaymentSection>
           }

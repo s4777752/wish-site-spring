@@ -9,10 +9,11 @@ interface PaymentMethodsProps {
   wishIntensity: number;
   wish: string;
   onPaymentComplete: () => void;
+  onFinalComplete?: () => void;
   deliveryMethod?: 'whatsapp' | 'email' | 'both';
 }
 
-const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, deliveryMethod = 'whatsapp' }: PaymentMethodsProps) => {
+const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, onFinalComplete, deliveryMethod = 'whatsapp' }: PaymentMethodsProps) => {
   const [showTinkoffForm, setShowTinkoffForm] = useState(false);
   const [whatsappPhone, setWhatsappPhone] = useState('');
   const [userEmail, setUserEmail] = useState('');
@@ -55,6 +56,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
           userEmail={userEmail}
           whatsappPhone={whatsappPhone}
           onPaymentComplete={onPaymentComplete}
+          onFinalComplete={onFinalComplete}
         />
         <Button 
           onClick={() => setShowTinkoffForm(false)}
