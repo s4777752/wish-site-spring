@@ -25,29 +25,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
   if (!showTinkoffForm) {
     return (
       <div className="space-y-4">
-        {/* Поля для доставки документа */}
-        {(needsWhatsappPhone || needsEmail) && (
-          <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-            
 
-            
-            {needsEmail && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  📧 Email адрес
-                </label>
-                <Input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={userEmail}
-                  onChange={(e) => setUserEmail(e.target.value)}
-                  className="text-base"
-                  required={needsEmail}
-                />
-              </div>
-            )}
-          </div>
-        )}
 
         <Button 
           onClick={() => setShowTinkoffForm(true)}
