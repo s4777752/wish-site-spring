@@ -126,6 +126,67 @@ const PaymentSection = ({
               <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {getAmountFromIntensity(wishIntensity)}</div>
               <p className="text-gray-600">Энергетический вклад в исполнение желания</p>
             </div>
+
+            {/* Выбор способа доставки документа аффирмации */}
+            <div className="bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 rounded-xl p-6 border-2 border-purple-200">
+              <div className="text-center mb-4">
+                <h4 className="text-lg font-bold text-gray-800 mb-2 flex items-center justify-center gap-2">
+                  <span>📜</span>
+                  Документ аффирмации
+                </h4>
+                <p className="text-sm text-gray-600">
+                  Выберите, куда отправить ваш персональный документ
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200 hover:border-green-300 hover:bg-green-50/50 transition-all cursor-pointer">
+                  <div className="text-center">
+                    <div className="text-3xl mb-2">📱</div>
+                    <h5 className="font-semibold text-gray-800 mb-1">WhatsApp</h5>
+                    <p className="text-xs text-gray-600">
+                      Мгновенная доставка в мессенджер
+                    </p>
+                    <div className="mt-2">
+                      <input 
+                        type="radio" 
+                        name="delivery" 
+                        value="whatsapp" 
+                        className="mr-2"
+                        defaultChecked
+                      />
+                      <span className="text-sm text-green-600 font-medium">Выбрать</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all cursor-pointer">
+                  <div className="text-center">
+                    <div className="text-3xl mb-2">📧</div>
+                    <h5 className="font-semibold text-gray-800 mb-1">Email</h5>
+                    <p className="text-xs text-gray-600">
+                      Отправка PDF на почту
+                    </p>
+                    <div className="mt-2">
+                      <input 
+                        type="radio" 
+                        name="delivery" 
+                        value="email" 
+                        className="mr-2"
+                      />
+                      <span className="text-sm text-blue-600 font-medium">Выбрать</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 text-center">
+                <div className="inline-flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full text-sm text-yellow-700">
+                  <span>💡</span>
+                  <span>Можно выбрать оба способа при оплате</span>
+                </div>
+              </div>
+            </div>
             
             {children}
           </div>
