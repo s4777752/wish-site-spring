@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
+import { generateAndDownloadDocument, DocumentData } from '@/components/DocumentGenerator';
 
 const PaymentSuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -16,67 +17,76 @@ const PaymentSuccessPage: React.FC = () => {
   const orderId = searchParams.get('orderId') || '';
 
   const [isDownloading, setIsDownloading] = useState(false);
-  const [documentGenerated, setDocumentGenerated] = useState(false);
+  const [isEmailSending, setIsEmailSending] = useState(false);
+  const [documentData, setDocumentData] = useState<DocumentData | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
 
-  // Автоматически генерируем документ при загрузке страницы
+  // Автоматически генерируем данные документа при загрузке страницы
   useEffect(() => {
-    const generateDocument = async () => {
-      if (!documentGenerated && wish && amount) {
-        try {
-          setDocumentGenerated(true);
-          const result = await sendWishAffirmationDocument(
-            decodeURIComponent(wish),
-            parseInt(intensity),
-            parseInt(amount),
-            email || 'user@example.com',
-            phone || '+7 999 123-45-67',
-            'Пользователь'
-          );
-          
-          if (result.success) {
-            console.log(`✅ Документ аффирмации #${result.documentId} подготовлен к скачиванию`);
-          }
-        } catch (error) {
-          console.error('Ошибка при подготовке документа:', error);
-        }
-      }
-    };
+    if (wish && amount) {
+      const docData: DocumentData = {
+        wish: decodeURIComponent(wish),
+        intensity: parseInt(intensity),
+        amount: parseInt(amount),
+        email: email || 'user@example.com',
+        userName: 'Пользователь',
+        documentId: orderId || `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+      };
+      
+      setDocumentData(docData);
+      
+      // Автоматически отправляем документ на email
+      sendDocumentByEmail(docData);
+    }
+  }, [wish, amount, intensity, email, phone, orderId]);
 
-    generateDocument();
-  }, [wish, amount, intensity, email, phone, documentGenerated]);
+  const sendDocumentByEmail = async (docData: DocumentData) => {
+    if (emailSent || isEmailSending) return;
+    
+    setIsEmailSending(true);
+    
+    try {
+      const result = await sendWishAffirmationDocument(
+        docData.wish,
+        docData.intensity,
+        docData.amount,
+        docData.email,
+        phone || '+7 999 123-45-67',
+        docData.userName
+      );
+      
+      if (result.success) {
+        console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${docData.email}`);
+        setEmailSent(true);
+      }
+    } catch (error) {
+      console.error('Ошибка при отправке документа:', error);
+    } finally {
+      setIsEmailSending(false);
+    }
+  };
 
   const handleDownloadDocument = async () => {
-    if (isDownloading) return;
+    if (isDownloading || !documentData) return;
     
     setIsDownloading(true);
     
     try {
-      const result = await sendWishAffirmationDocument(
-        decodeURIComponent(wish),
-        parseInt(intensity),
-        parseInt(amount),
-        email || 'user@example.com',
-        phone || '+7 999 123-45-67',
-        'Пользователь'
-      );
+      // Используем локальную генерацию документа
+      generateAndDownloadDocument(documentData);
       
-      if (result.success && result.documentUrl) {
-        // Создаем ссылку для скачивания
-        const link = document.createElement('a');
-        link.href = result.documentUrl;
-        link.download = `affirmation_${result.documentId}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        console.log(`📄 Документ #${result.documentId} скачан`);
-      } else {
-        console.error('Ошибка: не удалось получить URL документа');
-      }
+      console.log(`📄 Документ #${documentData.documentId} скачан локально`);
     } catch (error) {
       console.error('Ошибка при скачивании документа:', error);
     } finally {
       setIsDownloading(false);
+    }
+  };
+
+  const handleEmailResend = () => {
+    if (documentData) {
+      setEmailSent(false);
+      sendDocumentByEmail(documentData);
     }
   };
 
@@ -125,7 +135,7 @@ const PaymentSuccessPage: React.FC = () => {
         {/* Кнопка скачивания */}
         <button
           onClick={handleDownloadDocument}
-          disabled={isDownloading}
+          disabled={isDownloading || !documentData}
           className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 mb-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isDownloading ? (
@@ -133,10 +143,15 @@ const PaymentSuccessPage: React.FC = () => {
               <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
               Подготовка документа...
             </>
+          ) : !documentData ? (
+            <>
+              <Icon name="AlertCircle" size={20} />
+              Документ не готов
+            </>
           ) : (
             <>
               <Icon name="Download" size={20} />
-              Скачать документ аффирмации
+              📄 Скачать документ аффирмации
             </>
           )}
         </button>
