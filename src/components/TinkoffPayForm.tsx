@@ -11,7 +11,7 @@ interface TinkoffPayFormProps {
   userEmail: string;
   whatsappPhone: string;
   onPaymentComplete: () => void;
-  onFinalComplete?: () => void;
+  onUserDataChange?: (email: string, phone: string) => void;
 }
 
 declare global {
@@ -28,7 +28,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   userEmail, 
   whatsappPhone, 
   onPaymentComplete,
-  onFinalComplete 
+  onUserDataChange 
 }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -226,6 +226,11 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
       const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
       
+      // Передаем данные пользователя обратно в родительский компонент
+      if (onUserDataChange && formUserEmail) {
+        onUserDataChange(formUserEmail, whatsappPhone);
+      }
+      
       // Используем email из PaymentMethods если он есть, иначе из формы оплаты
       const emailToSend = userEmail || formUserEmail || 'user@example.com';
       const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
@@ -284,6 +289,17 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       try {
         // Заполняем скрытые поля если нужно
         const emailToSend = userEmail || formData.email || 'user@example.com';
+        const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+        
+        // Сохраняем данные для будущего использования
+        setDocumentData({
+          wish,
+          intensity: wishIntensity,
+          amount,
+          email: emailToSend,
+          userName: formData.userName,
+          documentId
+        });
         
         // Вызываем API Тинькофф
         window.pay(formRef.current);
@@ -319,8 +335,8 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       });
       
       setTimeout(() => {
-        console.log('Перенаправляю на страницу успеха (демо режим)');
-        handlePaymentSuccess();
+        console.log('Показываю кнопку скачивания (демо режим)');
+        setShowDownloadButton(true);
       }, 1500);
     }
   };
@@ -333,11 +349,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
 
   const handleBackToHome = () => {
     setShowDownloadButton(false);
-    if (onFinalComplete) {
-      onFinalComplete();
-    } else {
-      onPaymentComplete();
-    }
+    onPaymentComplete();
   };
 
   // Если показываем кнопку скачивания
@@ -348,7 +360,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
       <PaymentSuccessScreen
         documentData={documentData}
         onDownload={handleDownload}
-        onBack={handleBackToHome}
+        onBackToHome={handleBackToHome}
       />
     );
   }
