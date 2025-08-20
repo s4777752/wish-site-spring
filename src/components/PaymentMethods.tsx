@@ -29,8 +29,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, onPaymentComple
 
         <Button 
           onClick={() => setShowTinkoffForm(true)}
-          disabled={(needsWhatsappPhone && !whatsappPhone.includes('+7 (')) || (needsEmail && !userEmail.includes('@'))}
-          className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg disabled:bg-gray-300 disabled:cursor-not-allowed"
+          className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
           aria-label="Выбрать оплату через Тинькофф Эквайринг"
         >
           <Icon name="Banknote" size={20} className="mr-2" />
