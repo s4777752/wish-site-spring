@@ -20,6 +20,15 @@ declare global {
 const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishIntensity, userEmail, whatsappPhone, onPaymentComplete }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [showDownloadButton, setShowDownloadButton] = useState(false);
+  const [documentData, setDocumentData] = useState<{
+    wish: string;
+    intensity: number;
+    amount: number;
+    email: string;
+    userName: string;
+    documentId: string;
+  } | null>(null);
 
 
   useEffect(() => {
@@ -97,14 +106,24 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
               
               if (result.success) {
                 console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend} и ${whatsappPhone}`);
+                
+                // Сохраняем данные для скачивания документа
+                setDocumentData({
+                  wish,
+                  intensity: wishIntensity,
+                  amount,
+                  email: emailToSend,
+                  userName,
+                  documentId: result.documentId
+                });
               }
             } catch (error) {
               console.error('Ошибка при отправке документа аффирмации:', error);
             }
             
-            // Завершаем оплату
+            // Показываем кнопку скачивания
             setTimeout(() => {
-              onPaymentComplete();
+              setShowDownloadButton(true);
             }, 1500);
           }, 1000);
         } else {
@@ -131,14 +150,24 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
               
               if (result.success) {
                 console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend} и ${whatsappPhone}`);
+                
+                // Сохраняем данные для скачивания документа
+                setDocumentData({
+                  wish,
+                  intensity: wishIntensity,
+                  amount,
+                  email: emailToSend,
+                  userName,
+                  documentId: result.documentId
+                });
               }
             } catch (error) {
               console.error('Ошибка при отправке документа аффирмации:', error);
             }
             
-            // Завершаем оплату
+            // Показываем кнопку скачивания
             setTimeout(() => {
-              onPaymentComplete();
+              setShowDownloadButton(true);
             }, 1500);
           }, 500);
         }
@@ -154,8 +183,126 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
     }
   }, [amount, onPaymentComplete]);
 
+  // Функция генерации и скачивания PDF
+  const generatePDF = () => {
+    if (!documentData) return;
+    
+    const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    const currentDate = new Date().toLocaleDateString('ru-RU');
+    
+    const pdfContent = `
+🌟 ДОКУМЕНТ АФФИРМАЦИИ ЖЕЛАНИЯ
+Номер: ${documentId}
+Дата активации: ${currentDate}
+
+🎯 ВАШЕ ЖЕЛАНИЕ: "${documentData.wish}"
+⚡ УРОВЕНЬ СИЛЫ: ${documentData.intensity}/10
+💰 ЭНЕРГЕТИЧЕСКИЙ ВКЛАД: ${documentData.amount} ₽
+
+✨ ПЕРСОНАЛЬНЫЕ АФФИРМАЦИИ:
+${getAffirmationsForWish(documentData.wish)}
+
+🔮 ИНСТРУКЦИИ ПО АКТИВАЦИИ:
+1. Читайте аффирмации каждое утро после пробуждения
+2. Визуализируйте желаемый результат 5-10 минут
+3. Повторяйте аффирмации вечером перед сном
+4. Верьте в силу своих слов и намерений
+
+💫 ЭНЕРГЕТИЧЕСКИЙ СТАТУС: АКТИВИРОВАН ✅
+
+Получатель: ${documentData.userName}
+Email: ${documentData.email}
+    `;
+
+    // Создаем blob и скачиваем как текстовый файл
+    const blob = new Blob([pdfContent], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `Документ_аффирмации_${documentId}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
+  // Функция для генерации аффирмаций в зависимости от желания
+  const getAffirmationsForWish = (wish: string) => {
+    const lowerWish = wish.toLowerCase();
+    
+    if (lowerWish.includes('любовь') || lowerWish.includes('отношения')) {
+      return `• Я притягиваю настоящую любовь в свою жизнь
+• Моё сердце открыто для глубоких и искренних чувств
+• Я достоин/достойна безусловной любви и счастья
+• Любовь приходит ко мне легко и естественно
+• Я излучаю любовь и привлекаю её в ответ`;
+    }
+    
+    if (lowerWish.includes('деньги') || lowerWish.includes('богатство') || lowerWish.includes('финансы')) {
+      return `• Деньги легко и свободно текут в мою жизнь
+• Я притягиваю финансовое изобилие во всех сферах
+• Мои доходы растут с каждым днем
+• Я достоин/достойна богатства и процветания
+• Вселенная поддерживает мое финансовое благополучие`;
+    }
+    
+    if (lowerWish.includes('здоровье') || lowerWish.includes('исцеление')) {
+      return `• Мое тело исцеляется с каждым днем
+• Я излучаю жизненную энергию и силу
+• Каждая клетка моего тела наполнена здоровьем
+• Я принимаю решения, которые поддерживают мое благополучие
+• Мое тело и разум находятся в гармонии`;
+    }
+    
+    // Универсальные аффирмации
+    return `• Я притягиваю в свою жизнь все, что мне нужно
+• Вселенная работает в мою пользу
+• Мои желания исполняются легко и гармонично
+• Я открыт/открыта для получения всех благословений
+• Каждый день приближает меня к цели`;
+  };
 
 
+
+
+  // Если показываем кнопку скачивания
+  if (showDownloadButton && documentData) {
+    return (
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md p-6 text-center">
+        <div className="mb-6">
+          <div className="text-6xl mb-4">✅</div>
+          <h2 className="text-2xl font-bold text-green-600 mb-2">Оплата успешна!</h2>
+          <p className="text-gray-600">Ваш документ аффирмации готов</p>
+        </div>
+        
+        <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+          <p className="text-green-800 font-medium">
+            🎯 Желание: "{documentData.wish}"
+          </p>
+          <p className="text-green-600 text-sm mt-1">
+            💫 Документ #{documentData.documentId}
+          </p>
+        </div>
+
+        <button
+          onClick={generatePDF}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg mb-4 transition-colors"
+        >
+          📄 Скачать документ аффирмации
+        </button>
+
+        <button
+          onClick={() => {
+            setShowDownloadButton(false);
+            onPaymentComplete();
+          }}
+          className="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors"
+        >
+          Вернуться на главную
+        </button>
+      </div>
+    );
+  }
 
   return (
     <>
