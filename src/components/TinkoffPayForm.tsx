@@ -33,51 +33,7 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   const [showDownloadButton, setShowDownloadButton] = useState(false);
   const [documentData, setDocumentData] = useState<DocumentData | null>(null);
 
-  // Тестовая функция для проверки системы
-  const testPaymentSystem = () => {
-    console.log('🧪 ТЕСТИРОВАНИЕ СИСТЕМЫ ОПЛАТЫ');
-    console.log('1. Проверяю загрузку скриптов...');
-    
-    // Проверяем все скрипты на странице
-    const scripts = Array.from(document.querySelectorAll('script[src]'));
-    const tinkoffScript = scripts.find(script => 
-      (script as HTMLScriptElement).src.includes('tinkoff')
-    );
-    
-    if (tinkoffScript) {
-      console.log('📜 Скрипт Тинькофф найден:', (tinkoffScript as HTMLScriptElement).src);
-    } else {
-      console.log('❌ Скрипт Тинькофф не найден');
-    }
-    
-    // Проверяем доступность API
-    console.log('2. Проверяю глобальный объект window.pay...');
-    if (typeof window.pay === 'function') {
-      console.log('✅ API Тинькофф загружен успешно');
-    } else {
-      console.log('❌ API Тинькофф не загружен или не готов');
-      console.log('window.pay =', window.pay);
-    }
-    
-    console.log('3. Имитирую успешную оплату через 2 секунды...');
-    setTimeout(() => {
-      console.log('✅ Тест: показываю кнопку скачивания');
-      
-      const emailToSend = userEmail || 'test@example.com';
-      const documentId = `TEST${Date.now()}`;
-      
-      setDocumentData({
-        wish,
-        intensity: wishIntensity,
-        amount,
-        email: emailToSend,
-        userName: 'Тестовый пользователь',
-        documentId
-      });
-      
-      setShowDownloadButton(true);
-    }, 2000);
-  };
+
 
   useEffect(() => {
     // Генерируем уникальный номер заказа
@@ -316,26 +272,11 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({
   }
 
   return (
-    <div>
-      {/* Кнопка тестирования (только в dev режиме) */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="mb-4 p-4 bg-yellow-100 border border-yellow-300 rounded-lg">
-          <h3 className="text-sm font-medium text-yellow-800 mb-2">🧪 Режим тестирования</h3>
-          <button
-            onClick={testPaymentSystem}
-            className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700 text-sm"
-          >
-            Тестировать систему оплаты
-          </button>
-        </div>
-      )}
-      
-      <TinkoffForm
-        ref={formRef}
-        amount={amount}
-        onPaymentClick={handlePaymentClick}
-      />
-    </div>
+    <TinkoffForm
+      ref={formRef}
+      amount={amount}
+      onPaymentClick={handlePaymentClick}
+    />
   );
 };
 
