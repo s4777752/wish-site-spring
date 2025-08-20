@@ -97,6 +97,8 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
           amount={getAmountFromIntensity(wishIntensity)} 
           wish={wish}
           wishIntensity={wishIntensity}
+          userEmail={userEmail}
+          whatsappPhone={whatsappPhone}
           onPaymentComplete={onPaymentComplete}
         />
         <Button 

@@ -6,6 +6,8 @@ interface TinkoffPayFormProps {
   amount: number;
   wish: string;
   wishIntensity: number;
+  userEmail: string;
+  whatsappPhone: string;
   onPaymentComplete: () => void;
 }
 
@@ -15,7 +17,7 @@ declare global {
   }
 }
 
-const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishIntensity, onPaymentComplete }) => {
+const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishIntensity, userEmail, whatsappPhone, onPaymentComplete }) => {
   const formRef = useRef<HTMLFormElement>(null);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [showActivated, setShowActivated] = useState(false);
@@ -78,20 +80,23 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
             
             // Отправляем документ аффирмации после успешной оплаты
             try {
-              const userEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value || 'user@example.com';
+              const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
               const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+              
+              // Используем email из PaymentMethods если он есть, иначе из формы оплаты
+              const emailToSend = userEmail || formUserEmail || 'user@example.com';
               
               const result = await sendWishAffirmationDocument(
                 wish,
                 wishIntensity,
                 amount,
-                userEmail,
-                '+7 999 123-45-67', // В будущем можно добавить поле телефона в форму
+                emailToSend,
+                whatsappPhone || '+7 999 123-45-67',
                 userName
               );
               
               if (result.success) {
-                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${userEmail}`);
+                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend} и ${whatsappPhone}`);
               }
             } catch (error) {
               console.error('Ошибка при отправке документа аффирмации:', error);
@@ -109,20 +114,23 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
             
             // Отправляем документ аффирмации после успешной оплаты
             try {
-              const userEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value || 'user@example.com';
+              const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
               const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+              
+              // Используем email из PaymentMethods если он есть, иначе из формы оплаты
+              const emailToSend = userEmail || formUserEmail || 'user@example.com';
               
               const result = await sendWishAffirmationDocument(
                 wish,
                 wishIntensity,
                 amount,
-                userEmail,
-                '+7 999 123-45-67', // В будущем можно добавить поле телефона в форму
+                emailToSend,
+                whatsappPhone || '+7 999 123-45-67',
                 userName
               );
               
               if (result.success) {
-                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${userEmail}`);
+                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend} и ${whatsappPhone}`);
               }
             } catch (error) {
               console.error('Ошибка при отправке документа аффирмации:', error);
