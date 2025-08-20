@@ -143,11 +143,19 @@ const TinkoffForm = forwardRef<HTMLFormElement, TinkoffFormProps>(
           />
 
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4">
-            <div className="flex items-center">
+            <div className="flex items-center mb-3">
               <span className="text-2xl mr-3">💰</span>
               <div>
                 <div className="font-semibold text-amber-800">К оплате: {amount} ₽</div>
                 <div className="text-sm text-amber-600">Исполнение вашего желания</div>
+              </div>
+            </div>
+            <div className="bg-orange-100 border-l-4 border-orange-400 p-3 rounded">
+              <div className="flex items-center">
+                <span className="text-orange-500 mr-2">⚠️</span>
+                <div className="text-sm text-orange-700">
+                  <strong>Важно:</strong> Перед оплатой скачайте документ аффирмации и сохраните его!
+                </div>
               </div>
             </div>
           </div>
