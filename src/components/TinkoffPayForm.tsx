@@ -81,53 +81,65 @@ const TinkoffPayForm: React.FC<TinkoffPayFormProps> = ({ amount, wish, wishInten
           }
         }
 
-        if (window.pay) {
-          window.pay(form);
-          // Симулируем успешную оплату для демо
-          setTimeout(async () => {
-            setPaymentSuccess(true);
-            
-            // Отправляем документ аффирмации после успешной оплаты
-            const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
-            const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
-            
-            // Используем email из PaymentMethods если он есть, иначе из формы оплаты
-            const emailToSend = userEmail || formUserEmail || 'user@example.com';
-            const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-            
-            // Всегда сохраняем данные для скачивания документа
-            setDocumentData({
+        // Независимо от API Тинькофф, обрабатываем "оплату" 
+        console.log('Запускаю обработку оплаты...');
+        
+        // Симулируем успешную оплату для демо
+        setTimeout(async () => {
+          setPaymentSuccess(true);
+          console.log('Оплата помечена как успешная');
+          
+          // Получаем данные из формы
+          const formUserEmail = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
+          const userName = (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || 'Пользователь';
+          
+          // Используем email из PaymentMethods если он есть, иначе из формы оплаты
+          const emailToSend = userEmail || formUserEmail || 'user@example.com';
+          const documentId = `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+          
+          console.log('Сохраняю данные документа:', { wish, intensity: wishIntensity, amount, email: emailToSend, userName, documentId });
+          
+          // Всегда сохраняем данные для скачивания документа
+          setDocumentData({
+            wish,
+            intensity: wishIntensity,
+            amount,
+            email: emailToSend,
+            userName,
+            documentId
+          });
+          
+          try {
+            const result = await sendWishAffirmationDocument(
               wish,
-              intensity: wishIntensity,
+              wishIntensity,
               amount,
-              email: emailToSend,
-              userName,
-              documentId
-            });
+              emailToSend,
+              whatsappPhone || '+7 999 123-45-67',
+              userName
+            );
             
-            try {
-              const result = await sendWishAffirmationDocument(
-                wish,
-                wishIntensity,
-                amount,
-                emailToSend,
-                whatsappPhone || '+7 999 123-45-67',
-                userName
-              );
-              
-              if (result.success) {
-                console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend} и ${whatsappPhone}`);
-              }
-            } catch (error) {
-              console.error('Ошибка при отправке документа аффирмации:', error);
+            if (result.success) {
+              console.log(`✅ Документ аффирмации #${result.documentId} отправлен на ${emailToSend}`);
             }
-            
-            // Показываем кнопку скачивания
-            setTimeout(() => {
-              console.log('Показываю кнопку скачивания. DocumentData:', documentData);
-              setShowDownloadButton(true);
-            }, 1500);
-          }, 1000);
+          } catch (error) {
+            console.error('Ошибка при отправке документа аффирмации:', error);
+          }
+          
+          // Показываем кнопку скачивания
+          setTimeout(() => {
+            console.log('Показываю кнопку скачивания...');
+            setShowDownloadButton(true);
+          }, 1500);
+        }, 1000);
+
+        // Также пытаемся вызвать API Тинькофф если доступен
+        if (window.pay) {
+          try {
+            window.pay(form);
+          } catch (error) {
+            console.log('Ошибка API Тинькофф (это нормально для демо):', error);
+          }
         } else {
           // Если нет Tinkoff API, сразу вызываем успешную оплату для демо
           setTimeout(async () => {
