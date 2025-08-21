@@ -224,7 +224,7 @@ const Index = () => {
           <div className="max-w-4xl mx-auto px-4 text-center">
 
             <div className="text-gray-600 space-y-1">
-              <p>ИП Паклин Алексей Владимирович</p>
+              <p>ИП Паклин Сергей Васильевичь</p>
               <p>ОГРНИП: 318774600755313</p>
               <p>ИНН: 774320073259</p>
               <p>© 2024 Все права защищены.</p>
