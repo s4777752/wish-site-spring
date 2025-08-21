@@ -223,9 +223,12 @@ const Index = () => {
         <footer className="border-t border-gray-200 py-8">
           <div className="max-w-4xl mx-auto px-4 text-center">
 
-            <p className="text-gray-600">
-              © 2024 Сайт Желаний. Все права защищены.
-            </p>
+            <div className="text-gray-600 space-y-1">
+              <p>ИП Паклин Алексей Владимирович</p>
+              <p>ОГРНИП: 318774600755313</p>
+              <p>ИНН: 774320073259</p>
+              <p>© 2024 Все права защищены.</p>
+            </div>
           </div>
         </footer>
       </main>
