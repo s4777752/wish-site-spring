@@ -223,13 +223,9 @@ const Index = () => {
         <footer className="border-t border-gray-200 py-8">
           <div className="max-w-4xl mx-auto px-4 text-center">
 
-            <div className="text-gray-600 space-y-1">
-              <p></p>
-              <p></p>
-              <p></p>
-              <p>ИП Паклин Сергей Васильевич, ИНН 594200005879 ОГРН 305591619400016, эл.почта: unix7777@ya.ru
-© 2024 Все права защищены.</p>
-            </div>
+            <p className="text-gray-500 text-sm text-center">
+              ИП Паклин Сергей Васильевич, ИНН 594200005879 ОГРН 305591619400016, эл.почта: unix7777@ya.ru © 2024 Все права защищены.
+            </p>
           </div>
         </footer>
       </main>
