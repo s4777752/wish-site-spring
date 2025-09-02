@@ -26,6 +26,14 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
         <p className="text-sm text-gray-600">
           Отсканируйте код камерой телефона или в банковском приложении
         </p>
+        
+        {/* Кнопка оплаты */}
+        <Button 
+          onClick={() => window.open('https://qr.nspk.ru/AS1A002MT5JSR5K79BAOM3G4UTQOGKSA?type=01&bank=100000000008&crc=C909', '_blank')}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 transition-colors duration-200"
+        >
+          💳 ОПЛАТИТЬ
+        </Button>
       </div>
       
       {/* Кнопка скачивания документа аффирмации */}
