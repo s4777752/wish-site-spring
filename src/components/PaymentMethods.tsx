@@ -18,7 +18,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
         <h3 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h3>
         <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
           <img 
-            src="https://cdn.poehali.dev/files/7a4becd8-ca08-45be-a995-8f2eed20b629.jpg" 
+            src="https://cdn.poehali.dev/files/234a2502-0402-418b-bd9b-ba54957b32eb.jpg" 
             alt="QR код для оплаты" 
             className="w-48 h-48 mx-auto"
           />
