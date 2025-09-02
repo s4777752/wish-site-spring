@@ -1,8 +1,5 @@
-import { useState } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import Icon from '@/components/ui/icon';
-import TinkoffPayForm from '@/components/TinkoffPayForm';
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -13,95 +10,47 @@ interface PaymentMethodsProps {
   onUserDataChange?: (email: string, phone: string) => void;
 }
 
-const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, deliveryMethod = 'whatsapp', onUserDataChange }: PaymentMethodsProps) => {
-  const [showTinkoffForm, setShowTinkoffForm] = useState(false);
-  const [whatsappPhone, setWhatsappPhone] = useState('');
-  const [userEmail, setUserEmail] = useState('');
-
-  // Уведомляем родительский компонент об изменении данных пользователя
-  const handleUserDataChange = (email: string, phone: string) => {
-    setUserEmail(email);
-    setWhatsappPhone(phone);
-    if (onUserDataChange) {
-      onUserDataChange(email, phone);
-    }
-  };
-
-  const needsWhatsappPhone = deliveryMethod === 'whatsapp' || deliveryMethod === 'both';
-  const needsEmail = deliveryMethod === 'email' || deliveryMethod === 'both';
-
-
-
-  if (!showTinkoffForm) {
-    return (
-      <div className="space-y-4">
-
-
-        <Button 
-          onClick={() => setShowTinkoffForm(true)}
-          className="w-full bg-amber-500 hover:bg-amber-600 text-white text-lg py-6 rounded-lg"
-          aria-label="Выбрать оплату через Тинькофф Эквайринг"
-        >
-          <Icon name="Banknote" size={20} className="mr-2" />
-          Тинькофф Эквайринг
-        </Button>
-        
-        {((needsWhatsappPhone && !whatsappPhone.includes('+7 (')) || (needsEmail && !userEmail.includes('@'))) && (
-          <p className="text-sm text-amber-600 text-center">
-            💡 Заполните контакты для получения документа аффирмации
-          </p>
-        )}
+const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: PaymentMethodsProps) => {
+  return (
+    <div className="space-y-6">
+      {/* QR код для оплаты */}
+      <div className="text-center space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h3>
+        <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
+          <img 
+            src="https://cdn.poehali.dev/files/7a4becd8-ca08-45be-a995-8f2eed20b629.jpg" 
+            alt="QR код для оплаты" 
+            className="w-48 h-48 mx-auto"
+          />
+        </div>
+        <p className="text-sm text-gray-600">
+          Отсканируйте код камерой телефона или в банковском приложении
+        </p>
       </div>
-    );
-  }
-
-  if (showTinkoffForm) {
-    return (
-      <div className="space-y-4">
-        {/* Кнопка скачивания документа */}
-        <Button 
-          onClick={() => {
-            const documentData = {
-              wish: wish,
-              intensity: wishIntensity,
-              amount: getAmountFromIntensity(wishIntensity),
-              email: userEmail || 'user@example.com',
-              userName: 'Пользователь',
-              documentId: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`
-            };
-            
-            // Импортируем и вызываем функцию генерации
-            import('../components/DocumentGenerator').then(({ generateAndDownloadDocument }) => {
-              generateAndDownloadDocument(documentData);
-            });
-          }}
-          className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-3 px-6 transition-colors duration-200 animate-slow-pulse-green"
-        >
-          📄 Скачать документ аффирмации
-        </Button>
-        
-        <TinkoffPayForm 
-          amount={getAmountFromIntensity(wishIntensity)} 
-          wish={wish}
-          wishIntensity={wishIntensity}
-          userEmail={userEmail}
-          whatsappPhone={whatsappPhone}
-          onPaymentComplete={onPaymentComplete}
-          onUserDataChange={handleUserDataChange}
-        />
-        
-        <Button 
-          onClick={() => setShowTinkoffForm(false)}
-          variant="outline"
-          className="w-full"
-        >
-          Назад к выбору способа оплаты
-        </Button>
-      </div>
-    );
-  }
-
-  return null;
+      
+      {/* Кнопка скачивания документа аффирмации */}
+      <Button 
+        onClick={() => {
+          const documentData = {
+            wish: wish,
+            intensity: wishIntensity,
+            amount: getAmountFromIntensity(wishIntensity),
+            email: 'user@example.com',
+            userName: 'Пользователь',
+            documentId: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+          };
+          
+          // Импортируем и вызываем функцию генерации
+          import('../components/DocumentGenerator').then(({ generateAndDownloadDocument }) => {
+            generateAndDownloadDocument(documentData);
+          });
+        }}
+        className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 transition-colors duration-200 text-lg"
+      >
+        📄 Скачать документ аффирмации
+      </Button>
+    </div>
+  );
 };
 
 export default PaymentMethods;
