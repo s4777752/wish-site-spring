@@ -14,7 +14,7 @@
     <priority>1.0</priority>
     <mobile:mobile/>
     <image:image>
-      <image:loc>https://cdn.poehali.dev/intertnal/img/og.png</image:loc>
+      <image:loc>https://cdn.poehali.dev/internal/img/og.png</image:loc>
       <image:title>САЙТ ЖЕЛАНИЙ - Исполнение желаний онлайн</image:title>
       <image:caption>Загадайте желание и исполните мечту уже сегодня</image:caption>
     </image:image>
