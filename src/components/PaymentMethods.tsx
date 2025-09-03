@@ -18,7 +18,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
         <h3 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h3>
         <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
           <img 
-            src="https://cdn.poehali.dev/files/234a2502-0402-418b-bd9b-ba54957b32eb.jpg" 
+            src="https://cdn.poehali.dev/files/6082b555-879a-4295-91ae-bc0fa66f99f2.jpg" 
             alt="QR код для оплаты" 
             className="w-48 h-48 mx-auto"
           />
@@ -26,14 +26,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
         <p className="text-sm text-gray-600">
           Отсканируйте код камерой телефона или в банковском приложении
         </p>
-        
-        {/* Кнопка оплаты */}
-        <Button 
-          onClick={() => window.open('https://qr.nspk.ru/AS1A002MT5JSR5K79BAOM3G4UTQOGKSA?type=01&bank=100000000008&crc=C909', '_blank')}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-8 transition-colors duration-200"
-        >
-          💳 ОПЛАТИТЬ
-        </Button>
+
       </div>
       
       {/* Кнопка скачивания документа аффирмации */}
