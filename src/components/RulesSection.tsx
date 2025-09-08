@@ -95,6 +95,23 @@ const RulesSection = () => {
             </div>
           </Card>
 
+          <Card className="p-6 hover:shadow-lg transition-shadow bg-gradient-to-br from-red-50 to-yellow-50 border-2 border-yellow-200">
+            <div className="flex items-start space-x-4">
+              <div className="bg-red-100 p-3 rounded-full">
+                <Icon name="Calendar" size={24} className="text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3 text-red-700">🎄 Новогодние желания</h3>
+                <ul className="space-y-2 text-gray-700">
+                  <li>• Новый год — время волшебства и исполнения мечт</li>
+                  <li>• Особая энергия праздника усиливает эффект</li>
+                  <li>• Идеальное время для загадывания желаний</li>
+                  <li>• Традиция загадывать под бой курантов</li>
+                </ul>
+              </div>
+            </div>
+          </Card>
+
 
 
           <Card className="p-6 hover:shadow-lg transition-shadow">
