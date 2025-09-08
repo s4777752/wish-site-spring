@@ -46,7 +46,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
             generateAndDownloadDocument(documentData);
           });
         }}
-        className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 transition-colors duration-200 text-lg"
+        className="w-full bg-green-500 hover:bg-green-600 text-white font-semibold py-4 px-6 transition-colors duration-200 text-lg hidden"
       >
         📄 Скачать документ аффирмации
       </Button>
