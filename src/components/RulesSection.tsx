@@ -95,22 +95,7 @@ const RulesSection = () => {
             </div>
           </Card>
 
-          <Card className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-start space-x-4">
-              <div className="bg-blue-100 p-3 rounded-full">
-                <Icon name="Sparkles" size={24} className="text-blue-600" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Документ аффирмации</h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li>• Персональные аффирмации на основе вашего желания</li>
-                  <li>• Официальная печать сайта на документе</li>
 
-                  <li>• Инструкции по ежедневному использованию</li>
-                </ul>
-              </div>
-            </div>
-          </Card>
 
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start space-x-4">
@@ -139,8 +124,8 @@ const RulesSection = () => {
                 <ul className="space-y-2 text-gray-600">
                   <li>• Сайт автоматически исполняет желания после оплаты</li>
                   <li>• Энергетический вклад активирует процесс</li>
-                  <li>• Документ аффирмации - дополнительный инструмент</li>
-                  <li>• Аффирмации усиливают и ускоряют результат</li>
+                  <li>• Психологическое воздействие на подсознание</li>
+                  <li>• Формирование позитивных установок</li>
                 </ul>
               </div>
             </div>
