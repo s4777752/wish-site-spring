@@ -96,19 +96,12 @@ const RulesSection = () => {
           </Card>
 
           <Card className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-start space-x-4">
-              <div className="bg-green-100 p-3 rounded-full">
-                <Icon name="Calendar" size={24} className="text-green-600" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3">🎄 Новогодние желания</h3>
-                <ul className="space-y-2 text-gray-600">
-                  <li>• Новый год — время волшебства и исполнения мечт</li>
-                  <li>• Особая энергия праздника усиливает эффект</li>
-                  <li>• Идеальное время для загадывания желаний</li>
-                  <li>• Традиция загадывать под бой курантов</li>
-                </ul>
-              </div>
+            <div className="flex items-center justify-center">
+              <img 
+                src="https://cdn.poehali.dev/files/708ec76e-b77e-4ad2-9d90-7a6d0afbc992.jpg" 
+                alt="QR Code" 
+                className="w-48 h-48 object-contain"
+              />
             </div>
           </Card>
 
