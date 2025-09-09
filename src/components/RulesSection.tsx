@@ -98,7 +98,7 @@ const RulesSection = () => {
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-center justify-center">
               <img 
-                src="https://cdn.poehali.dev/files/708ec76e-b77e-4ad2-9d90-7a6d0afbc992.jpg" 
+                src="https://cdn.poehali.dev/files/c2888c90-63b6-4749-8d3a-717e8eabb2b3.jpg" 
                 alt="QR Code" 
                 className="w-48 h-48 object-contain"
               />
