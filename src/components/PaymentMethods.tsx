@@ -26,27 +26,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
     script.async = true;
     document.head.appendChild(script);
 
-    // Добавляем стили для кнопки
-    const style = document.createElement('style');
-    style.innerHTML = `
-      button[btn-pay-98dv40hx5t0bkkyj4d7uttgy6] { 
-        display: inline-block; 
-        padding: 16px 24px; 
-        border-radius: 8px; 
-        color: #fff; 
-        background-color: #58bfe8; 
-        font-size: 16px; 
-        font-family: "Lato", "Arial", sans-serif; 
-        line-height: 16px; 
-        outline: none; 
-        border: none; 
-      }
-      button[btn-pay-98dv40hx5t0bkkyj4d7uttgy6]:hover { 
-        opacity: 0.9; 
-        cursor: pointer; 
-      }
-    `;
-    document.head.appendChild(style);
+
 
     // Добавляем обработчик клика после загрузки скрипта
     const handlePaymentClick = () => {
@@ -110,10 +90,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
       if (existingScript) {
         document.head.removeChild(existingScript);
       }
-      const existingStyle = document.querySelector('style');
-      if (existingStyle) {
-        document.head.removeChild(existingStyle);
-      }
+
     };
   }, []);
 
@@ -147,19 +124,20 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
           onClick={(e) => {
             e.preventDefault();
             console.log('Клик по кнопке PayMaster');
+            const amount = getAmountFromIntensity(wishIntensity);
             if (window.cpay) {
               const paymentWidget = new window.cpay.PaymentWidget();
               paymentWidget.init({
                 "merchantId": "bc70f8f2-d8d3-49f1-9ec2-8f41857fc244",
                 "invoice": {"description": "SAIT ZHELANII"},
-                "amount": {"currency": "RUB", "value": 0},
+                "amount": {"currency": "RUB", "value": amount},
                 "receipt": null,
                 "paymentForm": {
                   "theme": "light",
-                  "primaryColor": "#58bfe8",
+                  "primaryColor": "#6366f1",
                   "productCard": {
-                    "title": "SAIT ZHELANII",
-                    "description": "САЙТ ЖЕЛАНИЙ",
+                    "title": "САЙТ ЖЕЛАНИЙ",
+                    "description": `Исполнение желания "${wish}" с силой ${wishIntensity}/10`,
                     "imageUrl": null
                   },
                   "fields": [
@@ -176,7 +154,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
                       "type": "input",
                       "name": "amount",
                       "label": "Сумма",
-                      "hint": null,
+                      "hint": `Рекомендуемая сумма: ${amount} руб.`,
                       "required": true,
                       "selectOptions": null,
                       "additionalAmount": null
@@ -188,6 +166,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
               console.error('PayMaster SDK не загружен');
             }
           }}
+          className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform hover:scale-105 transition-all duration-200 text-lg"
         >
           Оплатить
         </button>
