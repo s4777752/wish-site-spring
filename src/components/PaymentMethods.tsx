@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Button } from '@/components/ui/button';
 
 interface PaymentMethodsProps {
@@ -10,52 +10,10 @@ interface PaymentMethodsProps {
   onUserDataChange?: (email: string, phone: string) => void;
 }
 
-declare global {
-  interface Window {
-    webmoney: any;
-  }
-}
+
 
 const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: PaymentMethodsProps) => {
-  useEffect(() => {
-    // Загружаем скрипт WebMoney
-    const script1 = document.createElement('script');
-    script1.src = 'https://merchant.web.money/conf/lib/widgets/wmApp.js?v=1.6';
-    script1.async = true;
-    document.head.appendChild(script1);
 
-    script1.onload = () => {
-      // Инициализируем виджет после загрузки скрипта
-      if (window.webmoney) {
-        window.webmoney.widgets().PWYW.create({
-          "lang": "ru",
-          "data": {
-            "paymentType": "card",
-            "amount": "",
-            "amountReadonly": false,
-            "purse": "Z998401936213",
-            "desc": "SAIT ZHELANII",
-            "lmi_payment_no": null,
-            "forcePay": true
-          },
-          "style": {
-            "title": "",
-            "titleNum": 1
-          }
-        }).on('paymentComplete', function (data) {
-          console.log('Платеж завершен', data);
-        }).mount('wm-widget');
-      }
-    };
-
-    return () => {
-      // Очищаем скрипт при размонтировании
-      const existingScript = document.querySelector('script[src*="wmApp.js"]');
-      if (existingScript) {
-        document.head.removeChild(existingScript);
-      }
-    };
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -80,13 +38,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
 
       </div>
 
-      {/* WebMoney виджет */}
-      <div className="text-center">
-        <div 
-          id="wm-widget" 
-          style={{ width: '305px', height: '183px', margin: '0 auto' }}
-        ></div>
-      </div>
+
       
       {/* Кнопка скачивания документа аффирмации */}
       <Button 
