@@ -90,13 +90,19 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
       }
     };
 
-    // Устанавливаем обработчик после небольшой задержки, чтобы убедиться что скрипт загружен
-    const timer = setTimeout(() => {
-      const button = document.querySelector('[btn-pay-98dv40hx5t0bkkyj4d7uttgy6]');
-      if (button) {
-        button.addEventListener('click', handlePaymentClick);
-      }
-    }, 1000);
+    // Устанавливаем обработчик после загрузки скрипта
+    script.onload = () => {
+      const checkAndAddListener = () => {
+        const button = document.querySelector('[btn-pay-98dv40hx5t0bkkyj4d7uttgy6]');
+        if (button && window.cpay) {
+          button.addEventListener('click', handlePaymentClick);
+          console.log('PayMaster кнопка настроена');
+        } else {
+          setTimeout(checkAndAddListener, 100);
+        }
+      };
+      checkAndAddListener();
+    };
 
     return () => {
       // Очищаем при размонтировании
@@ -108,7 +114,6 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
       if (existingStyle) {
         document.head.removeChild(existingStyle);
       }
-      clearTimeout(timer);
     };
   }, []);
 
@@ -137,7 +142,55 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
 
       {/* PayMaster кнопка оплаты */}
       <div className="text-center">
-        <button btn-pay-98dv40hx5t0bkkyj4d7uttgy6>Оплатить</button>
+        <button 
+          btn-pay-98dv40hx5t0bkkyj4d7uttgy6
+          onClick={(e) => {
+            e.preventDefault();
+            console.log('Клик по кнопке PayMaster');
+            if (window.cpay) {
+              const paymentWidget = new window.cpay.PaymentWidget();
+              paymentWidget.init({
+                "merchantId": "bc70f8f2-d8d3-49f1-9ec2-8f41857fc244",
+                "invoice": {"description": "SAIT ZHELANII"},
+                "amount": {"currency": "RUB", "value": 0},
+                "receipt": null,
+                "paymentForm": {
+                  "theme": "light",
+                  "primaryColor": "#58bfe8",
+                  "productCard": {
+                    "title": "SAIT ZHELANII",
+                    "description": "САЙТ ЖЕЛАНИЙ",
+                    "imageUrl": null
+                  },
+                  "fields": [
+                    {
+                      "type": "input",
+                      "name": "customerEmail",
+                      "label": "E-mail",
+                      "hint": null,
+                      "required": true,
+                      "selectOptions": null,
+                      "additionalAmount": null
+                    },
+                    {
+                      "type": "input",
+                      "name": "amount",
+                      "label": "Сумма",
+                      "hint": null,
+                      "required": true,
+                      "selectOptions": null,
+                      "additionalAmount": null
+                    }
+                  ]
+                }
+              });
+            } else {
+              console.error('PayMaster SDK не загружен');
+            }
+          }}
+        >
+          Оплатить
+        </button>
       </div>
       
       {/* Кнопка скачивания документа аффирмации */}
