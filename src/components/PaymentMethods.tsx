@@ -27,23 +27,21 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
     script1.onload = () => {
       // Инициализируем виджет после загрузки скрипта
       if (window.webmoney) {
-        window.webmoney.widgets().button.create({
+        window.webmoney.widgets().PWYW.create({
+          "lang": "ru",
           "data": {
-            "amount": 50,
-            "purse": "Z998401936213",
-            "desc": "Тестовый товар",
             "paymentType": "card",
+            "amount": "",
+            "amountReadonly": false,
+            "purse": "Z998401936213",
+            "desc": "SAIT ZHELANII",
             "lmi_payment_no": null,
             "forcePay": true
           },
           "style": {
-            "theme": "wm",
-            "showAmount": true,
-            "titleNum": 1,
             "title": "",
-            "design": "skeuomorph"
-          },
-          "lang": "ru"
+            "titleNum": 1
+          }
         }).on('paymentComplete', function (data) {
           console.log('Платеж завершен', data);
         }).mount('wm-widget');
@@ -86,7 +84,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
       <div className="text-center">
         <div 
           id="wm-widget" 
-          style={{ width: '200px', height: '50px', margin: '0 auto' }}
+          style={{ width: '305px', height: '183px', margin: '0 auto' }}
         ></div>
       </div>
       
