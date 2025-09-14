@@ -30,6 +30,9 @@ const PaymentSection = ({
         <p className="text-gray-600">
           Ваше желание: "{wish}"
         </p>
+        <p className="text-sm text-indigo-600 bg-indigo-50 p-3 rounded-lg mt-3">
+          💌 После оплаты документ аффирмации придет на почту
+        </p>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center mb-6">
