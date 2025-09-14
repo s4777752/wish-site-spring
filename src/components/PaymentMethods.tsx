@@ -157,7 +157,8 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
                       "hint": `Рекомендуемая сумма: ${amount} руб.`,
                       "required": true,
                       "selectOptions": null,
-                      "additionalAmount": null
+                      "additionalAmount": null,
+                      "value": amount
                     }
                   ]
                 }
