@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
 interface PaymentMethodsProps {
@@ -10,10 +10,107 @@ interface PaymentMethodsProps {
   onUserDataChange?: (email: string, phone: string) => void;
 }
 
+declare global {
+  interface Window {
+    cpay: any;
+  }
+}
+
 
 
 const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: PaymentMethodsProps) => {
+  useEffect(() => {
+    // Добавляем скрипт PayMaster
+    const script = document.createElement('script');
+    script.src = 'https://paymaster.ru/cpay/sdk/payment-widget.js';
+    script.async = true;
+    document.head.appendChild(script);
 
+    // Добавляем стили для кнопки
+    const style = document.createElement('style');
+    style.innerHTML = `
+      button[btn-pay-98dv40hx5t0bkkyj4d7uttgy6] { 
+        display: inline-block; 
+        padding: 16px 24px; 
+        border-radius: 8px; 
+        color: #fff; 
+        background-color: #58bfe8; 
+        font-size: 16px; 
+        font-family: "Lato", "Arial", sans-serif; 
+        line-height: 16px; 
+        outline: none; 
+        border: none; 
+      }
+      button[btn-pay-98dv40hx5t0bkkyj4d7uttgy6]:hover { 
+        opacity: 0.9; 
+        cursor: pointer; 
+      }
+    `;
+    document.head.appendChild(style);
+
+    // Добавляем обработчик клика после загрузки скрипта
+    const handlePaymentClick = () => {
+      if (window.cpay) {
+        const paymentWidget = new window.cpay.PaymentWidget();
+        paymentWidget.init({
+          "merchantId": "bc70f8f2-d8d3-49f1-9ec2-8f41857fc244",
+          "invoice": {"description": "SAIT ZHELANII"},
+          "amount": {"currency": "RUB", "value": 0},
+          "receipt": null,
+          "paymentForm": {
+            "theme": "light",
+            "primaryColor": "#58bfe8",
+            "productCard": {
+              "title": "SAIT ZHELANII",
+              "description": "САЙТ ЖЕЛАНИЙ",
+              "imageUrl": null
+            },
+            "fields": [
+              {
+                "type": "input",
+                "name": "customerEmail",
+                "label": "E-mail",
+                "hint": null,
+                "required": true,
+                "selectOptions": null,
+                "additionalAmount": null
+              },
+              {
+                "type": "input",
+                "name": "amount",
+                "label": "Сумма",
+                "hint": null,
+                "required": true,
+                "selectOptions": null,
+                "additionalAmount": null
+              }
+            ]
+          }
+        });
+      }
+    };
+
+    // Устанавливаем обработчик после небольшой задержки, чтобы убедиться что скрипт загружен
+    const timer = setTimeout(() => {
+      const button = document.querySelector('[btn-pay-98dv40hx5t0bkkyj4d7uttgy6]');
+      if (button) {
+        button.addEventListener('click', handlePaymentClick);
+      }
+    }, 1000);
+
+    return () => {
+      // Очищаем при размонтировании
+      const existingScript = document.querySelector('script[src*="paymaster.ru"]');
+      if (existingScript) {
+        document.head.removeChild(existingScript);
+      }
+      const existingStyle = document.querySelector('style');
+      if (existingStyle) {
+        document.head.removeChild(existingStyle);
+      }
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -38,7 +135,10 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
 
       </div>
 
-
+      {/* PayMaster кнопка оплаты */}
+      <div className="text-center">
+        <button btn-pay-98dv40hx5t0bkkyj4d7uttgy6>Оплатить</button>
+      </div>
       
       {/* Кнопка скачивания документа аффирмации */}
       <Button 
