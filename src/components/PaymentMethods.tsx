@@ -130,7 +130,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
               paymentWidget.init({
                 "merchantId": "bc70f8f2-d8d3-49f1-9ec2-8f41857fc244",
                 "invoice": {"description": "SAIT ZHELANII"},
-                "amount": {"currency": "RUB", "value": amount},
+                "amount": {"currency": "RUB", "value": amount, "fixed": true},
                 "receipt": null,
                 "paymentForm": {
                   "theme": "light",
@@ -149,16 +149,6 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
                       "required": true,
                       "selectOptions": null,
                       "additionalAmount": null
-                    },
-                    {
-                      "type": "input",
-                      "name": "amount",
-                      "label": "Сумма",
-                      "hint": `Рекомендуемая сумма: ${amount} руб.`,
-                      "required": true,
-                      "selectOptions": null,
-                      "additionalAmount": null,
-                      "value": amount
                     }
                   ]
                 }
