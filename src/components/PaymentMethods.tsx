@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
 interface PaymentMethodsProps {
@@ -10,7 +10,55 @@ interface PaymentMethodsProps {
   onUserDataChange?: (email: string, phone: string) => void;
 }
 
+declare global {
+  interface Window {
+    webmoney: any;
+  }
+}
+
 const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: PaymentMethodsProps) => {
+  useEffect(() => {
+    // Загружаем скрипт WebMoney
+    const script1 = document.createElement('script');
+    script1.src = 'https://merchant.web.money/conf/lib/widgets/wmApp.js?v=1.6';
+    script1.async = true;
+    document.head.appendChild(script1);
+
+    script1.onload = () => {
+      // Инициализируем виджет после загрузки скрипта
+      if (window.webmoney) {
+        window.webmoney.widgets().button.create({
+          "data": {
+            "amount": 50,
+            "purse": "Z998401936213",
+            "desc": "Тестовый товар",
+            "paymentType": "card",
+            "lmi_payment_no": null,
+            "forcePay": true
+          },
+          "style": {
+            "theme": "wm",
+            "showAmount": true,
+            "titleNum": 1,
+            "title": "",
+            "design": "skeuomorph"
+          },
+          "lang": "ru"
+        }).on('paymentComplete', function (data) {
+          console.log('Платеж завершен', data);
+        }).mount('wm-widget');
+      }
+    };
+
+    return () => {
+      // Очищаем скрипт при размонтировании
+      const existingScript = document.querySelector('script[src*="wmApp.js"]');
+      if (existingScript) {
+        document.head.removeChild(existingScript);
+      }
+    };
+  }, []);
+
   return (
     <div className="space-y-6">
       {/* QR код для оплаты */}
@@ -32,6 +80,14 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
           </div>
         </div>
 
+      </div>
+
+      {/* WebMoney виджет */}
+      <div className="text-center">
+        <div 
+          id="wm-widget" 
+          style={{ width: '200px', height: '50px', margin: '0 auto' }}
+        ></div>
       </div>
       
       {/* Кнопка скачивания документа аффирмации */}
