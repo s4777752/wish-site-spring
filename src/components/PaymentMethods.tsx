@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { sendAffirmationEmail } from '@/utils/emailService';
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -18,7 +19,7 @@ declare global {
 
 
 
-const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: PaymentMethodsProps) => {
+const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, onUserDataChange }: PaymentMethodsProps) => {
   useEffect(() => {
     // Добавляем скрипт PayMaster
     const script = document.createElement('script');
@@ -149,8 +150,59 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish }: Payment
                       "required": true,
                       "selectOptions": null,
                       "additionalAmount": null
+                    },
+                    {
+                      "type": "input",
+                      "name": "customerName",
+                      "label": "Имя",
+                      "hint": null,
+                      "required": true,
+                      "selectOptions": null,
+                      "additionalAmount": null
                     }
                   ]
+                },
+                "callbacks": {
+                  "onSuccess": async (paymentData) => {
+                    console.log('Оплата успешна:', paymentData);
+                    
+                    // Получаем данные из формы оплаты
+                    const email = paymentData.customerData?.customerEmail || 'user@example.com';
+                    const name = paymentData.customerData?.customerName || 'Пользователь';
+                    
+                    // Отправляем email с документом аффирмации
+                    try {
+                      const orderNumber = `WM${Date.now()}`;
+                      const timestamp = new Date().toLocaleString('ru-RU');
+                      
+                      await sendAffirmationEmail({
+                        name: name,
+                        email: email,
+                        wish: wish,
+                        amount: amount,
+                        orderNumber: orderNumber,
+                        timestamp: timestamp
+                      });
+                      
+                      console.log('Документ аффирмации отправлен на:', email);
+                      
+                      // Уведомляем родительский компонент об изменении данных пользователя
+                      if (onUserDataChange) {
+                        onUserDataChange(email, '');
+                      }
+                      
+                    } catch (error) {
+                      console.error('Ошибка при отправке документа аффирмации:', error);
+                    }
+                    
+                    // Вызываем callback успешной оплаты
+                    if (onPaymentComplete) {
+                      onPaymentComplete();
+                    }
+                  },
+                  "onError": (error) => {
+                    console.error('Ошибка оплаты:', error);
+                  }
                 }
               });
             } else {

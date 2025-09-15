@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { sendAffirmationEmail } from '@/utils/emailService';
 
 interface PaymentFormProps {
   terminalKey: string;
+  wish?: string;
   onPaymentSuccess?: () => void;
   onPaymentError?: (error: string) => void;
 }
@@ -14,6 +16,7 @@ declare global {
 
 const PaymentForm: React.FC<PaymentFormProps> = ({ 
   terminalKey, 
+  wish = '',
   onPaymentSuccess, 
   onPaymentError 
 }) => {
@@ -73,6 +76,29 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
     try {
       if (window.pay) {
         window.pay(form);
+        
+        // Отправляем документ аффирмации после успешной оплаты
+        const orderNumber = `order_${Date.now()}`;
+        const timestamp = new Date().toLocaleString('ru-RU');
+        
+        if (formData.email && formData.name) {
+          setTimeout(async () => {
+            try {
+              await sendAffirmationEmail({
+                name: formData.name,
+                email: formData.email,
+                wish: wish || formData.description || 'Исполнение желания',
+                amount: parseFloat(formData.amount),
+                orderNumber,
+                timestamp
+              });
+              console.log('Документ аффирмации отправлен на', formData.email);
+            } catch (emailError) {
+              console.error('Ошибка при отправке документа аффирмации:', emailError);
+            }
+          }, 2000); // Задержка 2 секунды после успешной оплаты
+        }
+        
         onPaymentSuccess?.();
       } else {
         throw new Error('Платежная система не загружена');
