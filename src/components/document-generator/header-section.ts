@@ -39,7 +39,9 @@ export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElem
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
   
-  const lineGradient = ctx.createLinearGradient(200, 240, canvas.width - 200, 240);
+  // Рисуем декоративную линию ниже ФИО
+  const lineY = userName ? 270 : 240; // Если есть ФИО, линия ниже, иначе на прежнем месте
+  const lineGradient = ctx.createLinearGradient(200, lineY, canvas.width - 200, lineY);
   lineGradient.addColorStop(0, 'transparent');
   lineGradient.addColorStop(0.3, '#60a5fa');
   lineGradient.addColorStop(0.7, '#60a5fa');
@@ -47,7 +49,7 @@ export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElem
   ctx.strokeStyle = lineGradient;
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(200, 240);
-  ctx.lineTo(canvas.width - 200, 240);
+  ctx.moveTo(200, lineY);
+  ctx.lineTo(canvas.width - 200, lineY);
   ctx.stroke();
 }
