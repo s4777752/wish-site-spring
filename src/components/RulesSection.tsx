@@ -95,33 +95,7 @@ const RulesSection = () => {
             </div>
           </Card>
 
-          <Card className="p-6 hover:shadow-lg transition-shadow">
-            <div className="flex items-start space-x-4">
-              <div className="bg-purple-100 p-3 rounded-full">
-                <Icon name="FileText" size={24} className="text-purple-600" />
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-3">Документ аффирмации</h3>
-                <p className="text-gray-600 mb-3">
-                  После оплаты вы получите персональный документ аффирмации на указанную электронную почту.
-                </p>
-                <ul className="space-y-2 text-gray-600">
-                  <li className="flex items-center space-x-2">
-                    <Icon name="Check" size={16} className="text-green-500" />
-                    <span>Персонализированный текст под ваше желание</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <Icon name="Check" size={16} className="text-green-500" />
-                    <span>Готов к печати в высоком качестве</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <Icon name="Check" size={16} className="text-green-500" />
-                    <span>Доставка на email в течение часа</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </Card>
+
 
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start space-x-4">
