@@ -18,9 +18,9 @@ const PaymentWaitingScreen = ({ onComplete }: PaymentWaitingScreenProps) => {
     }));
     setStars(newStars);
 
-    // Автоматически закрываем через 5 секунд (опционально)
+    // Автоматически закрываем через 20 секунд (опционально)
     if (onComplete) {
-      const timer = setTimeout(onComplete, 5000);
+      const timer = setTimeout(onComplete, 20000);
       return () => clearTimeout(timer);
     }
   }, [onComplete]);
