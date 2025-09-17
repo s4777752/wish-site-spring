@@ -111,8 +111,8 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
           <div className="font-semibold text-gray-800">Т-Банк ⚡</div>
           <div className="text-sm text-gray-600 space-y-1">
             <div>1. Отсканируйте QR-код</div>
-            <div>2. ИП Паклин СВ</div>
-            <div>3. введите сумму</div>
+            <div></div>
+            <div>2. введите сумму</div>
           </div>
         </div>
 
