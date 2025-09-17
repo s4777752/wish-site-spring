@@ -286,7 +286,20 @@ const PaymentSection = ({
                   </div>
                 </div>
                 
-                <div className="flex space-x-3 pt-4">
+                <div className="flex items-center space-x-2 pt-4 pb-2">
+                  <input 
+                    type="checkbox" 
+                    id="sendAffirmation" 
+                    defaultChecked 
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                  />
+                  <label htmlFor="sendAffirmation" className="text-sm text-gray-700">
+                    Отправить документ аффирмации на email
+                  </label>
+                  <span className="text-sm text-green-600 font-medium">Да</span>
+                </div>
+                
+                <div className="flex space-x-3 pt-2">
                   <Button
                     type="button"
                     variant="outline"
