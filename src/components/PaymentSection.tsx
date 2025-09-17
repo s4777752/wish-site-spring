@@ -32,6 +32,7 @@ const PaymentSection = ({
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
   const [showWaitingScreen, setShowWaitingScreen] = useState(false);
+  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -286,11 +287,63 @@ const PaymentSection = ({
                     onClick={() => {
                       setIsQRModalOpen(false);
                       setIsModalOpen(false);
-                      setShowWaitingScreen(true);
+                      setShowDownloadDialog(true);
                     }}
                     className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
                   >
                     Я оплатил
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* Диалог скачивания документа аффирмации */}
+        {showDownloadDialog && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+              <div className="text-center space-y-6">
+                <div className="text-6xl mb-4">📄</div>
+                <h3 className="text-2xl font-bold text-gray-800">Скачать документ аффирмации?</h3>
+                <p className="text-gray-600">
+                  Персональный документ поможет усилить энергию вашего желания и напомнит о цели
+                </p>
+                
+                <div className="flex space-x-3 pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowDownloadDialog(false);
+                      setShowWaitingScreen(true);
+                    }}
+                    className="flex-1"
+                  >
+                    Нет, спасибо
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      // Генерируем и скачиваем документ
+                      const documentData = {
+                        wish: wish,
+                        intensity: wishIntensity,
+                        amount: getAmountFromIntensity(wishIntensity),
+                        userName: fullName,
+                        documentId: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+                      };
+                      
+                      import('../components/DocumentGenerator').then(({ generateAndDownloadDocument }) => {
+                        generateAndDownloadDocument(documentData);
+                      });
+                      
+                      setShowDownloadDialog(false);
+                      setShowWaitingScreen(true);
+                    }}
+                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
+                  >
+                    Да, скачать
                   </Button>
                 </div>
               </div>
