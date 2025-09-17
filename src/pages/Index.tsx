@@ -199,6 +199,12 @@ const Index = () => {
               setSelectedAmount={setSelectedAmount}
               getAmountFromIntensity={getAmountFromIntensity}
               getColorFromIntensity={getColorFromIntensity}
+              onReturnToSplash={() => {
+                setShowSplash(true);
+                setWish('');
+                setShowPayment(false);
+                setWishIntensity(5);
+              }}
             >
               <PaymentMethods
                 getAmountFromIntensity={getAmountFromIntensity}

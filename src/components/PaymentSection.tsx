@@ -14,6 +14,7 @@ interface PaymentSectionProps {
   getAmountFromIntensity: (intensity: number) => number;
   getColorFromIntensity: (intensity: number) => string;
   children: React.ReactNode;
+  onReturnToSplash?: () => void;
 }
 
 const PaymentSection = ({ 
@@ -23,7 +24,8 @@ const PaymentSection = ({
   setSelectedAmount, 
   getAmountFromIntensity, 
   getColorFromIntensity,
-  children 
+  children,
+  onReturnToSplash
 }: PaymentSectionProps) => {
   const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp' | 'email' | 'both'>('whatsapp');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -313,7 +315,12 @@ const PaymentSection = ({
         {/* Заставка ожидания оплаты */}
         {showWaitingScreen && (
           <PaymentWaitingScreen 
-            onComplete={() => setShowWaitingScreen(false)}
+            onComplete={() => {
+              setShowWaitingScreen(false);
+              if (onReturnToSplash) {
+                onReturnToSplash();
+              }
+            }}
           />
         )}
       </CardContent>
