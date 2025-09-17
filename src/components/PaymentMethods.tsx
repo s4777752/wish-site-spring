@@ -98,7 +98,7 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
   return (
     <div className="space-y-6">
       {/* QR код для оплаты */}
-      <div className="text-center space-y-4 hidden">
+      <div className="text-center space-y-4">
         <h3 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h3>
         <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
           <img 
