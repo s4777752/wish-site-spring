@@ -217,19 +217,6 @@ const PaymentSection = ({
                   />
                 </div>
                 
-                <div className="flex items-center space-x-2 pt-2">
-                  <input 
-                    type="checkbox" 
-                    id="sendAffirmation" 
-                    checked={sendAffirmationEmail}
-                    onChange={(e) => setSendAffirmationEmail(e.target.checked)}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                  />
-                  <label htmlFor="sendAffirmation" className="text-sm text-gray-700">
-                    Отправить документ аффирмации на email
-                  </label>
-                  <span className="text-sm text-green-600 font-medium">Да</span>
-                </div>
                 
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 mb-2">Сумма к оплате:</p>
