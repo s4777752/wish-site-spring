@@ -27,7 +27,7 @@ const PaymentSection = ({
   children,
   onReturnToSplash
 }: PaymentSectionProps) => {
-  const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp' | 'email' | 'both'>('whatsapp');
+  const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp'>('whatsapp');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
@@ -219,8 +219,8 @@ const PaymentSection = ({
                   <Button
                     type="button"
                     onClick={() => {
-                      if (!fullName || !email) {
-                        alert('Пожалуйста, заполните все поля');
+                      if (!fullName) {
+                        alert('Пожалуйста, заполните ФИО');
                         return;
                       }
                       setIsQRModalOpen(true);
