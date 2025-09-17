@@ -33,6 +33,7 @@ const PaymentSection = ({
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [showWaitingScreen, setShowWaitingScreen] = useState(false);
+  const [sendAffirmationEmail, setSendAffirmationEmail] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -220,6 +221,8 @@ const PaymentSection = ({
                   <input 
                     type="checkbox" 
                     id="sendAffirmation" 
+                    checked={sendAffirmationEmail}
+                    onChange={(e) => setSendAffirmationEmail(e.target.checked)}
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                   />
                   <label htmlFor="sendAffirmation" className="text-sm text-gray-700">
@@ -309,7 +312,24 @@ const PaymentSection = ({
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => {
+                    onClick={async () => {
+                      // Отправляем документ аффирмации на email если чекбокс отмечен
+                      if (sendAffirmationEmail && email && fullName) {
+                        try {
+                          const { sendAffirmationEmail: sendEmail } = await import('@/utils/emailService');
+                          await sendEmail({
+                            name: fullName,
+                            email: email,
+                            wish: wish,
+                            amount: getAmountFromIntensity(wishIntensity),
+                            orderNumber: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+                            timestamp: new Date().toLocaleString('ru-RU')
+                          });
+                        } catch (error) {
+                          console.error('Ошибка отправки email:', error);
+                        }
+                      }
+                      
                       setIsQRModalOpen(false);
                       setIsModalOpen(false);
                       setShowWaitingScreen(true);
