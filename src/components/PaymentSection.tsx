@@ -202,20 +202,6 @@ const PaymentSection = ({
                   />
                 </div>
                 
-                <div>
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Электронная почта
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Введите email"
-                    className="mt-1"
-                    required
-                  />
-                </div>
                 
                 
                 <div className="bg-gray-50 p-4 rounded-lg">
