@@ -2,9 +2,10 @@ export interface DocumentData {
   wish: string;
   intensity: number;
   amount: number;
-  email: string;
+  email?: string;
   userName: string;
   documentId: string;
+  timestamp?: string;
 }
 
 // Экспорт типа как константы для совместимости с Vite

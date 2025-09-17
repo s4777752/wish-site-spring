@@ -331,7 +331,14 @@ const PaymentSection = ({
                         intensity: wishIntensity,
                         amount: getAmountFromIntensity(wishIntensity),
                         userName: fullName,
-                        documentId: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`
+                        documentId: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+                        timestamp: new Date().toLocaleString('ru-RU', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })
                       };
                       
                       import('../components/DocumentGenerator').then(({ generateAndDownloadDocument }) => {

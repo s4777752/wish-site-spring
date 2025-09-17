@@ -102,5 +102,6 @@ export function drawBottomText(ctx: CanvasRenderingContext2D, canvas: HTMLCanvas
   
   ctx.fillStyle = '#94a3b8';
   ctx.font = '16px sans-serif';
-  ctx.fillText(`Получатель: ${documentData.userName} • Email: ${documentData.email}`, canvas.width/2, canvas.height - 60);
+  const emailText = documentData.email ? ` • Email: ${documentData.email}` : '';
+  ctx.fillText(`Получатель: ${documentData.userName}${emailText}`, canvas.width/2, canvas.height - 60);
 }

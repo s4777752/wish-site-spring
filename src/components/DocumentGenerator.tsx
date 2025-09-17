@@ -18,7 +18,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   if (!documentData) return;
   
   const documentId = documentData.documentId || `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
-  const currentDate = new Date().toLocaleDateString('ru-RU', { 
+  const currentDate = documentData.timestamp || new Date().toLocaleDateString('ru-RU', { 
     year: 'numeric', 
     month: 'long', 
     day: 'numeric' 
