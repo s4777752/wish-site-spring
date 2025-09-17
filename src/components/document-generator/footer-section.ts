@@ -99,9 +99,4 @@ export function drawBottomText(ctx: CanvasRenderingContext2D, canvas: HTMLCanvas
   ctx.font = 'bold 22px serif';
   ctx.textAlign = 'center';
   ctx.fillText('⚠️ ДОКУМЕНТ ДЕЙСТВУЕТ ПОСЛЕ ОПЛАТЫ СИЛЫ ⚠️', canvas.width/2, canvas.height - 100);
-  
-  ctx.fillStyle = '#94a3b8';
-  ctx.font = '16px sans-serif';
-  const emailText = documentData.email ? ` • Email: ${documentData.email}` : '';
-  ctx.fillText(`Получатель: ${documentData.userName}${emailText}`, canvas.width/2, canvas.height - 40);
 }

@@ -1,4 +1,4 @@
-export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, documentId: string, activationDateStr: string) {
+export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, documentId: string, activationDateStr: string, userName?: string) {
   const titleBg = ctx.createLinearGradient(0, 120, 0, 280);
   titleBg.addColorStop(0, 'rgba(30, 64, 175, 0.4)');
   titleBg.addColorStop(0.5, 'rgba(59, 130, 246, 0.6)');
@@ -26,6 +26,13 @@ export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElem
   ctx.font = 'italic 26px serif';
   ctx.fillStyle = '#e2e8f0';
   ctx.fillText('Персональный документ силы', canvas.width/2, 220);
+  
+  // Добавляем ФИО получателя под "Персональный документ силы"
+  if (userName) {
+    ctx.font = 'bold 20px serif';
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillText(`Получатель: ${userName}`, canvas.width/2, 250);
+  }
   
   ctx.shadowColor = 'transparent';
   ctx.shadowBlur = 0;

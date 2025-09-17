@@ -43,7 +43,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   drawWatermarks(ctx, canvas);
   drawBorders(ctx, canvas);
   drawCornerDecorations(ctx, canvas);
-  drawHeader(ctx, canvas, documentId, activationDateStr);
+  drawHeader(ctx, canvas, documentId, activationDateStr, documentData.userName);
   
   const affirmationStartY = drawWishSection(ctx, canvas, documentData);
   drawAffirmationsSection(ctx, canvas, documentData.wish, affirmationStartY);
