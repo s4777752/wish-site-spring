@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
+import PaymentWaitingScreen from './PaymentWaitingScreen';
 
 interface PaymentSectionProps {
   wish: string;
@@ -29,6 +30,7 @@ const PaymentSection = ({
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
+  const [showWaitingScreen, setShowWaitingScreen] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -294,9 +296,9 @@ const PaymentSection = ({
                   <Button
                     type="button"
                     onClick={() => {
-                      alert('Спасибо за оплату! Ваше желание отправлено во Вселенную!');
                       setIsQRModalOpen(false);
                       setIsModalOpen(false);
+                      setShowWaitingScreen(true);
                     }}
                     className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
                   >
@@ -306,6 +308,13 @@ const PaymentSection = ({
               </div>
             </div>
           </div>
+        )}
+        
+        {/* Заставка ожидания оплаты */}
+        {showWaitingScreen && (
+          <PaymentWaitingScreen 
+            onComplete={() => setShowWaitingScreen(false)}
+          />
         )}
       </CardContent>
     </Card>
