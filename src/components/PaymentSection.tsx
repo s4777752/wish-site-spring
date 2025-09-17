@@ -4,6 +4,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import Icon from '@/components/ui/icon';
 
 interface PaymentSectionProps {
   wish: string;
@@ -25,6 +29,10 @@ const PaymentSection = ({
   children 
 }: PaymentSectionProps) => {
   const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp' | 'email' | 'both'>('whatsapp');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
