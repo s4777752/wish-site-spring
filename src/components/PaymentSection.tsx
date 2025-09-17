@@ -272,7 +272,7 @@ const PaymentSection = ({
                 <h4 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h4>
                 <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
                   <img 
-                    src="https://cdn.poehali.dev/files/f8b182d3-f618-41a7-be07-1c7313360372.jpg" 
+                    src="https://cdn.poehali.dev/files/94c093a9-e696-40cd-99d6-9b1d57dc9e9d.jpg" 
                     alt="QR код для оплаты" 
                     className="w-48 h-48 mx-auto"
                   />
