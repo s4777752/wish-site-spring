@@ -31,9 +31,7 @@ const PaymentSection = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
   const [showWaitingScreen, setShowWaitingScreen] = useState(false);
-  const [sendAffirmationEmail, setSendAffirmationEmail] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -285,46 +283,7 @@ const PaymentSection = ({
                   </Button>
                   <Button
                     type="button"
-                    onClick={async () => {
-                      console.log('Проверка условий отправки:', {
-                        sendAffirmationEmail,
-                        email,
-                        fullName,
-                        allConditionsMet: sendAffirmationEmail && email && fullName
-                      });
-                      
-                      // Отправляем документ аффирмации на email если чекбокс отмечен
-                      if (sendAffirmationEmail && email && fullName) {
-                        try {
-                          console.log('Начинаем отправку документа аффирмации...');
-                          const { sendAffirmationEmail: sendEmail } = await import('@/utils/emailService');
-                          const result = await sendEmail({
-                            name: fullName,
-                            email: email,
-                            wish: wish,
-                            amount: getAmountFromIntensity(wishIntensity),
-                            orderNumber: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
-                            timestamp: new Date().toLocaleString('ru-RU')
-                          });
-                          console.log('Результат отправки:', result);
-                          
-                          if (result) {
-                            alert('Документ аффирмации отправлен на ваш email!');
-                          } else {
-                            alert('Ошибка отправки документа. Попробуйте позже.');
-                          }
-                        } catch (error) {
-                          console.error('Ошибка отправки email:', error);
-                          alert('Ошибка отправки документа: ' + error.message);
-                        }
-                      } else {
-                        console.log('Документ не отправляется. Причины:', {
-                          checkboxNotChecked: !sendAffirmationEmail,
-                          emailEmpty: !email,
-                          nameEmpty: !fullName
-                        });
-                      }
-                      
+                    onClick={() => {
                       setIsQRModalOpen(false);
                       setIsModalOpen(false);
                       setShowWaitingScreen(true);
