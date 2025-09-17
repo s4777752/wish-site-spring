@@ -216,26 +216,6 @@ const PaymentSection = ({
                   <p className="text-2xl font-bold text-purple-600">{getAmountFromIntensity(wishIntensity)} ₽</p>
                 </div>
                 
-                {/* QR код для оплаты */}
-                <div className="text-center space-y-4 pt-4">
-                  <h4 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h4>
-                  <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
-                    <img 
-                      src="https://cdn.poehali.dev/files/f8b182d3-f618-41a7-be07-1c7313360372.jpg" 
-                      alt="QR код для оплаты" 
-                      className="w-32 h-32 mx-auto"
-                    />
-                  </div>
-                  <div className="text-center space-y-2">
-                    <div className="font-semibold text-gray-800">Т-Банк ⚡</div>
-                    <div className="text-sm text-gray-600 space-y-1">
-                      <div>1. Отсканируйте QR-код</div>
-                      <div>2. Введите сумму: {getAmountFromIntensity(wishIntensity)} ₽</div>
-                      <div>3. Подтвердите оплату</div>
-                    </div>
-                  </div>
-                </div>
-                
                 <div className="flex space-x-3 pt-4">
                   <Button
                     type="button"
@@ -246,15 +226,10 @@ const PaymentSection = ({
                     Отмена
                   </Button>
                   <Button
-                    type="button"
-                    onClick={() => {
-                      // Здесь можно добавить логику после оплаты
-                      alert('Спасибо за оплату! Ваше желание отправлено во Вселенную!');
-                      setIsModalOpen(false);
-                    }}
-                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
+                    type="submit"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white flex-1"
                   >
-                    Я оплатил
+                    Оплатить
                   </Button>
                 </div>
               </form>
