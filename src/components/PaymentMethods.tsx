@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { sendAffirmationEmail } from '@/utils/emailService';
-import Icon from '@/components/ui/icon';
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -21,7 +20,6 @@ declare global {
 
 
 const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPaymentComplete, onUserDataChange }: PaymentMethodsProps) => {
-  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   useEffect(() => {
     // Добавляем скрипт PayMaster
     const script = document.createElement('script');
@@ -99,79 +97,29 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
 
   return (
     <div className="space-y-6">
-      {/* Кнопка для открытия QR кода */}
-      <div className="text-center">
-        <Button 
-          onClick={() => setIsQRModalOpen(true)}
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-          size="lg"
-        >
-          Оплатить
-        </Button>
-      </div>
-
-      {/* Модальное окно с QR кодом */}
-      {isQRModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-            <div className="flex justify-between items-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-800">Оплата</h3>
-              <button 
-                onClick={() => setIsQRModalOpen(false)}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <Icon name="X" size={24} />
-              </button>
-            </div>
-            
-            <div className="text-center space-y-4">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <p className="text-sm text-gray-600 mb-2">Сумма к оплате:</p>
-                <p className="text-2xl font-bold text-purple-600">{getAmountFromIntensity(wishIntensity)} ₽</p>
-              </div>
-              
-              <h4 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h4>
-              <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
-                <img 
-                  src="https://cdn.poehali.dev/files/f8b182d3-f618-41a7-be07-1c7313360372.jpg" 
-                  alt="QR код для оплаты" 
-                  className="w-48 h-48 mx-auto"
-                />
-              </div>
-              <div className="text-center space-y-2">
-                <div className="font-semibold text-gray-800">Т-Банк ⚡</div>
-                <div className="text-sm text-gray-600 space-y-1">
-                  <div>1. Отсканируйте QR-код</div>
-                  <div>2. Введите сумму: {getAmountFromIntensity(wishIntensity)} ₽</div>
-                  <div>3. Подтвердите оплату</div>
-                </div>
-              </div>
-              
-              <div className="flex space-x-3 pt-4">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setIsQRModalOpen(false)}
-                  className="flex-1"
-                >
-                  Отмена
-                </Button>
-                <Button
-                  type="button"
-                  onClick={() => {
-                    alert('Спасибо за оплату! Ваше желание отправлено во Вселенную!');
-                    setIsQRModalOpen(false);
-                    onPaymentComplete();
-                  }}
-                  className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
-                >
-                  Я оплатил
-                </Button>
-              </div>
-            </div>
+      {/* QR код для оплаты */}
+      <div className="text-center space-y-4">
+        <h3 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h3>
+        <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
+          <img 
+            src="https://cdn.poehali.dev/files/f8b182d3-f618-41a7-be07-1c7313360372.jpg" 
+            alt="QR код для оплаты" 
+            className="w-48 h-48 mx-auto"
+          />
+        </div>
+        <div className="text-center space-y-2">
+          <div className="font-semibold text-gray-800">Т-Банк ⚡</div>
+          <div className="text-sm text-gray-600 space-y-1">
+            <div>1. Отсканируйте QR-код</div>
+            <div></div>
+            <div>2. введите сумму</div>
           </div>
         </div>
-      )}
+
+      </div>
+
+
+      
       {/* Кнопка скачивания документа аффирмации */}
       <Button 
         onClick={() => {
