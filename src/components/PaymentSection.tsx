@@ -29,9 +29,6 @@ const PaymentSection = ({
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
