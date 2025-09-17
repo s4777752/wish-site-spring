@@ -1,9 +1,5 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import Icon from '@/components/ui/icon';
 
 interface PaymentSectionProps {
   wish: string;
@@ -25,9 +21,6 @@ const PaymentSection = ({
   children 
 }: PaymentSectionProps) => {
   const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp' | 'email' | 'both'>('whatsapp');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -141,101 +134,11 @@ const PaymentSection = ({
             
             {React.cloneElement(children as React.ReactElement, { deliveryMethod })}
             
-            <div className="mt-8 text-center">
-              <Button 
-                onClick={() => setIsModalOpen(true)}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-                size="lg"
-              >
-                Отправить запрос и оплатить
-              </Button>
-            </div>
+
           </div>
         )}
-        
-        {/* Модальное окно */}
-        {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
-              <div className="flex justify-between items-center mb-6">
-                <h3 className="text-2xl font-bold text-gray-800">Оформление заявки</h3>
-                <button 
-                  onClick={() => setIsModalOpen(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <Icon name="X" size={24} />
-                </button>
-              </div>
-              
-              <form className="space-y-4">
-                <div>
-                  <Label htmlFor="wish-field" className="text-sm font-medium text-gray-700">
-                    Ваше желание
-                  </Label>
-                  <Input
-                    id="wish-field"
-                    type="text"
-                    value={wish}
-                    disabled
-                    className="mt-1 bg-gray-100"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="fullName" className="text-sm font-medium text-gray-700">
-                    Фамилия Имя Отчество
-                  </Label>
-                  <Input
-                    id="fullName"
-                    type="text"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    placeholder="Введите ФИО"
-                    className="mt-1"
-                    required
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                    Электронная почта
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Введите email"
-                    className="mt-1"
-                    required
-                  />
-                </div>
-                
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600 mb-2">Сумма к оплате:</p>
-                  <p className="text-2xl font-bold text-purple-600">{getAmountFromIntensity(wishIntensity)} ₽</p>
-                </div>
-                
-                <div className="flex space-x-3 pt-4">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsModalOpen(false)}
-                    className="flex-1"
-                  >
-                    Отмена
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white flex-1"
-                  >
-                    Оплатить
-                  </Button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
+
+
       </CardContent>
     </Card>
   );
