@@ -15,13 +15,41 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
 
+  const playConfettiSound = () => {
+    // Создаем звук конфетти с помощью Web Audio API
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    
+    // Звук взрыва конфетти (быстрая последовательность нот)
+    const frequencies = [523, 659, 784, 1047, 1319]; // C5, E5, G5, C6, E6
+    
+    frequencies.forEach((freq, index) => {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+      oscillator.type = 'triangle';
+      
+      // Быстрое затухание для каждой ноты
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime + index * 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + index * 0.05 + 0.2);
+      
+      oscillator.start(audioContext.currentTime + index * 0.05);
+      oscillator.stop(audioContext.currentTime + index * 0.05 + 0.2);
+    });
+  };
+
   const handleDownload = () => {
     setShowConfetti(true);
+    playConfettiSound();
     onDownload();
   };
 
   const handleClose = () => {
     setShowConfetti(true);
+    playConfettiSound();
     setTimeout(() => {
       onClose();
     }, 1000); // Даём время для конфетти
