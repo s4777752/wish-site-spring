@@ -253,7 +253,7 @@ const PaymentSection = ({
               <div className="text-center space-y-4">
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <p className="text-sm text-gray-600 mb-2">Сумма к оплате:</p>
-                  <p className="text-2xl font-bold text-purple-600">{getAmountFromIntensity(wishIntensity)} ₽</p>
+                  <p className="text-2xl font-bold text-purple-600">Энергетический вклад {getAmountFromIntensity(wishIntensity)} ₽</p>
                 </div>
                 
                 <h4 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h4>
