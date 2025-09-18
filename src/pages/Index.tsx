@@ -205,6 +205,7 @@ const Index = () => {
                 setShowPayment(false);
                 setWishIntensity(5);
               }}
+              onPaymentSuccess={handlePayment}
             >
               <PaymentMethods
                 getAmountFromIntensity={getAmountFromIntensity}

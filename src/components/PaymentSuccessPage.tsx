@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Icon from '@/components/ui/icon';
 import SimpleConfetti from '@/components/SimpleConfetti';
 
@@ -13,10 +13,10 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
   onClose,
   amount
 }) => {
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(true); // Сразу включаем конфетти!
   
   console.log('PaymentSuccessPage рендерится, showConfetti:', showConfetti);
-
+  
   const playConfettiSound = async () => {
     try {
       // Создаем звук конфетти с помощью Web Audio API
@@ -136,6 +136,13 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
       }
     }
   };
+
+  // Автоматически запускаем конфетти и звук при загрузке страницы
+  useEffect(() => {
+    console.log('🎉 PaymentSuccessPage загружена! Запускаем конфетти и звук!');
+    setShowConfetti(true);
+    playConfettiSound();
+  }, []);
 
   const handleDownload = () => {
     console.log('🎉 Запускаем конфетти при скачивании!');
