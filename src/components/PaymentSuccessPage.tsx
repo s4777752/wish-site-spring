@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Icon from '@/components/ui/icon';
+import SimpleConfetti from '@/components/SimpleConfetti';
 
 interface PaymentSuccessPageProps {
   onDownload: () => void;
@@ -12,8 +13,24 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
   onClose,
   amount
 }) => {
+  const [showConfetti, setShowConfetti] = useState(false);
+
+  const handleDownload = () => {
+    setShowConfetti(true);
+    onDownload();
+  };
+
+  const handleClose = () => {
+    setShowConfetti(true);
+    setTimeout(() => {
+      onClose();
+    }, 1000); // Даём время для конфетти
+  };
+
   return (
     <div className="fixed inset-0 bg-gray-50 flex items-center justify-center z-50">
+      {/* Конфетти компонент */}
+      <SimpleConfetti isActive={showConfetti} />
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center">
         {/* Иконка успеха */}
         <div className="w-20 h-20 mx-auto mb-6 bg-blue-100 rounded-full flex items-center justify-center">
@@ -34,7 +51,7 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
 
         {/* Кнопка скачивания */}
         <button
-          onClick={onDownload}
+          onClick={handleDownload}
           className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 mb-4 flex items-center justify-center gap-2"
         >
           <Icon name="Download" size={20} />
@@ -43,7 +60,7 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
 
         {/* Кнопка закрытия */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="w-full bg-yellow-400 hover:bg-yellow-500 text-black font-semibold py-3 px-6 rounded-xl transition-colors duration-200"
         >
           Закрыть окно
