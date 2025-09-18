@@ -14,6 +14,8 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
   amount
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
+  
+  console.log('PaymentSuccessPage рендерится, showConfetti:', showConfetti);
 
   const playConfettiSound = async () => {
     try {
@@ -136,12 +138,14 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
   };
 
   const handleDownload = () => {
+    console.log('🎉 Запускаем конфетти при скачивании!');
     setShowConfetti(true);
     playConfettiSound();
     onDownload();
   };
 
   const handleClose = () => {
+    console.log('🎉 Запускаем конфетти при закрытии!');
     setShowConfetti(true);
     playConfettiSound();
     setTimeout(() => {
@@ -152,7 +156,9 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
   return (
     <div className="fixed inset-0 bg-gray-50 flex items-center justify-center z-50">
       {/* Конфетти компонент */}
-      <SimpleConfetti isActive={showConfetti} />
+      <div style={{ zIndex: 99999 }}>
+        <SimpleConfetti isActive={showConfetti} />
+      </div>
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 p-8 text-center">
         {/* Иконка успеха */}
         <div className="w-20 h-20 mx-auto mb-6 bg-blue-100 rounded-full flex items-center justify-center">
