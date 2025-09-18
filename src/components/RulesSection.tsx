@@ -151,18 +151,18 @@ const RulesSection = () => {
           <Card className="p-6 hover:shadow-lg transition-shadow">
             <div className="flex items-start space-x-4">
               <div className="bg-violet-100 p-3 rounded-full">
-                <Icon name="QrCode" size={24} className="text-violet-600" />
+                <Icon name="ScrollText" size={24} className="text-violet-600" />
               </div>
               <div>
-                <h3 className="text-xl font-semibold mb-3">QR код для энергетического вклада</h3>
+                <h3 className="text-xl font-semibold mb-3">Аффирмации для исполнения желаний</h3>
                 <p className="text-gray-600 mb-3">
-                  Укажите сумму энергетического вклада самостоятельно через QR код
+                  Персональные аффирмации усиливают энергию вашего намерения
                 </p>
                 <ul className="space-y-2 text-gray-600">
-                  <li>• Сканируйте QR код любым банковским приложением</li>
-                  <li>• Укажите желаемую сумму вклада от 100₽</li>
-                  <li>• Ваш энергетический вклад усилит исполнение желания</li>
-                  <li>• Чем больше вклад, тем сильнее энергия намерения</li>
+                  <li>• Создаем индивидуальную аффирмацию для вашего желания</li>
+                  <li>• Основано на принципах позитивной психологии</li>
+                  <li>• Ежедневное повторение программирует подсознание</li>
+                  <li>• Усиливает веру в исполнение мечты</li>
                 </ul>
               </div>
             </div>
