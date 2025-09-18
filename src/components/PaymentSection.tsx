@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
-
+import PaymentWaitingScreen from './PaymentWaitingScreen';
 
 interface PaymentSectionProps {
   wish: string;
@@ -15,7 +15,6 @@ interface PaymentSectionProps {
   getColorFromIntensity: (intensity: number) => string;
   children: React.ReactNode;
   onReturnToSplash?: () => void;
-  onPaymentSuccess?: () => void;
 }
 
 const PaymentSection = ({ 
@@ -26,14 +25,13 @@ const PaymentSection = ({
   getAmountFromIntensity, 
   getColorFromIntensity,
   children,
-  onReturnToSplash,
-  onPaymentSuccess
+  onReturnToSplash
 }: PaymentSectionProps) => {
   const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp'>('whatsapp');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isQRModalOpen, setIsQRModalOpen] = useState(false);
   const [fullName, setFullName] = useState('');
-
+  const [showWaitingScreen, setShowWaitingScreen] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
@@ -318,9 +316,7 @@ const PaymentSection = ({
                     variant="outline"
                     onClick={() => {
                       setShowDownloadDialog(false);
-                      if (onPaymentSuccess) {
-                        onPaymentSuccess();
-                      }
+                      setShowWaitingScreen(true);
                     }}
                     className="flex-1"
                   >
@@ -350,9 +346,7 @@ const PaymentSection = ({
                       });
                       
                       setShowDownloadDialog(false);
-                      if (onPaymentSuccess) {
-                        onPaymentSuccess();
-                      }
+                      setShowWaitingScreen(true);
                     }}
                     className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
                   >
@@ -363,7 +357,18 @@ const PaymentSection = ({
             </div>
           </div>
         )}
-
+        
+        {/* Заставка ожидания оплаты */}
+        {showWaitingScreen && (
+          <PaymentWaitingScreen 
+            onComplete={() => {
+              setShowWaitingScreen(false);
+              if (onReturnToSplash) {
+                onReturnToSplash();
+              }
+            }}
+          />
+        )}
       </CardContent>
     </Card>
   );
