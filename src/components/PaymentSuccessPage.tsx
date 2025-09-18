@@ -15,9 +15,15 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
 }) => {
   const [showConfetti, setShowConfetti] = useState(false);
 
-  const playConfettiSound = () => {
-    // Создаем звук конфетти с помощью Web Audio API
-    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const playConfettiSound = async () => {
+    try {
+      // Создаем звук конфетти с помощью Web Audio API
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      
+      // Возобновляем контекст если он приостановлен (нужно для современных браузеров)
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
     
     // Создаем конвольвер для реверберации
     const convolver = audioContext.createConvolver();
@@ -99,6 +105,34 @@ const PaymentSuccessPage: React.FC<PaymentSuccessPageProps> = ({
     
     explosionOsc.start(audioContext.currentTime);
     explosionOsc.stop(audioContext.currentTime + 0.15);
+    
+    console.log('🔊 Воспроизводим звук конфетти!');
+    
+    } catch (error) {
+      console.error('Ошибка воспроизведения звука:', error);
+      // Fallback - простой звуковой сигнал
+      try {
+        const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+        oscillator.type = 'triangle';
+        
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + 0.3);
+        
+        console.log('🔊 Fallback звук воспроизведен');
+      } catch (fallbackError) {
+        console.error('Даже fallback звук не работает:', fallbackError);
+      }
+    }
   };
 
   const handleDownload = () => {
