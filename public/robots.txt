@@ -5,11 +5,14 @@ User-agent: *
 Allow: /
 
 # Разрешаем индексацию основных страниц
-Allow: /wishes
-Allow: /about
-Allow: /contact
-Allow: /reviews
-Allow: /faq
+Allow: /
+Allow: /affirmation
+Allow: /document
+Allow: /test-document
+Allow: /terms
+
+# Запрещаем индексацию 404 страниц
+Disallow: /404.html
 
 # Запрещаем индексацию технических файлов
 Disallow: /src/

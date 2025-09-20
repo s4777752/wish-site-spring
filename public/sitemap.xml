@@ -20,53 +20,39 @@
     </image:image>
   </url>
   
-  <!-- Пользовательское соглашение -->
+  <!-- Страница аффирмаций -->
   <url>
-    <loc>https://wish-site-spring.poehali.dev/terms</loc>
-    <lastmod>2024-12-15</lastmod>
+    <loc>https://wish-site-spring.poehali.dev/affirmation</loc>
+    <lastmod>2024-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <mobile:mobile/>
+  </url>
+  
+  <!-- Страница документа -->
+  <url>
+    <loc>https://wish-site-spring.poehali.dev/document</loc>
+    <lastmod>2024-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+    <mobile:mobile/>
+  </url>
+  
+  <!-- Тестовая страница документа -->
+  <url>
+    <loc>https://wish-site-spring.poehali.dev/test-document</loc>
+    <lastmod>2024-12-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
     <mobile:mobile/>
   </url>
   
-  <!-- SEO страницы для продвижения -->
+  <!-- Пользовательское соглашение -->
   <url>
-    <loc>https://wish-site-spring.poehali.dev/kak-zakadat-zhelanie-online</loc>
-    <lastmod>2024-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <mobile:mobile/>
-  </url>
-  
-  <url>
-    <loc>https://wish-site-spring.poehali.dev/ispolnenie-zhelaniy</loc>
-    <lastmod>2024-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <mobile:mobile/>
-  </url>
-  
-  <url>
-    <loc>https://wish-site-spring.poehali.dev/energeticheskiy-vklad</loc>
-    <lastmod>2024-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <mobile:mobile/>
-  </url>
-  
-  <url>
-    <loc>https://wish-site-spring.poehali.dev/psihologiya-zhelaniy</loc>
-    <lastmod>2024-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <mobile:mobile/>
-  </url>
-  
-  <url>
-    <loc>https://wish-site-spring.poehali.dev/otzyvy-polzovateley</loc>
-    <lastmod>2024-12-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <loc>https://wish-site-spring.poehali.dev/terms</loc>
+    <lastmod>2024-12-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
     <mobile:mobile/>
   </url>
   

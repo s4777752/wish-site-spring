@@ -1,18 +1,23 @@
-# Apache configuration for proper HTTP status codes
+# Apache configuration for proper HTTP status codes and SPA routing
 
 RewriteEngine On
 
-# Handle robots.txt and sitemap.xml with correct status codes
-RewriteRule ^robots\.txt$ /robots.txt [L,R=200]
-RewriteRule ^sitemap\.xml$ /sitemap.xml [L,R=200]
+# Существующие статические файлы возвращают правильные статусы
+RewriteRule ^robots\.txt$ /robots.txt [L]
+RewriteRule ^sitemap\.xml$ /sitemap.xml [L]
+RewriteRule ^favicon\.svg$ /favicon.svg [L]
 
-# Handle React SPA routing
-# All requests that are NOT for existing files/directories go to index.html
+# Только известные маршруты SPA перенаправляются на index.html с кодом 200
+RewriteRule ^$ /index.html [L]
+RewriteRule ^affirmation/?$ /index.html [L]
+RewriteRule ^document/?$ /index.html [L]
+RewriteRule ^test-document/?$ /index.html [L]
+RewriteRule ^terms/?$ /index.html [L]
+
+# Все остальные несуществующие страницы возвращают 404
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteCond %{REQUEST_URI} !^/robots\.txt$
-RewriteCond %{REQUEST_URI} !^/sitemap\.xml$
-RewriteRule . /index.html [L]
+RewriteRule . /404.html [L,R=404]
 
 # Set proper headers for static files
 <FilesMatch "\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$">
