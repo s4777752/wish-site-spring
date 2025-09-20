@@ -33,6 +33,7 @@ const PaymentSection = ({
   const [fullName, setFullName] = useState('');
   const [showWaitingScreen, setShowWaitingScreen] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -219,16 +220,31 @@ const PaymentSection = ({
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => {
+                    disabled={isProcessing}
+                    onClick={async () => {
                       if (!fullName) {
                         alert('Пожалуйста, заполните ФИО');
                         return;
                       }
-                      setIsQRModalOpen(true);
+                      setIsProcessing(true);
+                      try {
+                        // Имитируем задержку обработки
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        setIsQRModalOpen(true);
+                      } finally {
+                        setIsProcessing(false);
+                      }
                     }}
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white flex-1"
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Оплатить
+                    {isProcessing ? (
+                      <div className="flex items-center gap-2">
+                        <Icon name="Loader2" className="animate-spin" size={16} />
+                        Обработка...
+                      </div>
+                    ) : (
+                      'Оплатить'
+                    )}
                   </Button>
                 </div>
               </form>
