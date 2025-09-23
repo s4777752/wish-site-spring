@@ -85,7 +85,84 @@
         <a href="/" class="btn">🚀 Вернуться на главную</a>
     </div>
 
+    <!-- Yandex.Metrika counter -->
+    <script type="text/javascript">
+        (function (m, e, t, r, i, k, a) {
+            m[i] = m[i] || function () {
+                (m[i].a = m[i].a || []).push(arguments)
+            };
+            m[i].l = 1 * new Date();
+            for (var j = 0; j < document.scripts.length; j++) {
+                if (document.scripts[j].src === r) {
+                    return;
+                }
+            }
+            k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
+        })
+        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+        ym(103589488, "init", {
+            ssr: true,
+            webvisor: true,
+            clickmap: true,
+            ecommerce: "dataLayer",
+            accurateTrackBounce: true,
+            trackLinks: true
+        });
+    </script>
+
     <script>
+        // Логируем 404 ошибку для аналитики
+        const pathname = window.location.pathname;
+        const fullUrl = window.location.href;
+        const referrer = document.referrer;
+        
+        console.error('404 Error: User accessed non-existent static route:', pathname);
+        
+        // Устанавливаем правильный статус для поисковиков
+        document.documentElement.setAttribute('data-status', '404');
+        
+        // Отправляем в Яндекс.Метрику после загрузки скрипта
+        function trackYandex404() {
+            if (typeof window.ym !== 'undefined') {
+                window.ym(103589488, 'reachGoal', '404_error_static', {
+                    page_url: pathname,
+                    full_url: fullUrl,
+                    referrer: referrer,
+                    error_type: 'static_page_not_found',
+                    timestamp: new Date().toISOString()
+                });
+            }
+        }
+        
+        // Пытаемся отправить сразу, или ждем загрузки Яндекс.Метрики
+        if (typeof window.ym !== 'undefined') {
+            trackYandex404();
+        } else {
+            // Ждем загрузки Яндекс.Метрики
+            const checkYandex = setInterval(() => {
+                if (typeof window.ym !== 'undefined') {
+                    trackYandex404();
+                    clearInterval(checkYandex);
+                }
+            }, 100);
+            
+            // Таймаут через 5 секунд
+            setTimeout(() => clearInterval(checkYandex), 5000);
+        }
+        
+        // Отправляем в dataLayer для GTM
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            event: '404_error_static',
+            page_path: pathname,
+            page_title: '404 - Страница не найдена',
+            page_url: fullUrl,
+            referrer: referrer,
+            error_type: 'static_page_not_found',
+            timestamp: new Date().toISOString()
+        });
+
         // Создаем звёзды
         function createStars() {
             const starsContainer = document.querySelector('.stars');
@@ -102,6 +179,16 @@
         }
         
         createStars();
+
+        // Отслеживаем клик по кнопке возврата
+        document.querySelector('.btn').addEventListener('click', function() {
+            if (typeof window.ym !== 'undefined') {
+                window.ym(103589488, 'reachGoal', '404_recovery', {
+                    from_path: pathname,
+                    recovery_action: 'return_to_home'
+                });
+            }
+        });
     </script>
 </body>
 </html>

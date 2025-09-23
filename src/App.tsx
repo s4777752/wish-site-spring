@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import AffirmationPage from "./pages/AffirmationPage";
 import DocumentPreviewPage from "./pages/DocumentPreviewPage";
 import TestDocumentPage from "./pages/TestDocumentPage";
+import Analytics404 from "./pages/Analytics404";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/document" element={<DocumentPreviewPage />} />
             <Route path="/test-document" element={<TestDocumentPage />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/admin/404-analytics" element={<Analytics404 />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
