@@ -14,8 +14,6 @@ import DocumentPreviewPage from "./pages/DocumentPreviewPage";
 import TestDocumentPage from "./pages/TestDocumentPage";
 import Analytics404 from "./pages/Analytics404";
 import PaymentTest from "./pages/PaymentTest";
-import PlatWidgetTest from "./pages/PlatWidgetTest";
-import PlatLinkTest from "./pages/PlatLinkTest";
 
 const queryClient = new QueryClient();
 
@@ -41,8 +39,6 @@ const App = () => {
             <Route path="/terms" element={<Terms />} />
             <Route path="/admin/404-analytics" element={<Analytics404 />} />
             <Route path="/test/payment" element={<PaymentTest />} />
-            <Route path="/test/1plat-widget" element={<PlatWidgetTest />} />
-            <Route path="/test/1plat-links" element={<PlatLinkTest />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
