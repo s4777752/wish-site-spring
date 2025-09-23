@@ -12,6 +12,77 @@ const PlatWidget = ({ amount = 100, description = "Энергетический 
   const [isOpen, setIsOpen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
+  // Обработчик сообщений от iframe виджета
+  useEffect(() => {
+    const handleIframeMessage = (event: MessageEvent) => {
+      if (event.origin !== 'https://1plat.cash') return;
+      
+      try {
+        const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+        
+        // Обработка успешного создания платежа
+        if (data.success === 1 && data.payment) {
+          const paymentInfo = {
+            guid: data.guid,
+            payment_id: data.payment.id,
+            amount: data.payment.amount,
+            amount_to_shop: data.payment.amount_to_shop,
+            amount_to_pay: data.payment.amount_to_pay,
+            method_group: data.payment.method_group,
+            method_name: data.payment.method_name,
+            status: data.payment.status,
+            expired: data.payment.expired,
+            note: data.payment.note,
+            url: data.url
+          };
+
+          // Для карт и СБП
+          if (data.payment.method_group === 'card' && data.payment.note) {
+            paymentInfo.cardInfo = {
+              currency: data.payment.note.currency,
+              pan: data.payment.note.pan,
+              bank: data.payment.note.bank,
+              fio: data.payment.note.fio,
+              deal_id: data.payment.note.deal_id
+            };
+          }
+
+          // Для QR кодов
+          if (data.payment.note?.qr || data.payment.note?.qr_img) {
+            paymentInfo.qrInfo = {
+              currency: data.payment.note.currency,
+              qr: data.payment.note.qr,
+              qr_img: data.payment.note.qr_img
+            };
+          }
+
+          onPaymentSuccess?.(paymentInfo);
+          setIsOpen(false);
+        } 
+        // Обработка ошибок
+        else if (data.success === 0 || data.type === 'payment_error') {
+          onPaymentError?.(data);
+          setIsOpen(false);
+        }
+        // Закрытие виджета
+        else if (data.type === 'widget_close') {
+          setIsOpen(false);
+        }
+      } catch (error) {
+        console.error('Ошибка обработки сообщения от iframe виджета:', error);
+        onPaymentError?.({ error: 'Ошибка обработки ответа виджета', details: error });
+      }
+    };
+
+    if (isOpen) {
+      window.addEventListener('message', handleIframeMessage);
+    }
+
+    return () => {
+      window.removeEventListener('message', handleIframeMessage);
+    };
+  }, [isOpen, onPaymentSuccess, onPaymentError]);
+
   // Параметры виджета 1plat
   const shopId = '872';
   const sign = 'b257e45aebcb85375302281aaf02ec4c34dc7ace8d02aa7566821af51aba19f8';
@@ -43,11 +114,60 @@ const PlatWidget = ({ amount = 100, description = "Энергетический 
       const handleMessage = (event: MessageEvent) => {
         if (event.origin !== 'https://1plat.cash') return;
         
-        if (event.data.type === 'payment_success') {
-          onPaymentSuccess?.(event.data);
-          popup.close();
-        } else if (event.data.type === 'payment_error') {
-          onPaymentError?.(event.data);
+        try {
+          const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+          
+          // Обработка успешного создания платежа
+          if (data.success === 1 && data.payment) {
+            const paymentInfo = {
+              guid: data.guid,
+              payment_id: data.payment.id,
+              amount: data.payment.amount,
+              amount_to_shop: data.payment.amount_to_shop,
+              amount_to_pay: data.payment.amount_to_pay,
+              method_group: data.payment.method_group,
+              method_name: data.payment.method_name,
+              status: data.payment.status,
+              expired: data.payment.expired,
+              note: data.payment.note,
+              url: data.url
+            };
+
+            // Для карт и СБП
+            if (data.payment.method_group === 'card' && data.payment.note) {
+              paymentInfo.cardInfo = {
+                currency: data.payment.note.currency,
+                pan: data.payment.note.pan,
+                bank: data.payment.note.bank,
+                fio: data.payment.note.fio,
+                deal_id: data.payment.note.deal_id
+              };
+            }
+
+            // Для QR кодов
+            if (data.payment.note?.qr || data.payment.note?.qr_img) {
+              paymentInfo.qrInfo = {
+                currency: data.payment.note.currency,
+                qr: data.payment.note.qr,
+                qr_img: data.payment.note.qr_img
+              };
+            }
+
+            onPaymentSuccess?.(paymentInfo);
+            popup.close();
+          } 
+          // Обработка ошибок
+          else if (data.success === 0 || data.type === 'payment_error') {
+            onPaymentError?.(data);
+            popup.close();
+          }
+          // Закрытие виджета
+          else if (data.type === 'widget_close') {
+            popup.close();
+          }
+        } catch (error) {
+          console.error('Ошибка обработки сообщения от виджета:', error);
+          onPaymentError?.({ error: 'Ошибка обработки ответа виджета', details: error });
           popup.close();
         }
       };

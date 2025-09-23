@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import PlatWidget from '@/components/PlatWidget';
+import PaymentResult from '@/components/PaymentResult';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -81,22 +82,10 @@ const PlatWidgetTest = () => {
 
               {/* Результат платежа */}
               {paymentResult && (
-                <div className={`p-6 rounded-lg border ${
-                  paymentResult.type === 'success' 
-                    ? 'bg-green-50 border-green-200' 
-                    : 'bg-red-50 border-red-200'
-                }`}>
-                  <h3 className={`font-semibold mb-3 ${
-                    paymentResult.type === 'success' ? 'text-green-900' : 'text-red-900'
-                  }`}>
-                    {paymentResult.type === 'success' ? '✅ Платеж успешен' : '❌ Ошибка платежа'}
-                  </h3>
-                  <pre className={`text-xs overflow-auto p-3 rounded ${
-                    paymentResult.type === 'success' ? 'bg-green-100' : 'bg-red-100'
-                  }`}>
-                    {JSON.stringify(paymentResult.data, null, 2)}
-                  </pre>
-                </div>
+                <PaymentResult
+                  paymentData={paymentResult.data}
+                  type={paymentResult.type}
+                />
               )}
             </div>
 
