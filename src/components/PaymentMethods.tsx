@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { sendAffirmationEmail } from '@/utils/emailService';
 import Icon from '@/components/ui/icon';
 import PaymentMethodSelector from '@/components/PaymentMethodSelector';
+import PlatWidget from '@/components/PlatWidget';
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -98,17 +99,23 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
     };
   }, []);
 
-  const handlePaymentInitiated = (method: string, amount: number, currency?: string) => {
-    console.log(`Инициирован платеж: ${method}, сумма: ${amount}${currency ? ` ${currency}` : ' ₽'}`);
-    // Здесь можно интегрировать с реальной платежной системой 1plat
+  const handlePaymentSuccess = (data: any) => {
+    console.log('Платеж успешно завершен:', data);
     onPaymentComplete();
+  };
+
+  const handlePaymentError = (error: any) => {
+    console.error('Ошибка платежа:', error);
   };
 
   return (
     <div className="space-y-6">
-      {/* Новый селектор методов оплаты 1plat */}
-      <PaymentMethodSelector 
-        onPaymentInitiated={handlePaymentInitiated}
+      {/* Реальный виджет 1plat */}
+      <PlatWidget 
+        amount={getAmountFromIntensity(wishIntensity)}
+        description={`Энергетический вклад для исполнения желания: "${wish.slice(0, 50)}${wish.length > 50 ? '...' : ''}"`}
+        onPaymentSuccess={handlePaymentSuccess}
+        onPaymentError={handlePaymentError}
       />
 
       {/* Кнопка скачивания документа аффирмации */}
