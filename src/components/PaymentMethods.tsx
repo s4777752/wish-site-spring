@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { sendAffirmationEmail } from '@/utils/emailService';
 import Icon from '@/components/ui/icon';
+import PaymentMethodSelector from '@/components/PaymentMethodSelector';
 
 interface PaymentMethodsProps {
   getAmountFromIntensity: (intensity: number) => number;
@@ -97,8 +98,19 @@ const PaymentMethods = ({ getAmountFromIntensity, wishIntensity, wish, onPayment
     };
   }, []);
 
+  const handlePaymentInitiated = (method: string, amount: number, currency?: string) => {
+    console.log(`Инициирован платеж: ${method}, сумма: ${amount}${currency ? ` ${currency}` : ' ₽'}`);
+    // Здесь можно интегрировать с реальной платежной системой 1plat
+    onPaymentComplete();
+  };
+
   return (
     <div className="space-y-6">
+      {/* Новый селектор методов оплаты 1plat */}
+      <PaymentMethodSelector 
+        onPaymentInitiated={handlePaymentInitiated}
+      />
+
       {/* Кнопка скачивания документа аффирмации */}
       <Button 
         onClick={() => {

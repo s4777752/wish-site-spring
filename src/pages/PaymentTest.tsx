@@ -40,11 +40,21 @@ const PaymentTest = () => {
             <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200">
               <h3 className="font-semibold text-yellow-900 mb-2">Meta тег установлен:</h3>
               <code className="text-yellow-800 bg-yellow-100 px-2 py-1 rounded">
-                &lt;meta name="1plat" content="API Shop"&gt;
+                &lt;meta name="1plat" content="872"&gt;
               </code>
               <p className="text-yellow-800 text-sm mt-2">
-                Этот тег позволяет платежной системе 1plat идентифицировать ваш магазин.
+                Этот тег позволяет платежной системе 1plat идентифицировать ваш магазин ID 872.
               </p>
+            </div>
+
+            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+              <h3 className="font-semibold text-green-900 mb-2">Доступные методы оплаты:</h3>
+              <ul className="text-green-800 space-y-2 text-sm">
+                <li>💳 <strong>Банковские карты:</strong> 100 - 500,000 ₽</li>
+                <li>📱 <strong>СБП (Система быстрых платежей):</strong> 100 - 500,000 ₽</li>
+                <li>📷 <strong>QR-код оплата:</strong> 100 - 500,000 ₽</li>
+                <li>₿ <strong>Криптовалюта:</strong> 1 - 500,000 (USDT, TRX)</li>
+              </ul>
             </div>
           </div>
         </div>
