@@ -350,7 +350,8 @@ const PaymentSection = ({
                       </p>
                     </div>
                   </>
-                )}</div>
+                )}
+              </div>
                 
                 <div className="flex space-x-3 pt-4">
                   <Button
