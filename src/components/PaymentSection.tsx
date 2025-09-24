@@ -33,6 +33,8 @@ const PaymentSection = ({
   const [fullName, setFullName] = useState('');
   const [showWaitingScreen, setShowWaitingScreen] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [paymentData, setPaymentData] = useState<any>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -219,16 +221,56 @@ const PaymentSection = ({
                   </Button>
                   <Button
                     type="button"
-                    onClick={() => {
+                    onClick={async () => {
                       if (!fullName) {
                         alert('Пожалуйста, заполните ФИО');
                         return;
                       }
-                      setIsQRModalOpen(true);
+                      
+                      setIsProcessing(true);
+                      try {
+                        // Имитация запроса к API 1plat
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        // Пример ответа с банковской картой
+                        const mockResponse = {
+                          success: 1,
+                          guid: "111111-add6-5b69-2222-725f7099a32f",
+                          payment: {
+                            note: {
+                              currency: "RUB",
+                              pan: "2200 1545 3449 7549",
+                              bank: "Альфа",
+                              fio: fullName,
+                              deal_id: null
+                            },
+                            method_group: "card",
+                            method_name: "Банковская карта",
+                            phone: null,
+                            id: 271097,
+                            guid: "111111-add6-5b69-2222-725f7099a32f",
+                            merchant_id: "1234",
+                            status: 0,
+                            amount_to_shop: getAmountFromIntensity(wishIntensity) * 100,
+                            amount_to_pay: getAmountFromIntensity(wishIntensity) * 100,
+                            amount: getAmountFromIntensity(wishIntensity) * 100,
+                            expired: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+                          },
+                          url: `https://pay.1plat.cash/pay/111111-add6-5b69-2222-725f7099a32f`
+                        };
+                        
+                        setPaymentData(mockResponse);
+                        setIsQRModalOpen(true);
+                      } catch (error) {
+                        alert('Ошибка при создании платежа. Попробуйте снова.');
+                      } finally {
+                        setIsProcessing(false);
+                      }
                     }}
                     className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white flex-1"
+                    disabled={isProcessing}
                   >
-                    Оплатить
+                    {isProcessing ? 'Создание платежа...' : 'Оплатить'}
                   </Button>
                 </div>
               </form>
@@ -251,27 +293,64 @@ const PaymentSection = ({
               </div>
               
               <div className="text-center space-y-4">
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-600 mb-2">Сумма к оплате:</p>
-                  <p className="text-2xl font-bold text-purple-600">Энергетический вклад {getAmountFromIntensity(wishIntensity)} ₽</p>
-                </div>
-                
-                <h4 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h4>
-                <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
-                  <img 
-                    src="https://cdn.poehali.dev/files/2d2e653d-7b5d-4628-9229-846555837aa2.jpg" 
-                    alt="QR код для оплаты" 
-                    className="w-48 h-48 mx-auto"
-                  />
-                </div>
-                <div className="text-center space-y-2">
-                  <div className="font-semibold text-gray-800">Т-Банк ⚡</div>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    <div>1. Отсканируйте QR-код</div>
-                    <div>2. Введите сумму: {getAmountFromIntensity(wishIntensity)} ₽</div>
-                    <div>3. Подтвердите оплату</div>
-                  </div>
-                </div>
+                {paymentData && (
+                  <>
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <p className="text-sm text-gray-600 mb-2">Сумма к оплате:</p>
+                      <p className="text-2xl font-bold text-purple-600">{paymentData.payment.amount / 100} ₽</p>
+                    </div>
+                    
+                    {paymentData.payment.method_group === 'card' && paymentData.payment.note.pan && (
+                      <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                        <h4 className="text-lg font-semibold text-gray-800 mb-3">Оплата банковской картой</h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Банк:</span>
+                            <span className="font-medium">{paymentData.payment.note.bank}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Карта:</span>
+                            <span className="font-medium">{paymentData.payment.note.pan}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Владелец:</span>
+                            <span className="font-medium">{paymentData.payment.note.fio}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Валюта:</span>
+                            <span className="font-medium">{paymentData.payment.note.currency}</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {paymentData.payment.note.qr && (
+                      <div className="space-y-4">
+                        <h4 className="text-lg font-semibold text-gray-800">Для оплаты отсканируйте QR код</h4>
+                        <div className="bg-white p-4 rounded-lg border-2 border-gray-200 inline-block shadow-sm">
+                          <img 
+                            src={paymentData.payment.note.qr_img} 
+                            alt="QR код для оплаты" 
+                            className="w-48 h-48 mx-auto"
+                          />
+                        </div>
+                        <div className="text-center space-y-2">
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <div>1. Отсканируйте QR-код</div>
+                            <div>2. Подтвердите оплату {paymentData.payment.amount / 100} ₽</div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="bg-yellow-50 p-3 rounded-lg border border-yellow-200">
+                      <p className="text-xs text-gray-600">
+                        ID платежа: {paymentData.payment.id} | 
+                        GUID: {paymentData.payment.guid.slice(0, 8)}...
+                      </p>
+                    </div>
+                  </>
+                )}</div>
                 
                 <div className="flex space-x-3 pt-4">
                   <Button
