@@ -6,7 +6,6 @@ interface PaymentWaitingScreenProps {
 
 const PaymentWaitingScreen = ({ onComplete }: PaymentWaitingScreenProps) => {
   const [stars, setStars] = useState<Array<{id: number, x: number, y: number, size: number, opacity: number}>>([]);
-  const [confetti, setConfetti] = useState<Array<{id: number, x: number, y: number, color: string, rotation: number, delay: number}>>([]);
 
   useEffect(() => {
     // Генерируем звезды
@@ -18,18 +17,6 @@ const PaymentWaitingScreen = ({ onComplete }: PaymentWaitingScreenProps) => {
       opacity: Math.random() * 0.8 + 0.2,
     }));
     setStars(newStars);
-
-    // Генерируем конфетти
-    const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dda0dd', '#98d8c8', '#ff7675'];
-    const newConfetti = Array.from({ length: 30 }, (_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: -10 - Math.random() * 20,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      rotation: Math.random() * 360,
-      delay: Math.random() * 3
-    }));
-    setConfetti(newConfetti);
 
     // Автоматически закрываем через 20 секунд (опционально)
     if (onComplete) {
@@ -55,31 +42,6 @@ const PaymentWaitingScreen = ({ onComplete }: PaymentWaitingScreenProps) => {
             animationDuration: `${2 + Math.random() * 2}s`,
           }}
         />
-      ))}
-
-      {/* Конфетти */}
-      {confetti.map((piece) => (
-        <div
-          key={`confetti-${piece.id}`}
-          className="absolute animate-bounce"
-          style={{
-            left: `${piece.x}%`,
-            top: `${piece.y}%`,
-            animationDelay: `${piece.delay}s`,
-            animationDuration: '3s',
-            animationIterationCount: 'infinite'
-          }}
-        >
-          <div
-            className="w-3 h-3 rounded-full shadow-lg animate-spin"
-            style={{
-              backgroundColor: piece.color,
-              transform: `rotate(${piece.rotation}deg)`,
-              animationDelay: `${piece.delay}s`,
-              animationDuration: '2s'
-            }}
-          />
-        </div>
       ))}
 
       {/* Пульсирующая надпись */}
