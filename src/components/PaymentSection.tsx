@@ -152,7 +152,7 @@ const PaymentSection = ({
                 placeholder="Введите ваше полное имя"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full"
+                className="w-full border-2 border-indigo-500 focus:border-purple-600 focus:ring-2 focus:ring-purple-200"
               />
             </div>
 
