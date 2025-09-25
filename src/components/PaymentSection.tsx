@@ -145,7 +145,7 @@ const PaymentSection = ({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="fullName">ФИО для документа аффирмации</Label>
+              <Label htmlFor="fullName" className="text-2xl font-semibold">ФИО для документа аффирмации</Label>
               <Input
                 id="fullName"
                 type="text"
