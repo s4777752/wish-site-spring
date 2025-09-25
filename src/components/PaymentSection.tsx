@@ -179,7 +179,7 @@ const PaymentSection = ({
               >
                 Отправить запрос и оплатить
               </Button>
-              <p className="text-sm text-gray-600 mt-3 text-center">
+              <p className="text-gray-600 mt-3 text-center text-xl font-medium">
                 После оплаты можно будет скачать документ аффирмации<br />
                 (только после закрытия окна оплаты)
               </p>
