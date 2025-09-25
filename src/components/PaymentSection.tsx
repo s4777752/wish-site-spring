@@ -143,6 +143,18 @@ const PaymentSection = ({
               <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {getAmountFromIntensity(wishIntensity)}</div>
               <p className="text-gray-600">Энергетический вклад в исполнение желания</p>
             </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="fullName">ФИО для документа аффирмации</Label>
+              <Input
+                id="fullName"
+                type="text"
+                placeholder="Введите ваше полное имя"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full"
+              />
+            </div>
 
 
             
