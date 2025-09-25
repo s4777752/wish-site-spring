@@ -5,7 +5,6 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import PaymentWaitingScreen from './PaymentWaitingScreen';
-import FireworksEffect from './FireworksEffect';
 
 interface PaymentSectionProps {
   wish: string;
@@ -36,7 +35,6 @@ const PaymentSection = ({
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showFireworks, setShowFireworks] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -420,7 +418,7 @@ const PaymentSection = ({
                     variant="outline"
                     onClick={() => {
                       setShowDownloadDialog(false);
-                      setShowFireworks(true);
+                      setShowWaitingScreen(true);
                     }}
                     className="flex-1"
                   >
@@ -450,7 +448,7 @@ const PaymentSection = ({
                       });
                       
                       setShowDownloadDialog(false);
-                      setShowFireworks(true);
+                      setShowWaitingScreen(true);
                     }}
                     className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
                   >
@@ -467,18 +465,6 @@ const PaymentSection = ({
           <PaymentWaitingScreen 
             onComplete={() => {
               setShowWaitingScreen(false);
-              if (onReturnToSplash) {
-                onReturnToSplash();
-              }
-            }}
-          />
-        )}
-
-        {/* Грандиозный салют */}
-        {showFireworks && (
-          <FireworksEffect 
-            onComplete={() => {
-              setShowFireworks(false);
               if (onReturnToSplash) {
                 onReturnToSplash();
               }
