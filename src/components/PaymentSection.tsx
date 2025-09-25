@@ -162,7 +162,10 @@ const PaymentSection = ({
             
             <div className="mt-8 text-center">
               <Button 
-                onClick={() => setIsModalOpen(true)}
+                onClick={() => {
+                  const paymentUrl = `https://xn---123-k4d3abw0abhy7czi.xn--p1ai/payment?amount=${getAmountFromIntensity(wishIntensity)}&wish=${encodeURIComponent(wish)}&name=${encodeURIComponent(fullName)}`;
+                  window.open(paymentUrl, 'payment', 'width=600,height=700,scrollbars=yes,resizable=yes');
+                }}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 size="lg"
               >
