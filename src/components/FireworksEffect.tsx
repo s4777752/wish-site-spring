@@ -86,9 +86,9 @@ const FireworksEffect: React.FC<FireworksEffectProps> = ({ onComplete }) => {
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-b from-purple-900 via-blue-900 to-black z-50 overflow-hidden">
+    <div className="fixed inset-0 bg-gradient-to-b from-purple-900 via-blue-900 to-black z-[9999] overflow-hidden w-screen h-screen">
       {/* Звезды на фоне */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 w-full h-full">
         {[...Array(50)].map((_, i) => (
           <div
             key={i}
@@ -124,16 +124,16 @@ const FireworksEffect: React.FC<FireworksEffectProps> = ({ onComplete }) => {
       ))}
 
       {/* Центральный текст */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div className="text-center space-y-6 animate-bounce">
-          <div className="text-8xl mb-4 animate-pulse">🎆</div>
-          <h1 className="text-5xl font-bold text-white mb-4 animate-pulse">
+      <div className="absolute inset-0 flex items-center justify-center w-full h-full">
+        <div className="text-center space-y-6 animate-bounce px-4 max-w-4xl">
+          <div className="text-9xl mb-6 animate-pulse">🎆</div>
+          <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-6 animate-pulse leading-tight">
             Поздравляем!
           </h1>
-          <p className="text-2xl text-yellow-300 animate-pulse">
+          <p className="text-3xl md:text-4xl lg:text-5xl text-yellow-300 animate-pulse leading-relaxed">
             Ваше желание отправлено во Вселенную!
           </p>
-          <div className="flex justify-center space-x-4 text-4xl animate-bounce">
+          <div className="flex justify-center space-x-6 text-6xl md:text-7xl animate-bounce">
             <span>✨</span>
             <span>🌟</span>
             <span>💫</span>
