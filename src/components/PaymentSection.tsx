@@ -145,14 +145,14 @@ const PaymentSection = ({
             </div>
             
             <div className="space-y-2">
-              <Label htmlFor="fullName" className="text-xl font-semibold">ФИО для документа аффирмации</Label>
+              <Label htmlFor="fullName" className="text-3xl font-semibold">ФИО для документа аффирмации</Label>
               <Input
                 id="fullName"
                 type="text"
                 placeholder="Введите ваше полное имя"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full border-2 border-indigo-500 focus:border-purple-600 focus:ring-2 focus:ring-purple-200"
+                className="w-full border-4 border-purple-600 ring-2 ring-purple-300 focus:border-purple-700 focus:ring-4 focus:ring-purple-400"
               />
             </div>
 
