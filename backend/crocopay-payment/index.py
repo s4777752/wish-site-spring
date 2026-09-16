@@ -67,9 +67,22 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
 
     data = resp.json()
 
-    if resp.status_code != 200:
-        return {'statusCode': resp.status_code, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
+    if resp.status_code != 200 or 'code' in data:
+        return {'statusCode': resp.status_code if resp.status_code != 200 else 500,
+                'headers': {**cors_headers(), 'Content-Type': 'application/json'},
                 'body': json.dumps({'error': data.get('message', 'Ошибка создания счёта')}), 'isBase64Encoded': False}
+
+    response_block = data.get('response', {})
+    transaction = response_block.get('transaction', {})
+    requisites = response_block.get('paymentRequisites', {})
+
+    invoice_id = transaction.get('id')
+    status = transaction.get('status', 'Pending')
+    currency = transaction.get('currency', 'RUB')
+    expires_at = transaction.get('expiredAt')
+    card = requisites.get('requisites')
+    bank_receiver = requisites.get('paymentMethod')
+    card_owner = requisites.get('holder')
 
     conn = get_db_connection()
     schema = get_schema()
@@ -83,18 +96,29 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
-                    order_id, data['id'], wish, wish_intensity, full_name,
-                    amount, data.get('currency', 'RUB'), data.get('payment_option', payment_option),
-                    data.get('status', 'Pending'), data.get('card'), data.get('bank_receiver'),
-                    data.get('card_owner'), data.get('expires_at')
+                    order_id, invoice_id, wish, wish_intensity, full_name,
+                    amount, currency, requisites.get('paymentOption', payment_option),
+                    status, card, bank_receiver, card_owner, expires_at
                 )
             )
         conn.commit()
     finally:
         conn.close()
 
-    response_data = dict(data)
-    response_data['order_id'] = order_id
+    response_data = {
+        'id': invoice_id,
+        'status': status,
+        'amount': transaction.get('amount'),
+        'currency': currency,
+        'payment_option': requisites.get('paymentOption', payment_option),
+        'card': card,
+        'bank_receiver': bank_receiver,
+        'card_owner': card_owner,
+        'expires_at': expires_at,
+        'qr_image': requisites.get('qrImage'),
+        'payment_link': requisites.get('paymentLink'),
+        'order_id': order_id
+    }
 
     return {'statusCode': 200, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
             'body': json.dumps(response_data), 'isBase64Encoded': False}
@@ -117,7 +141,10 @@ def get_invoice_status(invoice_id: str) -> Dict[str, Any]:
 
     if resp.status_code != 200:
         return {'statusCode': resp.status_code, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-                'body': json.dumps({'error': data.get('message', 'Счёт не найден')}), 'isBase64Encoded': False}
+                'body': json.dumps({'error': data.get('error') or data.get('message', 'Счёт не найден')}), 'isBase64Encoded': False}
+
+    transaction = data.get('transaction', {})
+    status = transaction.get('status', 'Pending')
 
     conn = get_db_connection()
     schema = get_schema()
@@ -125,14 +152,22 @@ def get_invoice_status(invoice_id: str) -> Dict[str, Any]:
         with conn.cursor() as cur:
             cur.execute(
                 f"UPDATE {schema}.crocopay_orders SET status = %s, updated_at = now() WHERE invoice_id = %s",
-                (data.get('status'), invoice_id)
+                (status, invoice_id)
             )
         conn.commit()
     finally:
         conn.close()
 
+    response_data = {
+        'id': transaction.get('id'),
+        'status': status,
+        'amount': transaction.get('amount'),
+        'currency': transaction.get('currency'),
+        'expires_at': transaction.get('expiredAt')
+    }
+
     return {'statusCode': 200, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-            'body': json.dumps(data), 'isBase64Encoded': False}
+            'body': json.dumps(response_data), 'isBase64Encoded': False}
 
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
