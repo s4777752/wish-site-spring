@@ -38,15 +38,6 @@
     <mobile:mobile/>
   </url>
   
-  <!-- Тестовая страница документа -->
-  <url>
-    <loc>https://wish-site-spring.poehali.dev/test-document</loc>
-    <lastmod>2024-12-20</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
-    <mobile:mobile/>
-  </url>
-  
   <!-- Пользовательское соглашение -->
   <url>
     <loc>https://wish-site-spring.poehali.dev/terms</loc>

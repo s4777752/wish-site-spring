@@ -8,11 +8,15 @@ Allow: /
 Allow: /
 Allow: /affirmation
 Allow: /document
-Allow: /test-document
 Allow: /terms
 
 # Запрещаем индексацию 404 страниц
 Disallow: /404.html
+
+# Запрещаем индексацию служебных и тестовых страниц
+Disallow: /admin/
+Disallow: /test-document
+Disallow: /test/
 
 # Запрещаем индексацию технических файлов
 Disallow: /src/

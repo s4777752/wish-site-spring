@@ -358,6 +358,7 @@ const PaymentSection = ({
                           <img 
                             src={paymentData.payment.note.qr_img} 
                             alt="QR код для оплаты" 
+                            loading="lazy"
                             className="w-48 h-48 mx-auto"
                           />
                         </div>

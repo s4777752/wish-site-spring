@@ -1,10 +1,17 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import SEO from '@/components/SEO';
 
 const Terms = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50">
+      <SEO
+        title="Пользовательское соглашение — САЙТ ЖЕЛАНИЙ"
+        description="Условия использования сервиса «Сайт Желаний»: психологические основы работы с целями, обработка персональных данных, оплата и права пользователя."
+        keywords="пользовательское соглашение сайт желаний, условия использования, оферта исполнение желаний"
+        canonical="https://wish-site-spring.poehali.dev/terms"
+      />
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">

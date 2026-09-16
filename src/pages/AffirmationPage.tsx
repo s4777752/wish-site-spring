@@ -3,10 +3,17 @@ import AffirmationGenerator from '@/components/AffirmationGenerator';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import { Link } from 'react-router-dom';
+import SEO from '@/components/SEO';
 
 const AffirmationPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+      <SEO
+        title="Персональная аффирмация — создать документ желаний | САЙТ ЖЕЛАНИЙ"
+        description="Создайте персональный документ аффирмаций под ваши желания. Красивый PDF на email и WhatsApp сразу после оплаты."
+        keywords="персональная аффирмация, документ желаний, создать аффирмацию онлайн, pdf аффирмация"
+        canonical="https://wish-site-spring.poehali.dev/affirmation"
+      />
       {/* Навигация */}
       <header className="p-4 bg-white/80 backdrop-blur-sm shadow-sm">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
