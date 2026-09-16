@@ -9,12 +9,11 @@ import psycopg2
 
 def get_db_connection():
     dsn = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(dsn)
-    schema = os.environ.get('MAIN_DB_SCHEMA')
-    if schema:
-        with conn.cursor() as cur:
-            cur.execute(f'SET search_path TO {schema}')
-    return conn
+    return psycopg2.connect(dsn)
+
+
+def get_schema() -> str:
+    return os.environ.get('MAIN_DB_SCHEMA', 'public')
 
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
@@ -81,10 +80,11 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
         if order_id:
             conn = get_db_connection()
+            schema = get_schema()
             try:
                 with conn.cursor() as cur:
                     cur.execute(
-                        "UPDATE crocopay_orders SET status = 'Success', updated_at = now() WHERE order_uuid = %s",
+                        f"UPDATE {schema}.crocopay_orders SET status = 'Success', updated_at = now() WHERE order_uuid = %s",
                         (order_id,)
                     )
                 conn.commit()

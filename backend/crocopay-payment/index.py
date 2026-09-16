@@ -12,12 +12,11 @@ WEBHOOK_URL = 'https://functions.poehali.dev/b0425af1-e07e-4c52-b23d-22dcb7f3e01
 
 def get_db_connection():
     dsn = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(dsn)
-    schema = os.environ.get('MAIN_DB_SCHEMA')
-    if schema:
-        with conn.cursor() as cur:
-            cur.execute(f'SET search_path TO {schema}')
-    return conn
+    return psycopg2.connect(dsn)
+
+
+def get_schema() -> str:
+    return os.environ.get('MAIN_DB_SCHEMA', 'public')
 
 
 def cors_headers() -> Dict[str, str]:
@@ -73,11 +72,12 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
                 'body': json.dumps({'error': data.get('message', 'Ошибка создания счёта')}), 'isBase64Encoded': False}
 
     conn = get_db_connection()
+    schema = get_schema()
     try:
         with conn.cursor() as cur:
             cur.execute(
-                """
-                INSERT INTO crocopay_orders
+                f"""
+                INSERT INTO {schema}.crocopay_orders
                     (order_uuid, invoice_id, wish, wish_intensity, full_name, amount, currency,
                      payment_option, status, card, bank_receiver, card_owner, expires_at)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -120,10 +120,11 @@ def get_invoice_status(invoice_id: str) -> Dict[str, Any]:
                 'body': json.dumps({'error': data.get('message', 'Счёт не найден')}), 'isBase64Encoded': False}
 
     conn = get_db_connection()
+    schema = get_schema()
     try:
         with conn.cursor() as cur:
             cur.execute(
-                "UPDATE crocopay_orders SET status = %s, updated_at = now() WHERE invoice_id = %s",
+                f"UPDATE {schema}.crocopay_orders SET status = %s, updated_at = now() WHERE invoice_id = %s",
                 (data.get('status'), invoice_id)
             )
         conn.commit()
