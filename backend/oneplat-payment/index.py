@@ -74,7 +74,7 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
     if resp.status_code != 200 or not data.get('success'):
         return {'statusCode': resp.status_code if resp.status_code != 200 else 500,
                 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-                'body': json.dumps({'error': data.get('message', 'Ошибка создания счёта'), 'raw': data, 'debug': debug_info}), 'isBase64Encoded': False}
+                'body': json.dumps({'error': data.get('message') or data.get('error') or 'Ошибка создания счёта'}), 'isBase64Encoded': False}
 
     payment = data.get('payment', {})
     note = payment.get('note', {})
