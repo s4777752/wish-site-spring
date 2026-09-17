@@ -65,12 +65,16 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
         timeout=15
     )
 
-    data = resp.json()
+    try:
+        data = resp.json()
+    except ValueError:
+        return {'statusCode': 502, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
+                'body': json.dumps({'error': 'Некорректный ответ от 1plat', 'raw': resp.text[:500]}), 'isBase64Encoded': False}
 
     if resp.status_code != 200 or not data.get('success'):
         return {'statusCode': resp.status_code if resp.status_code != 200 else 500,
                 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-                'body': json.dumps({'error': data.get('message', 'Ошибка создания счёта')}), 'isBase64Encoded': False}
+                'body': json.dumps({'error': data.get('message', 'Ошибка создания счёта'), 'raw': data}), 'isBase64Encoded': False}
 
     payment = data.get('payment', {})
     note = payment.get('note', {})
