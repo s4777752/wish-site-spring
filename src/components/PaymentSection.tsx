@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import PaymentWaitingScreen from './PaymentWaitingScreen';
-import FreeKassaModal from './FreeKassaModal';
+import OnePlatModal from './OnePlatModal';
 
 interface PaymentSectionProps {
   wish: string;
@@ -36,7 +36,7 @@ const PaymentSection = ({
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [isFreeKassaModalOpen, setIsFreeKassaModalOpen] = useState(false);
+  const [isOnePlatModalOpen, setIsOnePlatModalOpen] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -169,7 +169,7 @@ const PaymentSection = ({
                     alert('Пожалуйста, заполните ФИО');
                     return;
                   }
-                  setIsFreeKassaModalOpen(true);
+                  setIsOnePlatModalOpen(true);
                 }}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 size="lg"
@@ -474,13 +474,16 @@ const PaymentSection = ({
           />
         )}
 
-        {/* Модальное окно оплаты FreeKassa */}
-        <FreeKassaModal
-          isOpen={isFreeKassaModalOpen}
-          onClose={() => setIsFreeKassaModalOpen(false)}
+        {/* Модальное окно оплаты 1plat (карта / СБП / QR) */}
+        <OnePlatModal
+          isOpen={isOnePlatModalOpen}
+          onClose={() => setIsOnePlatModalOpen(false)}
           amount={getAmountFromIntensity(wishIntensity)}
+          wish={wish}
+          wishIntensity={wishIntensity}
+          fullName={fullName}
           onPaid={() => {
-            setIsFreeKassaModalOpen(false);
+            setIsOnePlatModalOpen(false);
             setShowDownloadDialog(true);
           }}
         />
