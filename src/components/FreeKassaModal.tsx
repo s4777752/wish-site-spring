@@ -8,13 +8,12 @@ interface FreeKassaModalProps {
   onPaid: () => void;
 }
 
-const FREEKASSA_API_KEY = '162c9f4960b208b3b6e9d1e04ad96e7c';
-const FREEKASSA_SHOP_ID = '76166';
+const FREEKASSA_WIDGET_URL = 'https://r45-12-form.com/widget?shop_id=872&sign=b257e45aebcb85375302281aaf02ec4c34dc7ace8d02aa7566821af51aba19f8';
 
 const FreeKassaModal = ({ isOpen, onClose, amount, onPaid }: FreeKassaModalProps) => {
   if (!isOpen) return null;
 
-  const widgetUrl = `https://widgets.freekassa.net?type=payment-window&lang=ru&theme=dark&default_amount=${amount}&api_key=${FREEKASSA_API_KEY}&shopID=${FREEKASSA_SHOP_ID}`;
+  const widgetUrl = FREEKASSA_WIDGET_URL;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
