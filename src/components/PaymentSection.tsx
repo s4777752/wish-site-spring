@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import PaymentWaitingScreen from './PaymentWaitingScreen';
+import CrocoPayModal from './CrocoPayModal';
 
 interface PaymentSectionProps {
   wish: string;
@@ -35,6 +36,7 @@ const PaymentSection = ({
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isCrocoPayModalOpen, setIsCrocoPayModalOpen] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -163,16 +165,11 @@ const PaymentSection = ({
             <div className="mt-8 text-center">
               <Button 
                 onClick={() => {
-                  const paymentUrl = `https://xn---123-k4d3abw0abhy7czi.xn--p1ai/payment?amount=${getAmountFromIntensity(wishIntensity)}&wish=${encodeURIComponent(wish)}&name=${encodeURIComponent(fullName)}`;
-                  const paymentWindow = window.open(paymentUrl, 'payment', 'width=600,height=700,scrollbars=yes,resizable=yes');
-                  
-                  // Отслеживание закрытия окна
-                  const checkClosed = setInterval(() => {
-                    if (paymentWindow?.closed) {
-                      clearInterval(checkClosed);
-                      setShowDownloadDialog(true);
-                    }
-                  }, 1000);
+                  if (!fullName) {
+                    alert('Пожалуйста, заполните ФИО');
+                    return;
+                  }
+                  setIsCrocoPayModalOpen(true);
                 }}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 size="lg"
@@ -476,6 +473,20 @@ const PaymentSection = ({
             }}
           />
         )}
+
+        {/* Модальное окно оплаты CrocoPay (карта / СБП) */}
+        <CrocoPayModal
+          isOpen={isCrocoPayModalOpen}
+          onClose={() => setIsCrocoPayModalOpen(false)}
+          amount={getAmountFromIntensity(wishIntensity)}
+          wish={wish}
+          wishIntensity={wishIntensity}
+          fullName={fullName}
+          onPaid={() => {
+            setIsCrocoPayModalOpen(false);
+            setShowDownloadDialog(true);
+          }}
+        />
       </CardContent>
     </Card>
   );
