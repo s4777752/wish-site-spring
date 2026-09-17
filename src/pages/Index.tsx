@@ -223,7 +223,12 @@ const Index = () => {
         {/* Rules Section */}
         <RulesSection />
 
-
+        {/* Временный баннер FreeKassa */}
+        <div className="flex justify-center py-4">
+          <a href="https://freekassa.net" title="big-dark-1">
+            <img src="https://cdn.freekassa.net/images/logos/banners/f/big-dark-1.png" alt="big-dark-1" />
+          </a>
+        </div>
 
         {/* Footer */}
         <footer className="border-t border-gray-200 py-8">
