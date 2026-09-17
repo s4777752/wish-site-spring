@@ -42,8 +42,8 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
         return {'statusCode': 400, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
                 'body': json.dumps({'error': 'method должен быть card, sbp или qr'}), 'isBase64Encoded': False}
 
-    shop_id = os.environ['ONEPLAT_SHOP_ID']
-    shop_secret = os.environ['ONEPLAT_SHOP_SECRET']
+    shop_id = os.environ['ONEPLAT_SHOP_ID'].strip()
+    shop_secret = os.environ['ONEPLAT_SHOP_SECRET'].strip()
 
     merchant_order_id = str(uuid.uuid4())
     user_id = merchant_order_id[:8]
@@ -74,7 +74,7 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
     if resp.status_code != 200 or not data.get('success'):
         return {'statusCode': resp.status_code if resp.status_code != 200 else 500,
                 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-                'body': json.dumps({'error': data.get('message', 'Ошибка создания счёта'), 'raw': data}), 'isBase64Encoded': False}
+                'body': json.dumps({'error': data.get('message', 'Ошибка создания счёта'), 'raw': data, 'debug': debug_info}), 'isBase64Encoded': False}
 
     payment = data.get('payment', {})
     note = payment.get('note', {})
