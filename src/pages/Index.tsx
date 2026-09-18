@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SEO from '@/components/SEO';
 import StructuredData from '@/components/StructuredData';
 import Analytics from '@/components/Analytics';
@@ -9,6 +9,7 @@ import PaymentSuccessPage from '@/components/PaymentSuccessPage';
 import RulesSection from '@/components/RulesSection';
 import SimpleConfetti from '@/components/SimpleConfetti';
 import StarrySplashScreen from '@/components/StarrySplashScreen';
+import funcUrls from '../../backend/func2url.json';
 
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 
@@ -20,6 +21,7 @@ const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [showPaymentAnimation, setShowPaymentAnimation] = useState(false);
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
+  const [checkingPayment, setCheckingPayment] = useState(true);
 
   // Функция для расчета суммы по интенсивности
   const getAmountFromIntensity = (intensity: number) => intensity * 100;
@@ -38,13 +40,59 @@ const Index = () => {
     return `rgb(${r}, ${g}, ${b})`;
   };
 
-  const handlePaid = () => {
-    setShowPaymentAnimation(true);
-  };
+  // Проверяем возврат с оплаты CrocoPay при загрузке
+  useEffect(() => {
+    const checkPaymentReturn = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const orderRef = params.get('order_ref') || localStorage.getItem('crocopay_order_ref');
+      const paymentParam = params.get('payment');
+
+      if (!orderRef) {
+        setCheckingPayment(false);
+        return;
+      }
+
+      const savedWish = localStorage.getItem('crocopay_wish');
+      const savedIntensity = localStorage.getItem('crocopay_wish_intensity');
+      if (savedWish) setWish(savedWish);
+      if (savedIntensity) setWishIntensity(parseInt(savedIntensity, 10));
+
+      if (paymentParam === 'cancel') {
+        localStorage.removeItem('crocopay_order_ref');
+        localStorage.removeItem('crocopay_wish');
+        localStorage.removeItem('crocopay_wish_intensity');
+        window.history.replaceState({}, '', window.location.pathname);
+        setCheckingPayment(false);
+        return;
+      }
+
+      try {
+        const response = await fetch(`${funcUrls['crocopay-payment-link']}?id=${orderRef}`);
+        const data = await response.json();
+
+        if (data.status === 'Success') {
+          setShowSplash(false);
+          setShowPayment(true);
+          setShowPaymentAnimation(true);
+        }
+      } catch (e) {
+        // Игнорируем сбой проверки, пользователь попадёт на обычную форму
+      } finally {
+        window.history.replaceState({}, '', window.location.pathname);
+        setCheckingPayment(false);
+      }
+    };
+
+    checkPaymentReturn();
+  }, []);
 
   const handlePaymentAnimationComplete = async () => {
     setShowPaymentAnimation(false);
     setShowPaymentSuccess(true);
+
+    localStorage.removeItem('crocopay_order_ref');
+    localStorage.removeItem('crocopay_wish');
+    localStorage.removeItem('crocopay_wish_intensity');
 
     const amount = getAmountFromIntensity(wishIntensity);
     if (window.trackWish) {
@@ -113,6 +161,10 @@ const Index = () => {
     setWishIntensity(5);
   };
 
+  if (checkingPayment) {
+    return null;
+  }
+
   if (showSplash) {
     return <StarrySplashScreen onComplete={handleSplashComplete} />;
   }
@@ -170,7 +222,6 @@ const Index = () => {
               setWishIntensity={setWishIntensity}
               getAmountFromIntensity={getAmountFromIntensity}
               getColorFromIntensity={getColorFromIntensity}
-              onPaid={handlePaid}
             />
           }
         />

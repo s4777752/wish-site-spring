@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import CrocoPayH2HModal from './CrocoPayH2HModal';
+import funcUrls from '../../backend/func2url.json';
 
 interface PaymentSectionProps {
   wish: string;
@@ -11,7 +11,6 @@ interface PaymentSectionProps {
   setWishIntensity: (intensity: number) => void;
   getAmountFromIntensity: (intensity: number) => number;
   getColorFromIntensity: (intensity: number) => string;
-  onPaid: () => void;
 }
 
 const PaymentSection = ({
@@ -19,11 +18,52 @@ const PaymentSection = ({
   wishIntensity,
   setWishIntensity,
   getAmountFromIntensity,
-  getColorFromIntensity,
-  onPaid
+  getColorFromIntensity
 }: PaymentSectionProps) => {
   const [fullName, setFullName] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
+  const [error, setError] = useState('');
+
+  const handlePayClick = async () => {
+    if (!fullName) {
+      alert('Пожалуйста, заполните ФИО');
+      return;
+    }
+
+    setIsRedirecting(true);
+    setError('');
+    try {
+      const response = await fetch(funcUrls['crocopay-payment-link'], {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: getAmountFromIntensity(wishIntensity),
+          wish,
+          wishIntensity,
+          fullName
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data.error || 'Не удалось создать платёжную ссылку');
+        setIsRedirecting(false);
+        return;
+      }
+
+      if (data.order_ref) {
+        localStorage.setItem('crocopay_order_ref', data.order_ref);
+        localStorage.setItem('crocopay_wish', wish);
+        localStorage.setItem('crocopay_wish_intensity', String(wishIntensity));
+      }
+
+      window.location.href = data.redirect_url;
+    } catch (e) {
+      setError('Ошибка соединения с платёжной системой');
+      setIsRedirecting(false);
+    }
+  };
 
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
@@ -140,36 +180,23 @@ const PaymentSection = ({
 
           <div className="mt-8 text-center">
             <Button
-              onClick={() => {
-                if (!fullName) {
-                  alert('Пожалуйста, заполните ФИО');
-                  return;
-                }
-                setIsModalOpen(true);
-              }}
+              onClick={handlePayClick}
+              disabled={isRedirecting}
               className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
               size="lg"
             >
-              Отправить запрос и оплатить
+              {isRedirecting ? 'Переходим к оплате...' : 'Оплатить'}
             </Button>
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-600 mt-3 max-w-md mx-auto">
+                {error}
+              </div>
+            )}
             <p className="text-gray-600 mt-3 text-center text-xl font-medium">
               После оплаты можно будет скачать документ аффирмации
             </p>
           </div>
         </div>
-
-        <CrocoPayH2HModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          amount={getAmountFromIntensity(wishIntensity)}
-          wish={wish}
-          wishIntensity={wishIntensity}
-          fullName={fullName}
-          onPaid={() => {
-            setIsModalOpen(false);
-            onPaid();
-          }}
-        />
       </CardContent>
     </Card>
   );
