@@ -1,70 +1,38 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import funcUrls from '../../backend/func2url.json';
+import Icon from '@/components/ui/icon';
+import PaymentWaitingScreen from './PaymentWaitingScreen';
+import CrocoPayModal from './CrocoPayModal';
 
 interface PaymentSectionProps {
   wish: string;
   wishIntensity: number;
   setWishIntensity: (intensity: number) => void;
+  setSelectedAmount: (amount: number) => void;
   getAmountFromIntensity: (intensity: number) => number;
   getColorFromIntensity: (intensity: number) => string;
+  children: React.ReactNode;
+  onReturnToSplash?: () => void;
 }
 
-const PaymentSection = ({
-  wish,
-  wishIntensity,
-  setWishIntensity,
-  getAmountFromIntensity,
-  getColorFromIntensity
+const PaymentSection = ({ 
+  wish, 
+  wishIntensity, 
+  setWishIntensity, 
+  setSelectedAmount, 
+  getAmountFromIntensity, 
+  getColorFromIntensity,
+  children,
+  onReturnToSplash
 }: PaymentSectionProps) => {
+  const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp'>('whatsapp');
   const [fullName, setFullName] = useState('');
-  const [isRedirecting, setIsRedirecting] = useState(false);
-  const [error, setError] = useState('');
-
-  const handlePayClick = async () => {
-    if (!fullName) {
-      alert('Пожалуйста, заполните ФИО');
-      return;
-    }
-
-    setIsRedirecting(true);
-    setError('');
-    try {
-      const response = await fetch(funcUrls['crocopay-payment-link'], {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: getAmountFromIntensity(wishIntensity),
-          wish,
-          wishIntensity,
-          fullName
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(data.error || 'Не удалось создать платёжную ссылку');
-        setIsRedirecting(false);
-        return;
-      }
-
-      if (data.order_ref) {
-        localStorage.setItem('crocopay_order_ref', data.order_ref);
-        localStorage.setItem('crocopay_wish', wish);
-        localStorage.setItem('crocopay_wish_intensity', String(wishIntensity));
-      }
-
-      window.location.href = data.redirect_url;
-    } catch (e) {
-      setError('Ошибка соединения с платёжной системой');
-      setIsRedirecting(false);
-    }
-  };
-
+  const [showWaitingScreen, setShowWaitingScreen] = useState(false);
+  const [showDownloadDialog, setShowDownloadDialog] = useState(false);
+  const [isCrocoPayOpen, setIsCrocoPayOpen] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -74,27 +42,33 @@ const PaymentSection = ({
         <p className="text-gray-600">
           Ваше желание: "{wish}"
         </p>
+
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center mb-6">
           <h3 className="text-xl font-semibold mb-4">Укажите силу вашего желания</h3>
           <p className="text-gray-600 text-sm">Чем сильнее желание, тем больше энергии вы вкладываете в его исполнение</p>
         </div>
-
+        
         <div className="space-y-6 mb-6">
+          {/* Индикатор силы желания */}
           <div className="space-y-4">
             <div className="flex justify-between items-center text-sm text-gray-600">
               <span>Слабое желание</span>
               <span>Сильное желание</span>
             </div>
-
+            
             <div className="relative">
               <input
                 type="range"
                 min="1"
                 max="10"
                 value={wishIntensity}
-                onChange={(e) => setWishIntensity(parseInt(e.target.value))}
+                onChange={(e) => {
+                  const intensity = parseInt(e.target.value);
+                  setWishIntensity(intensity);
+                  setSelectedAmount(getAmountFromIntensity(intensity));
+                }}
                 className="w-full h-3 rounded-lg appearance-none cursor-pointer"
                 style={{
                   background: `linear-gradient(to right, 
@@ -128,7 +102,7 @@ const PaymentSection = ({
                 }
               `}</style>
             </div>
-
+            
             <div className="flex justify-between text-xs text-gray-500">
               {[1,2,3,4,5,6,7,8,9,10].map(num => (
                 <span key={num} className={wishIntensity === num ? 'font-bold text-gray-800' : ''}>
@@ -137,8 +111,9 @@ const PaymentSection = ({
               ))}
             </div>
           </div>
-
-          <div
+          
+          {/* Визуальная карточка с силой желания */}
+          <div 
             className="p-6 rounded-xl border-3 text-center transition-all duration-300"
             style={{
               backgroundColor: getColorFromIntensity(wishIntensity) + '20',
@@ -159,44 +134,134 @@ const PaymentSection = ({
             </div>
           </div>
         </div>
+        
+        {wishIntensity && (
+          <div className="space-y-4">
+            <div className="text-center py-4 bg-gray-50 rounded-lg">
+              <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {getAmountFromIntensity(wishIntensity)}</div>
+              <p className="text-gray-600">Энергетический вклад в исполнение желания</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="fullName" className="text-xl font-semibold">ФИО для документа аффирмации</Label>
+              <Input
+                id="fullName"
+                type="text"
+                placeholder="Введите ваше полное имя"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full border-2 border-indigo-500 focus:border-purple-600 focus:ring-2 focus:ring-purple-200"
+              />
+            </div>
 
-        <div className="space-y-4">
-          <div className="text-center py-4 bg-gray-50 rounded-lg">
-            <div className="text-2xl font-bold text-indigo-600 mb-1">₽ {getAmountFromIntensity(wishIntensity)}</div>
-            <p className="text-gray-600">Энергетический вклад в исполнение желания</p>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="fullName" className="text-xl font-semibold">ФИО для документа аффирмации</Label>
-            <Input
-              id="fullName"
-              type="text"
-              placeholder="Введите ваше полное имя"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full border-2 border-indigo-500 focus:border-purple-600 focus:ring-2 focus:ring-purple-200"
+            
+            {React.cloneElement(children as React.ReactElement, { deliveryMethod })}
+            
+            <div className="mt-8 text-center">
+              <Button 
+                onClick={() => {
+                  if (!fullName.trim()) {
+                    alert('Пожалуйста, укажите ФИО для документа аффирмации');
+                    return;
+                  }
+                  setIsCrocoPayOpen(true);
+                }}
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                size="lg"
+              >
+                Отправить запрос и оплатить
+              </Button>
+              <p className="text-gray-600 mt-3 text-center text-xl font-medium">
+                После оплаты можно будет скачать документ аффирмации
+              </p>
+            </div>
+
+            <CrocoPayModal
+              isOpen={isCrocoPayOpen}
+              onClose={() => setIsCrocoPayOpen(false)}
+              amount={getAmountFromIntensity(wishIntensity)}
+              wish={wish}
+              wishIntensity={wishIntensity}
+              fullName={fullName}
+              onPaid={() => {
+                setIsCrocoPayOpen(false);
+                setShowDownloadDialog(true);
+              }}
             />
           </div>
-
-          <div className="mt-8 text-center">
-            <Button
-              onClick={handlePayClick}
-              disabled={isRedirecting}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
-              size="lg"
-            >
-              {isRedirecting ? 'Переходим к оплате...' : 'Оплатить'}
-            </Button>
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-600 mt-3 max-w-md mx-auto">
-                {error}
+        )}
+        
+        {/* Диалог скачивания документа аффирмации */}
+        {showDownloadDialog && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+              <div className="text-center space-y-6">
+                <div className="text-6xl mb-4">📄</div>
+                <h3 className="text-2xl font-bold text-gray-800">Скачать документ аффирмации?</h3>
+                <p className="text-gray-600">
+                  Персональный документ поможет усилить энергию вашего желания и напомнит о цели
+                </p>
+                
+                <div className="flex space-x-3 pt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setShowDownloadDialog(false);
+                      setShowWaitingScreen(true);
+                    }}
+                    className="flex-1"
+                  >
+                    Нет, спасибо
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      // Генерируем и скачиваем документ
+                      const documentData = {
+                        wish: wish,
+                        intensity: wishIntensity,
+                        amount: getAmountFromIntensity(wishIntensity),
+                        userName: fullName,
+                        documentId: `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`,
+                        timestamp: new Date().toLocaleString('ru-RU', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })
+                      };
+                      
+                      import('../components/DocumentGenerator').then(({ generateAndDownloadDocument }) => {
+                        generateAndDownloadDocument(documentData);
+                      });
+                      
+                      setShowDownloadDialog(false);
+                      setShowWaitingScreen(true);
+                    }}
+                    className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white flex-1"
+                  >
+                    Да, скачать
+                  </Button>
+                </div>
               </div>
-            )}
-            <p className="text-gray-600 mt-3 text-center text-xl font-medium">
-              После оплаты можно будет скачать документ аффирмации
-            </p>
+            </div>
           </div>
-        </div>
+        )}
+        
+        {/* Заставка ожидания оплаты */}
+        {showWaitingScreen && (
+          <PaymentWaitingScreen 
+            onComplete={() => {
+              setShowWaitingScreen(false);
+              if (onReturnToSplash) {
+                onReturnToSplash();
+              }
+            }}
+          />
+        )}
       </CardContent>
     </Card>
   );

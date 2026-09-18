@@ -1,0 +1,40 @@
+{
+  "tests": [
+    {
+      "name": "Test complaint creation with valid payment_id",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "payment_id": "test_payment_123"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true,
+        "payment_id": "string"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test complaint creation without payment_id",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {},
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "payment_id обязателен"
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test CORS OPTIONS request",
+      "method": "OPTIONS",
+      "expectedStatus": 200,
+      "expectedBody": "",
+      "bodyMatcher": "exact"
+    }
+  ]
+}

@@ -7,9 +7,10 @@ interface WishFormProps {
   onSubmit: () => void;
   showPayment: boolean;
   paymentSection?: React.ReactNode;
+  onConfettiStart?: () => void;
 }
 
-const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection }: WishFormProps) => {
+const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection, onConfettiStart }: WishFormProps) => {
   return (
     <section className="flex flex-col items-center justify-center min-h-screen px-4" aria-labelledby="main-heading">
       <div className="text-center max-w-2xl mx-auto">
@@ -32,7 +33,13 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection }: Wish
             />
             
             <Button 
-              onClick={onSubmit}
+              onClick={() => {
+                onSubmit();
+                if (onConfettiStart) {
+                  onConfettiStart();
+                }
+                console.log('ОК кнопка нажата! Запускаю конфетти...');
+              }}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg transition-all hover:scale-105 shadow-lg hover:shadow-xl"
               disabled={!wish.trim()}
               aria-describedby="wish-description"
@@ -40,7 +47,8 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection }: Wish
             >
               ОК
             </Button>
-
+            
+            {/* Payment Section - показывается рядом с кнопкой ОК */}
             {showPayment && paymentSection && (
               <div className="mt-8">
                 {paymentSection}
