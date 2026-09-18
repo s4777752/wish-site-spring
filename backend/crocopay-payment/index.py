@@ -7,7 +7,7 @@ import psycopg2
 import requests
 
 CROCOPAY_HOST = 'https://crocopay.tech'
-WEBHOOK_URL = 'https://functions.poehali.dev/b0425af1-e07e-4c52-b23d-22dcb7f3e01d'
+WEBHOOK_URL = 'https://functions.poehali.dev/9ee637a1-48dc-48b2-a120-6e6c0569976a'
 
 
 def get_db_connection():
@@ -104,6 +104,25 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
             'body': json.dumps(response_data), 'isBase64Encoded': False}
 
 
+def get_available_methods() -> Dict[str, Any]:
+    client_id = os.environ['CROCOPAY_CLIENT_ID'].strip()
+    client_secret = os.environ['CROCOPAY_CLIENT_SECRET'].strip()
+
+    resp = requests.get(
+        f'{CROCOPAY_HOST}/api/v2/h2h/payment-method/available',
+        headers={
+            'Client-Id': client_id,
+            'Client-Secret': client_secret
+        },
+        timeout=15
+    )
+
+    data = resp.json()
+
+    return {'statusCode': resp.status_code, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
+            'body': json.dumps(data), 'isBase64Encoded': False}
+
+
 def get_invoice_status(invoice_id: str) -> Dict[str, Any]:
     client_id = os.environ['CROCOPAY_CLIENT_ID'].strip()
     client_secret = os.environ['CROCOPAY_CLIENT_SECRET'].strip()
@@ -157,6 +176,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
 
         if method == 'GET':
             params = event.get('queryStringParameters') or {}
+            if params.get('methods') == '1':
+                return get_available_methods()
             invoice_id = params.get('id')
             if not invoice_id:
                 return {'statusCode': 400, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
