@@ -3,6 +3,7 @@ import SEO from '@/components/SEO';
 import StructuredData from '@/components/StructuredData';
 import Analytics from '@/components/Analytics';
 import WishForm from '@/components/WishForm';
+import PaymentSection from '@/components/PaymentSection';
 import PaymentSuccessAnimation from '@/components/PaymentSuccessAnimation';
 import PaymentSuccessPage from '@/components/PaymentSuccessPage';
 import RulesSection from '@/components/RulesSection';
@@ -13,36 +14,55 @@ import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 
 const Index = () => {
   const [wish, setWish] = useState('');
-  const [wishIntensity] = useState(5);
+  const [showPayment, setShowPayment] = useState(false);
+  const [wishIntensity, setWishIntensity] = useState(5);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
-  const [showWishAnimation, setShowWishAnimation] = useState(false);
-  const [showWishSuccess, setShowWishSuccess] = useState(false);
+  const [showPaymentAnimation, setShowPaymentAnimation] = useState(false);
+  const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
 
-  // Функция для расчета "энергии" желания (используется только в тексте документа)
+  // Функция для расчета суммы по интенсивности
   const getAmountFromIntensity = (intensity: number) => intensity * 100;
 
-  const handleWishAnimationComplete = async () => {
-    setShowWishAnimation(false);
-    setShowWishSuccess(true);
+  // Функция для получения цвета по интенсивности (от светло-зеленого до темно-зеленого)
+  const getColorFromIntensity = (intensity: number) => {
+    const lightGreen = { r: 144, g: 238, b: 144 };
+    const darkGreen = { r: 0, g: 100, b: 0 };
 
+    const ratio = (intensity - 1) / 9;
+
+    const r = Math.round(lightGreen.r + (darkGreen.r - lightGreen.r) * ratio);
+    const g = Math.round(lightGreen.g + (darkGreen.g - lightGreen.g) * ratio);
+    const b = Math.round(lightGreen.b + (darkGreen.b - lightGreen.b) * ratio);
+
+    return `rgb(${r}, ${g}, ${b})`;
+  };
+
+  const handlePaid = () => {
+    setShowPaymentAnimation(true);
+  };
+
+  const handlePaymentAnimationComplete = async () => {
+    setShowPaymentAnimation(false);
+    setShowPaymentSuccess(true);
+
+    const amount = getAmountFromIntensity(wishIntensity);
     if (window.trackWish) {
-      window.trackWish(0, wishIntensity);
+      window.trackWish(amount, wishIntensity);
     }
 
-    // Автоматически отправляем документ аффирмации сразу после исполнения желания
     try {
       const result = await sendWishAffirmationDocument(
         wish,
         wishIntensity,
-        0,
+        amount,
         'user@example.com',
         '+7 999 123-45-67',
         'Пользователь'
       );
 
       if (result.success) {
-        console.log(`✅ Документ аффирмации #${result.documentId} отправлен автоматически`);
+        console.log(`✅ Документ аффирмации #${result.documentId} отправлен автоматически после оплаты`);
       }
     } catch (error) {
       console.error('Ошибка при автоматической отправке документа:', error);
@@ -51,7 +71,7 @@ const Index = () => {
 
   const handleWishSubmit = () => {
     if (wish.trim()) {
-      setShowWishAnimation(true);
+      setShowPayment(true);
     }
   };
 
@@ -61,10 +81,11 @@ const Index = () => {
 
   const handleDownloadDocument = async () => {
     try {
+      const amount = getAmountFromIntensity(wishIntensity);
       const result = await sendWishAffirmationDocument(
         wish,
         wishIntensity,
-        0,
+        amount,
         'user@example.com',
         '+7 999 123-45-67',
         'Пользователь'
@@ -85,21 +106,23 @@ const Index = () => {
     }
   };
 
-  const handleCloseWishSuccess = () => {
-    setShowWishSuccess(false);
+  const handleClosePaymentSuccess = () => {
+    setShowPaymentSuccess(false);
     setWish('');
+    setShowPayment(false);
+    setWishIntensity(5);
   };
 
   if (showSplash) {
     return <StarrySplashScreen onComplete={handleSplashComplete} />;
   }
 
-  if (showWishSuccess) {
+  if (showPaymentSuccess) {
     return (
       <PaymentSuccessPage
-        amount={0}
+        amount={getAmountFromIntensity(wishIntensity)}
         onDownload={handleDownloadDocument}
-        onClose={handleCloseWishSuccess}
+        onClose={handleClosePaymentSuccess}
       />
     );
   }
@@ -109,14 +132,14 @@ const Index = () => {
       {/* SEO компоненты */}
       <SEO
         title="САЙТ ЖЕЛАНИЙ - Загадать желание на Официальном сайте!"
-        description="🌟 Загадайте желание онлайн и исполните мечту уже сегодня! ✨ Проверенный метод от психологов. 🔮 Более 10,247 исполненных желаний!"
-        keywords="загадать желание онлайн, исполнение желаний, сайт желаний, исполнить мечту, желания сбываются, психология желаний, визуализация мечты, привлечение удачи, закон притяжения, мотивация цели, как загадать желание правильно, исполнение мечты онлайн, желания исполняются, загадывание желаний, новогодние желания, желание на день рождения, платформа желаний, манифестация желаний, подсознание и желания, достижение целей онлайн, метод исполнения желаний, работа с желаниями, программирование подсознания, привлечение успеха"
+        description="🌟 Загадайте желание онлайн и исполните мечту уже сегодня! ✨ Проверенный метод от психологов. 🔮 Энергетический вклад активирует подсознание. 💫 Более 10,247 исполненных желаний!"
+        keywords="загадать желание онлайн, исполнение желаний, сайт желаний, исполнить мечту, желания сбываются, энергетический вклад, психология желаний, визуализация мечты, привлечение удачи, закон притяжения, мотивация цели, как загадать желание правильно, исполнение мечты онлайн, желания исполняются, загадывание желаний, новогодние желания, желание на день рождения, заказать исполнение желания, платформа желаний, манифестация желаний, энергия для желаний, подсознание и желания, достижение целей онлайн, метод исполнения желаний, работа с желаниями, программирование подсознания, привлечение успеха"
         canonical="https://wish-site-spring.poehali.dev"
       />
       <StructuredData
         type="WebSite"
         name="САЙТ ЖЕЛАНИЙ"
-        description="Загадайте желание онлайн на официальном Сайте Желаний."
+        description="Загадайте желание онлайн на официальном Сайте Желаний. Энергетический вклад через безопасную оплату поможет вашему желанию исполниться."
         url="https://wish-site-spring.poehali.dev"
       />
       <Analytics
@@ -126,9 +149,9 @@ const Index = () => {
       />
 
       <main className="min-h-screen bg-white">
-        {/* Анимация исполнения желания */}
-        {showWishAnimation && (
-          <PaymentSuccessAnimation onComplete={handleWishAnimationComplete} />
+        {/* Анимация успешной оплаты */}
+        {showPaymentAnimation && (
+          <PaymentSuccessAnimation onComplete={handlePaymentAnimationComplete} />
         )}
 
         {/* Конфетти компонент */}
@@ -139,9 +162,17 @@ const Index = () => {
           wish={wish}
           setWish={setWish}
           onSubmit={handleWishSubmit}
-          onConfettiStart={() => {
-            setShowConfetti(true);
-          }}
+          showPayment={showPayment}
+          paymentSection={
+            <PaymentSection
+              wish={wish}
+              wishIntensity={wishIntensity}
+              setWishIntensity={setWishIntensity}
+              getAmountFromIntensity={getAmountFromIntensity}
+              getColorFromIntensity={getColorFromIntensity}
+              onPaid={handlePaid}
+            />
+          }
         />
 
         {/* Rules Section */}

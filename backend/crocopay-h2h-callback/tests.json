@@ -1,0 +1,24 @@
+{
+  "tests": [
+    {
+      "name": "OPTIONS preflight",
+      "method": "OPTIONS",
+      "path": "/",
+      "expectedStatus": 200
+    },
+    {
+      "name": "POST без order_ref возвращает ошибку",
+      "method": "POST",
+      "path": "/",
+      "body": {},
+      "expectedStatus": 400
+    },
+    {
+      "name": "POST с неверной подписью возвращает 403",
+      "method": "POST",
+      "path": "/?order_ref=test-ref",
+      "body": {"timestamp": 1, "subtotal": 100, "percentage": 0, "charge_percentage": 0, "charge_fixed": 0, "total": 100, "sign": "invalid"},
+      "expectedStatus": 403
+    }
+  ]
+}

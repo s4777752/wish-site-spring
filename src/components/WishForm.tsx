@@ -5,10 +5,11 @@ interface WishFormProps {
   wish: string;
   setWish: (wish: string) => void;
   onSubmit: () => void;
-  onConfettiStart?: () => void;
+  showPayment: boolean;
+  paymentSection?: React.ReactNode;
 }
 
-const WishForm = ({ wish, setWish, onSubmit, onConfettiStart }: WishFormProps) => {
+const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection }: WishFormProps) => {
   return (
     <section className="flex flex-col items-center justify-center min-h-screen px-4" aria-labelledby="main-heading">
       <div className="text-center max-w-2xl mx-auto">
@@ -17,7 +18,7 @@ const WishForm = ({ wish, setWish, onSubmit, onConfettiStart }: WishFormProps) =
         </h1>
         
         <div className="space-y-6 animate-fade-in">
-          <p id="wish-description" className="text-lg text-gray-600 mb-8">Опишите ваше желание и нажмите "ОК" — оно будет исполнено</p>
+          <p id="wish-description" className="text-lg text-gray-600 mb-8">После "ОК" - выбирайте силу вашего желания </p>
           
           <div className="max-w-lg mx-auto space-y-4">
             <Textarea
@@ -31,12 +32,7 @@ const WishForm = ({ wish, setWish, onSubmit, onConfettiStart }: WishFormProps) =
             />
             
             <Button 
-              onClick={() => {
-                onSubmit();
-                if (onConfettiStart) {
-                  onConfettiStart();
-                }
-              }}
+              onClick={onSubmit}
               className="w-full bg-indigo-600 hover:bg-indigo-700 text-white text-lg py-6 rounded-lg transition-all hover:scale-105 shadow-lg hover:shadow-xl"
               disabled={!wish.trim()}
               aria-describedby="wish-description"
@@ -44,6 +40,12 @@ const WishForm = ({ wish, setWish, onSubmit, onConfettiStart }: WishFormProps) =
             >
               ОК
             </Button>
+
+            {showPayment && paymentSection && (
+              <div className="mt-8">
+                {paymentSection}
+              </div>
+            )}
           </div>
         </div>
       </div>
