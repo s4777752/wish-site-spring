@@ -7,24 +7,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import AffirmationDocument from './AffirmationDocument';
 
-interface PaymentFormData {
+interface ContactFormData {
   email: string;
   phone: string;
   whatsapp: string;
 }
 
 const AffirmationGenerator: React.FC = () => {
-  const [step, setStep] = useState<'form' | 'preview' | 'payment'>('form');
+  const [step, setStep] = useState<'form' | 'preview' | 'contacts'>('form');
   const [affirmationType, setAffirmationType] = useState<'love' | 'money' | 'health' | 'career' | 'custom'>('love');
   const [userName, setUserName] = useState('');
   const [customTitle, setCustomTitle] = useState('');
   const [customDesires, setCustomDesires] = useState('');
-  const [paymentData, setPaymentData] = useState<PaymentFormData>({
+  const [contactData, setContactData] = useState<ContactFormData>({
     email: '',
     phone: '',
     whatsapp: ''
   });
-  const [isPaid, setIsPaid] = useState(false);
+  const [isSent, setIsSent] = useState(false);
   const documentRef = useRef<HTMLDivElement>(null);
 
   const affirmationTypes = [
@@ -80,8 +80,8 @@ const AffirmationGenerator: React.FC = () => {
         affirmationType,
         customTitle,
         desires: affirmationType === 'custom' ? parseCustomDesires(customDesires) : [],
-        email: paymentData.email,
-        whatsapp: paymentData.whatsapp
+        email: contactData.email,
+        whatsapp: contactData.whatsapp
       };
 
       // Эмуляция отправки API запроса
@@ -89,8 +89,8 @@ const AffirmationGenerator: React.FC = () => {
       
       // Имитация успешной отправки
       setTimeout(() => {
-        alert(`✅ Аффирмация отправлена на:\n📧 Email: ${paymentData.email}\n📱 WhatsApp: ${paymentData.whatsapp}`);
-        setIsPaid(true);
+        alert(`✅ Аффирмация отправлена на:\n📧 Email: ${contactData.email}\n📱 WhatsApp: ${contactData.whatsapp}`);
+        setIsSent(true);
       }, 1000);
 
     } catch (error) {
@@ -99,19 +99,13 @@ const AffirmationGenerator: React.FC = () => {
     }
   };
 
-  const handlePayment = async () => {
-    if (!paymentData.email || !paymentData.whatsapp) {
+  const handleSend = async () => {
+    if (!contactData.email || !contactData.whatsapp) {
       alert('Пожалуйста, заполните email и WhatsApp для получения документа');
       return;
     }
 
-    // Эмуляция процесса оплаты
-    const confirmed = confirm(`Оплатить 299₽ за персональную аффирмацию?\n\nДокумент будет отправлен на:\n📧 ${paymentData.email}\n📱 WhatsApp: ${paymentData.whatsapp}`);
-    
-    if (confirmed) {
-      // В реальном приложении здесь будет интеграция с платежной системой
-      await sendToEmailAndWhatsApp();
-    }
+    await sendToEmailAndWhatsApp();
   };
 
   if (step === 'form') {
@@ -209,9 +203,9 @@ const AffirmationGenerator: React.FC = () => {
                 <Icon name="ArrowLeft" size={16} className="mr-2" />
                 Редактировать
               </Button>
-              <Button onClick={() => setStep('payment')}>
-                <Icon name="CreditCard" size={16} className="mr-2" />
-                Заказать за 299₽
+              <Button onClick={() => setStep('contacts')}>
+                <Icon name="Send" size={16} className="mr-2" />
+                Получить бесплатно
               </Button>
             </div>
           </CardContent>
@@ -234,11 +228,11 @@ const AffirmationGenerator: React.FC = () => {
     <Card className="max-w-md mx-auto">
       <CardHeader className="text-center">
         <CardTitle className="text-xl text-primary flex items-center justify-center gap-2">
-          <Icon name="CreditCard" size={24} />
-          Оформление заказа
+          <Icon name="Send" size={24} />
+          Получение документа
         </CardTitle>
         <p className="text-muted-foreground">
-          Стоимость: <span className="font-bold text-lg">299₽</span>
+          Бесплатно
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -246,8 +240,8 @@ const AffirmationGenerator: React.FC = () => {
           <label className="block text-sm font-medium mb-2">Email для получения PDF</label>
           <Input
             type="email"
-            value={paymentData.email}
-            onChange={(e) => setPaymentData({...paymentData, email: e.target.value})}
+            value={contactData.email}
+            onChange={(e) => setContactData({...contactData, email: e.target.value})}
             placeholder="your@email.com"
           />
         </div>
@@ -256,16 +250,16 @@ const AffirmationGenerator: React.FC = () => {
           <label className="block text-sm font-medium mb-2">WhatsApp (с кодом страны)</label>
           <Input
             type="tel"
-            value={paymentData.whatsapp}
-            onChange={(e) => setPaymentData({...paymentData, whatsapp: e.target.value})}
+            value={contactData.whatsapp}
+            onChange={(e) => setContactData({...contactData, whatsapp: e.target.value})}
             placeholder="+7 999 123-45-67"
           />
         </div>
 
         <div className="text-center space-y-3">
-          <Button onClick={handlePayment} className="w-full" size="lg">
+          <Button onClick={handleSend} className="w-full" size="lg">
             <Icon name="Zap" size={20} className="mr-2" />
-            Оплатить и получить аффирмацию
+            Получить аффирмацию
           </Button>
           
           <Button variant="outline" onClick={() => setStep('preview')} className="w-full">
@@ -275,7 +269,7 @@ const AffirmationGenerator: React.FC = () => {
         </div>
 
         <div className="text-xs text-muted-foreground text-center">
-          После оплаты документ будет автоматически отправлен на указанные контакты
+          Документ будет автоматически отправлен на указанные контакты
         </div>
       </CardContent>
     </Card>
