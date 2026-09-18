@@ -14,6 +14,8 @@ import DocumentPreviewPage from "./pages/DocumentPreviewPage";
 import TestDocumentPage from "./pages/TestDocumentPage";
 import Analytics404 from "./pages/Analytics404";
 import PaymentTest from "./pages/PaymentTest";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
+import PaymentCancelPage from "./pages/PaymentCancelPage";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,8 @@ const App = () => {
             <Route path="/terms" element={<Terms />} />
             <Route path="/admin/404-analytics" element={<Analytics404 />} />
             <Route path="/test/payment" element={<PaymentTest />} />
+            <Route path="/payment-success" element={<PaymentSuccessPage />} />
+            <Route path="/payment-cancel" element={<PaymentCancelPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

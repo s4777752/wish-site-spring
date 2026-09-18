@@ -9,12 +9,10 @@ import psycopg2
 
 def get_db_connection():
     dsn = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(dsn)
     schema = os.environ.get('MAIN_DB_SCHEMA')
     if schema:
-        with conn.cursor() as cur:
-            cur.execute(f'SET search_path TO {schema}')
-    return conn
+        return psycopg2.connect(dsn, options=f'-c search_path={schema}', connect_timeout=3)
+    return psycopg2.connect(dsn, connect_timeout=3)
 
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
