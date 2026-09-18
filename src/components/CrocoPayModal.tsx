@@ -15,7 +15,7 @@ interface CrocoPayModalProps {
   onPaid: () => void;
 }
 
-type PaymentOption = 'TO_CARD' | 'SBP';
+type PaymentOption = 'TO_CARD' | 'SBP' | 'SBP_ALFA' | 'SBP_TBANK' | 'QR_NSPK';
 
 interface InvoiceData {
   id: string;
@@ -28,6 +28,14 @@ interface InvoiceData {
   card_owner: string;
   expires_at: string;
 }
+
+const paymentOptionLabels: Record<PaymentOption, { emoji: string; title: string; desc: string }> = {
+  TO_CARD: { emoji: '💳', title: 'Банковская карта', desc: 'Перевод на карту любого банка РФ' },
+  SBP: { emoji: '📱', title: 'СБП', desc: 'Перевод по номеру телефона — любой банк РФ' },
+  SBP_ALFA: { emoji: '📱', title: 'СБП Альфа-Банк', desc: 'Перевод по номеру телефона' },
+  SBP_TBANK: { emoji: '📱', title: 'СБП Т-Банк', desc: 'Перевод по номеру телефона' },
+  QR_NSPK: { emoji: '🔳', title: 'QR-код', desc: 'Оплата по QR-коду НСПК' }
+};
 
 const CrocoPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fullName, onPaid }: CrocoPayModalProps) => {
   const [paymentOption, setPaymentOption] = useState<PaymentOption>('TO_CARD');
@@ -132,20 +140,15 @@ const CrocoPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fullName,
             <div className="space-y-3">
               <Label className="text-base font-semibold">Способ оплаты:</Label>
               <RadioGroup value={paymentOption} onValueChange={(v) => setPaymentOption(v as PaymentOption)}>
-                <div className="flex items-center space-x-3 p-3 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors">
-                  <RadioGroupItem value="TO_CARD" id="to_card" />
-                  <Label htmlFor="to_card" className="cursor-pointer flex-1">
-                    <div className="font-medium">💳 Банковская карта</div>
-                    <div className="text-sm text-gray-600">Перевод на карту любого банка РФ</div>
-                  </Label>
-                </div>
-                <div className="flex items-center space-x-3 p-3 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors">
-                  <RadioGroupItem value="SBP" id="sbp" />
-                  <Label htmlFor="sbp" className="cursor-pointer flex-1">
-                    <div className="font-medium">📱 СБП</div>
-                    <div className="text-sm text-gray-600">Перевод по номеру телефона</div>
-                  </Label>
-                </div>
+                {(Object.keys(paymentOptionLabels) as PaymentOption[]).map((key) => (
+                  <div key={key} className="flex items-center space-x-3 p-3 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors">
+                    <RadioGroupItem value={key} id={key} />
+                    <Label htmlFor={key} className="cursor-pointer flex-1">
+                      <div className="font-medium">{paymentOptionLabels[key].emoji} {paymentOptionLabels[key].title}</div>
+                      <div className="text-sm text-gray-600">{paymentOptionLabels[key].desc}</div>
+                    </Label>
+                  </div>
+                ))}
               </RadioGroup>
             </div>
 
@@ -169,31 +172,42 @@ const CrocoPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fullName,
           <div className="space-y-4">
             <div className="bg-gray-50 p-4 rounded-lg text-center">
               <p className="text-sm text-gray-600 mb-1">Сумма к оплате:</p>
-              <p className="text-2xl font-bold text-purple-600">{invoice.amount / 100} ₽</p>
+              <p className="text-2xl font-bold text-purple-600">{invoice.amount} ₽</p>
             </div>
 
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-2 text-sm">
-              <h4 className="text-lg font-semibold text-gray-800 mb-2">
-                {invoice.payment_option === 'TO_CARD' ? 'Переведите на карту' : 'Переведите по СБП'}
-              </h4>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Банк:</span>
-                <span className="font-medium">{invoice.bank_receiver}</span>
+            {invoice.payment_option === 'QR_NSPK' ? (
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 text-center space-y-2">
+                <h4 className="text-lg font-semibold text-gray-800 mb-2">Отсканируйте QR-код</h4>
+                {invoice.card ? (
+                  <img src={invoice.card} alt="QR для оплаты" className="mx-auto max-w-[200px]" />
+                ) : (
+                  <p className="text-sm text-gray-600">QR-код формируется...</p>
+                )}
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">{invoice.payment_option === 'TO_CARD' ? 'Номер карты:' : 'Телефон:'}</span>
-                <div className="flex items-center gap-2">
-                  <span className="font-medium">{invoice.card}</span>
-                  <button onClick={() => copyToClipboard(invoice.card)} className="text-purple-600 hover:text-purple-800">
-                    <Icon name="Copy" size={14} />
-                  </button>
+            ) : (
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-2 text-sm">
+                <h4 className="text-lg font-semibold text-gray-800 mb-2">
+                  {invoice.payment_option === 'TO_CARD' ? 'Переведите на карту' : 'Переведите по СБП'}
+                </h4>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Банк:</span>
+                  <span className="font-medium">{invoice.bank_receiver}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">{invoice.payment_option === 'TO_CARD' ? 'Номер карты:' : 'Телефон:'}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium">{invoice.card}</span>
+                    <button onClick={() => copyToClipboard(invoice.card)} className="text-purple-600 hover:text-purple-800">
+                      <Icon name="Copy" size={14} />
+                    </button>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-600">Получатель:</span>
+                  <span className="font-medium">{invoice.card_owner}</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-600">Получатель:</span>
-                <span className="font-medium">{invoice.card_owner}</span>
-              </div>
-            </div>
+            )}
 
             <div className="flex items-center justify-center gap-2 text-sm text-gray-500 py-2">
               <Icon name="Loader2" size={16} className="animate-spin" />

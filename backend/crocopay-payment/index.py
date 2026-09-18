@@ -40,15 +40,19 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
         return {'statusCode': 400, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
                 'body': json.dumps({'error': 'amount обязателен'}), 'isBase64Encoded': False}
 
-    if payment_option not in ('TO_CARD', 'SBP'):
+    valid_options = ('TO_CARD', 'SBP', 'SBP_ALFA', 'SBP_TBANK', 'QR_NSPK')
+    if payment_option not in valid_options:
         return {'statusCode': 400, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-                'body': json.dumps({'error': 'payment_option должен быть TO_CARD или SBP'}), 'isBase64Encoded': False}
+                'body': json.dumps({'error': f'payment_option должен быть одним из {", ".join(valid_options)}'}), 'isBase64Encoded': False}
 
-    client_id = os.environ['CROCOPAY_CLIENT_ID']
-    client_secret = os.environ['CROCOPAY_CLIENT_SECRET']
+    client_id = os.environ['CROCOPAY_CLIENT_ID'].strip()
+    client_secret = os.environ['CROCOPAY_CLIENT_SECRET'].strip()
 
     order_id = str(uuid.uuid4())
     callback_url = f'{WEBHOOK_URL}?order_id={order_id}'
+
+    # Для RUB сумма передаётся целым числом рублей, без копеек
+    amount_whole = int(round(float(amount)))
 
     resp = requests.post(
         f'{CROCOPAY_HOST}/api/v2/h2h/invoices',
@@ -58,7 +62,7 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
             'Content-Type': 'application/json'
         },
         json={
-            'amount': int(round(float(amount) * 100)),
+            'amount': amount_whole,
             'currency': 'RUB',
             'payment_option': payment_option,
             'callback_url': callback_url
@@ -101,8 +105,8 @@ def create_invoice(body: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def get_invoice_status(invoice_id: str) -> Dict[str, Any]:
-    client_id = os.environ['CROCOPAY_CLIENT_ID']
-    client_secret = os.environ['CROCOPAY_CLIENT_SECRET']
+    client_id = os.environ['CROCOPAY_CLIENT_ID'].strip()
+    client_secret = os.environ['CROCOPAY_CLIENT_SECRET'].strip()
 
     resp = requests.get(
         f'{CROCOPAY_HOST}/api/v2/h2h/invoices/{invoice_id}',
