@@ -172,9 +172,7 @@ const PaymentSection = ({
               >
                 Отправить запрос и оплатить
               </Button>
-              <p className="text-gray-600 mt-3 text-center text-xl font-medium">
-                После оплаты можно будет скачать документ аффирмации
-              </p>
+              <p className="text-gray-600 mt-3 text-center text-xl font-medium">После оплаты можно будет скачать документ аффирмации ( не обязательно)</p>
             </div>
 
             <CrocoPayModal
