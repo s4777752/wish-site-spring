@@ -9,7 +9,7 @@ interface FreeKassaWidgetProps {
 const FreeKassaWidget = ({ isOpen, onClose, amount }: FreeKassaWidgetProps) => {
   if (!isOpen) return null;
 
-  const widgetUrl = `https://widgets.freekassa.net?type=payment-window&lang=ru&theme=light&default_amount=${Math.round(amount)}&api_key=03ba77eb6eccd96e48020c6470d7d2dc&shopID=76166`;
+  const widgetUrl = `https://widgets.freekassa.net?type=payment-button&currency=RUB&destination=${encodeURIComponent('Сайт Желаний')}&theme=dark&default_amount=${Math.round(amount)}&button_text=Оплатить&button_size=48px&shopId=76166&s=13cd1703382cfdddfd02d252ab3fba2d`;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -24,7 +24,7 @@ const FreeKassaWidget = ({ isOpen, onClose, amount }: FreeKassaWidgetProps) => {
         <iframe
           src={widgetUrl}
           width="300"
-          height="590"
+          height="50"
           frameBorder="0"
           className="mx-auto rounded-lg"
           title="FreeKassa Payment Widget"
