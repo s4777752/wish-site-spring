@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import PaymentWaitingScreen from './PaymentWaitingScreen';
-import CrocoPayModal from './CrocoPayModal';
+import FreeKassaWidget from './FreeKassaWidget';
 
 interface PaymentSectionProps {
   wish: string;
@@ -32,7 +32,7 @@ const PaymentSection = ({
   const [fullName, setFullName] = useState('');
   const [showWaitingScreen, setShowWaitingScreen] = useState(false);
   const [showDownloadDialog, setShowDownloadDialog] = useState(false);
-  const [isCrocoPayOpen, setIsCrocoPayOpen] = useState(false);
+  const [isPaymentWidgetOpen, setIsPaymentWidgetOpen] = useState(false);
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -165,7 +165,7 @@ const PaymentSection = ({
                     alert('Пожалуйста, укажите ФИО для документа аффирмации');
                     return;
                   }
-                  setIsCrocoPayOpen(true);
+                  setIsPaymentWidgetOpen(true);
                 }}
                 className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-4 px-8 rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
                 size="lg"
@@ -175,17 +175,10 @@ const PaymentSection = ({
               <p className="text-gray-600 mt-3 text-center text-xl font-medium">После оплаты можно будет скачать документ аффирмации ( не обязательно)</p>
             </div>
 
-            <CrocoPayModal
-              isOpen={isCrocoPayOpen}
-              onClose={() => setIsCrocoPayOpen(false)}
+            <FreeKassaWidget
+              isOpen={isPaymentWidgetOpen}
+              onClose={() => setIsPaymentWidgetOpen(false)}
               amount={getAmountFromIntensity(wishIntensity)}
-              wish={wish}
-              wishIntensity={wishIntensity}
-              fullName={fullName}
-              onPaid={() => {
-                setIsCrocoPayOpen(false);
-                setShowDownloadDialog(true);
-              }}
             />
           </div>
         )}
