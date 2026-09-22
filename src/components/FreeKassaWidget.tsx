@@ -9,7 +9,7 @@ interface FreeKassaWidgetProps {
 const FreeKassaWidget = ({ isOpen, onClose, amount }: FreeKassaWidgetProps) => {
   if (!isOpen) return null;
 
-  const widgetUrl = `https://widgets.freekassa.net?type=payment-window&lang=ru&theme=dark&default_amount=${Math.round(amount)}&api_key=03ba77eb6eccd96e48020c6470d7d2dc&shopID=76166`;
+  const widgetUrl = `https://widgets.freekassa.net?type=payment-window&lang=ru&theme=dark&default_amount=${Math.round(amount)}&i=${encodeURIComponent('Сайт Желаний')}&api_key=03ba77eb6eccd96e48020c6470d7d2dc&shopID=76166`;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
