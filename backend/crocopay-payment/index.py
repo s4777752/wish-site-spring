@@ -2,14 +2,13 @@ import json
 import os
 import uuid
 from typing import Dict, Any
-from urllib.parse import urlencode
 
 import psycopg2
 import requests
 
 CROCOPAY_HOST = 'https://crocopay.tech'
-SITE_URL = 'https://wish-site-spring.poehali.dev'
 WEBHOOK_URL = 'https://functions.poehali.dev/9ee637a1-48dc-48b2-a120-6e6c0569976a'
+ALLOWED_PAYMENT_OPTIONS = {'TO_CARD', 'SBP'}
 
 
 def get_db_connection():
@@ -34,49 +33,51 @@ def create_payment_link(body: Dict[str, Any]) -> Dict[str, Any]:
     wish = body.get('wish', '')
     wish_intensity = body.get('wishIntensity')
     full_name = body.get('fullName', '')
+    payment_option = str(body.get('paymentOption', 'TO_CARD')).upper()
 
     if not amount:
         return {'statusCode': 400, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
                 'body': json.dumps({'error': 'amount обязателен'}), 'isBase64Encoded': False}
+
+    if payment_option not in ALLOWED_PAYMENT_OPTIONS:
+        return {'statusCode': 400, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
+                'body': json.dumps({'error': 'paymentOption должен быть TO_CARD или SBP'}), 'isBase64Encoded': False}
 
     client_id = os.environ['CROCOPAY_CLIENT_ID'].strip()
     client_secret = os.environ['CROCOPAY_CLIENT_SECRET'].strip()
 
     order_id = str(uuid.uuid4())
     amount_whole = int(round(float(amount)))
-
-    success_params = urlencode({
-        'orderId': order_id,
-        'amount': amount_whole,
-        'wish': wish,
-        'intensity': wish_intensity or ''
-    })
-    success_url = f'{SITE_URL}/payment-success?{success_params}'
-    cancel_url = f'{SITE_URL}/payment-cancel?orderId={order_id}'
     callback_url = f'{WEBHOOK_URL}?order_id={order_id}'
 
     resp = requests.post(
-        f'{CROCOPAY_HOST}/api/v2/initiate-payment',
-        data={
-            'client_id': client_id,
-            'client_secret': client_secret,
+        f'{CROCOPAY_HOST}/api/v2/h2h/invoices',
+        headers={
+            'Client-Id': client_id,
+            'Client-Secret': client_secret,
+            'Content-Type': 'application/json'
+        },
+        json={
             'amount': amount_whole,
             'currency': 'RUB',
-            'successUrl': success_url,
-            'cancelUrl': cancel_url,
-            'callbackUrl': callback_url
+            'payment_option': payment_option,
+            'callback_url': callback_url
         },
         timeout=15
     )
 
     data = resp.json()
 
-    if resp.status_code != 200 or data.get('status') != 'success':
-        return {'statusCode': resp.status_code if resp.status_code != 200 else 502,
+    if resp.status_code != 200:
+        return {'statusCode': resp.status_code,
                 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
                 'body': json.dumps({'error': data.get('message', 'Не удалось создать счёт')}), 'isBase64Encoded': False}
 
-    redirect_url = data.get('redirect_url')
+    invoice_id = data.get('id')
+    card = data.get('card')
+    bank_receiver = data.get('bank_receiver')
+    card_owner = data.get('card_owner')
+    expires_at = data.get('expires_at')
 
     conn = get_db_connection()
     try:
@@ -84,13 +85,14 @@ def create_payment_link(body: Dict[str, Any]) -> Dict[str, Any]:
             cur.execute(
                 """
                 INSERT INTO crocopay_orders
-                    (order_uuid, wish, wish_intensity, full_name, amount, currency,
-                     payment_option, status, redirect_url)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    (order_uuid, invoice_id, wish, wish_intensity, full_name, amount, currency,
+                     payment_option, status, card, bank_receiver, card_owner, expires_at)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                 """,
                 (
-                    order_id, wish, wish_intensity, full_name,
-                    amount, 'RUB', 'REDIRECT', 'Pending', redirect_url
+                    order_id, invoice_id, wish, wish_intensity, full_name,
+                    amount, 'RUB', payment_option, data.get('status', 'Pending'),
+                    card, bank_receiver, card_owner, expires_at
                 )
             )
         conn.commit()
@@ -98,7 +100,18 @@ def create_payment_link(body: Dict[str, Any]) -> Dict[str, Any]:
         conn.close()
 
     return {'statusCode': 200, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-            'body': json.dumps({'redirect_url': redirect_url, 'order_id': order_id}), 'isBase64Encoded': False}
+            'body': json.dumps({
+                'order_id': order_id,
+                'invoice_id': invoice_id,
+                'status': data.get('status', 'Pending'),
+                'amount': amount_whole,
+                'currency': 'RUB',
+                'payment_option': payment_option,
+                'card': card,
+                'bank_receiver': bank_receiver,
+                'card_owner': card_owner,
+                'expires_at': expires_at
+            }), 'isBase64Encoded': False}
 
 
 def get_order_status(order_id: str) -> Dict[str, Any]:
@@ -125,10 +138,10 @@ def get_order_status(order_id: str) -> Dict[str, Any]:
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Создание платёжной ссылки через CrocoPay Express (initiate-payment) и проверка статуса заказа
-    Args: event - dict с httpMethod, body (amount, wish, wishIntensity, fullName), queryStringParameters (orderId)
+    Business: Создание H2H-счёта CrocoPay (реквизиты карты или СБП) и проверка статуса заказа
+    Args: event - dict с httpMethod, body (amount, wish, wishIntensity, fullName, paymentOption), queryStringParameters (orderId)
           context - объект с атрибутами request_id, function_name
-    Returns: HTTP response с redirect_url или статусом заказа
+    Returns: HTTP response с реквизитами оплаты или статусом заказа
     '''
     method: str = event.get('httpMethod', 'GET')
 

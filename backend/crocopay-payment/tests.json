@@ -22,6 +22,15 @@
       "expectedStatus": 400,
       "expectedBody": {"error": "string"},
       "bodyMatcher": "partial"
+    },
+    {
+      "name": "POST с неверным paymentOption возвращает ошибку",
+      "method": "POST",
+      "path": "/",
+      "body": {"amount": 500, "paymentOption": "QIWI"},
+      "expectedStatus": 400,
+      "expectedBody": {"error": "string"},
+      "bodyMatcher": "partial"
     }
   ]
 }

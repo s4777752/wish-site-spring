@@ -182,7 +182,10 @@ const PaymentSection = ({
               wish={wish}
               wishIntensity={wishIntensity}
               fullName={fullName}
-              onPaid={() => {}}
+              onPaid={() => {
+                setIsPaymentWidgetOpen(false);
+                setShowDownloadDialog(true);
+              }}
             />
           </div>
         )}
