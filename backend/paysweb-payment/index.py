@@ -69,7 +69,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         data={
             'amount': amount_int,
             'merchant_order_id': order_id,
-            'use_select_method_form': 1,
+            'use_card_payment': 'RUB',
             'api_key': os.environ['PAYSWEB_API_KEY'].strip(),
             'success_url': success_url,
             'fail_url': fail_url
@@ -94,6 +94,6 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         messages = []
         for v in data.values():
             messages.extend(v if isinstance(v, list) else [str(v)])
-        return resp(502, {'error': '; '.join(map(str, messages)) or 'Не удалось создать платёж'})
+        return resp(502, {'error': '; '.join(map(str, messages)) or 'Не удалось создать платёж', 'paysweb_status': r.status_code, 'paysweb_raw': data})
 
     return resp(502, {'error': 'Некорректный ответ платёжной системы', 'status': r.status_code})
