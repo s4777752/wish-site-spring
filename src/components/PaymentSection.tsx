@@ -4,8 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
-import { useNavigate } from 'react-router-dom';
-import OnePlatModal from './OnePlatModal';
+import PaymentWidgetModal from './PaymentWidgetModal';
 
 interface PaymentSectionProps {
   wish: string;
@@ -31,7 +30,6 @@ const PaymentSection = ({
   const [deliveryMethod, setDeliveryMethod] = useState<'whatsapp'>('whatsapp');
   const [fullName, setFullName] = useState('');
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
-  const navigate = useNavigate();
   return (
     <Card className="border-2 border-indigo-200 shadow-lg animate-scale-in mt-8">
       <CardHeader className="text-center">
@@ -64,7 +62,7 @@ const PaymentSection = ({
                 max="10"
                 value={wishIntensity}
                 onChange={(e) => {
-                  const intensity = parseInt(e.target.value);
+                  const intensity = 10;
                   setWishIntensity(intensity);
                   setSelectedAmount(getAmountFromIntensity(intensity));
                 }}
@@ -109,6 +107,10 @@ const PaymentSection = ({
                 </span>
               ))}
             </div>
+
+            <p className="text-center text-sm font-medium text-red-600">
+              Внимание: в данный момент можно выбрать только максимальную силу желания
+            </p>
           </div>
           
           {/* Визуальная карточка с силой желания */}
@@ -174,18 +176,13 @@ const PaymentSection = ({
               <p className="text-gray-600 mt-3 text-center text-xl font-medium">После оплаты можно будет скачать документ аффирмации ( не обязательно)</p>
             </div>
 
-            <OnePlatModal
+            <PaymentWidgetModal
               isOpen={isPaymentOpen}
               onClose={() => setIsPaymentOpen(false)}
               amount={getAmountFromIntensity(wishIntensity)}
               wish={wish}
               wishIntensity={wishIntensity}
               fullName={fullName}
-              onPaid={(orderId) => {
-                setIsPaymentOpen(false);
-                const amount = getAmountFromIntensity(wishIntensity);
-                navigate(`/payment-success?orderId=${orderId}&amount=${amount}&wish=${encodeURIComponent(wish)}&intensity=${wishIntensity}`);
-              }}
             />
           </div>
         )}

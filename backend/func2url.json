@@ -1,4 +1,3 @@
 {
-  "oneplat-webhook": "https://functions.poehali.dev/92357cf8-0b83-4509-8c3b-8233328274ee",
-  "oneplat-payment": "https://functions.poehali.dev/80df978a-b009-43cf-a5a7-931de0cf3ce6"
+  "paysweb-payment": "https://functions.poehali.dev/66ee48f6-a91a-4d14-bd23-1f152d2ecc04"
 }

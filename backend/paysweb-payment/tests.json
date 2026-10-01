@@ -1,0 +1,7 @@
+{
+  "tests": [
+    {"name": "OPTIONS preflight", "method": "OPTIONS", "path": "/", "expectedStatus": 200},
+    {"name": "POST без amount возвращает ошибку", "method": "POST", "path": "/", "body": {"wish": "test"}, "expectedStatus": 400, "expectedBody": {"error": "string"}, "bodyMatcher": "partial"},
+    {"name": "POST с суммой ниже минимума", "method": "POST", "path": "/", "body": {"amount": 500}, "expectedStatus": 400, "expectedBody": {"error": "string"}, "bodyMatcher": "partial"}
+  ]
+}
