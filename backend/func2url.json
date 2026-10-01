@@ -1,4 +1,4 @@
 {
-  "crocopay-payment": "https://functions.poehali.dev/5f7dce50-8975-41a5-8969-d296e97e8f54",
-  "crocopay-webhook": "https://functions.poehali.dev/9ee637a1-48dc-48b2-a120-6e6c0569976a"
+  "oneplat-webhook": "https://functions.poehali.dev/92357cf8-0b83-4509-8c3b-8233328274ee",
+  "oneplat-payment": "https://functions.poehali.dev/80df978a-b009-43cf-a5a7-931de0cf3ce6"
 }

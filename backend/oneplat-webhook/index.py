@@ -1,5 +1,4 @@
 import hashlib
-import hmac
 import json
 import os
 from typing import Dict, Any
@@ -9,16 +8,17 @@ import psycopg2
 
 def get_db_connection():
     dsn = os.environ['DATABASE_URL']
-    schema = os.environ.get('MAIN_DB_SCHEMA')
-    if schema:
-        return psycopg2.connect(dsn, options=f'-c search_path={schema}', connect_timeout=3)
-    return psycopg2.connect(dsn, connect_timeout=3)
+    return psycopg2.connect(dsn)
+
+
+def get_schema() -> str:
+    return os.environ.get('MAIN_DB_SCHEMA', 'public')
 
 
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Приём webhook от CrocoPay после успешной оплаты, проверка подписи и обновление статуса заказа
-    Args: event - dict с httpMethod, body (timestamp, subtotal, percentage, charge_percentage, charge_fixed, total, sign), queryStringParameters (order_id)
+    Business: Приём callback от 1plat после изменения статуса платежа, проверка подписи signature_v2 и обновление статуса заказа
+    Args: event - dict с httpMethod, body (payment_id, guid, merchant_id, user_id, status, amount, signature_v2)
           context - объект с атрибутами request_id, function_name
     Returns: HTTP response со статусом обработки
     '''
@@ -46,12 +46,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         }
 
     try:
-        params = event.get('queryStringParameters') or {}
-        order_id = params.get('order_id')
-
         body_data = json.loads(event.get('body', '{}'))
 
-        required_fields = ['timestamp', 'subtotal', 'percentage', 'charge_percentage', 'charge_fixed', 'total', 'sign']
+        required_fields = ['payment_id', 'merchant_id', 'amount', 'status', 'signature_v2']
         if not all(f in body_data for f in required_fields):
             return {
                 'statusCode': 400,
@@ -60,16 +57,13 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'isBase64Encoded': False
             }
 
-        client_secret = os.environ['CROCOPAY_CLIENT_SECRET']
+        shop_id = os.environ['ONEPLAT_SHOP_ID']
+        shop_secret = os.environ['ONEPLAT_SHOP_SECRET']
 
-        sign_string = '|'.join(str(body_data[f]) for f in required_fields[:-1])
-        expected_sign = hmac.new(
-            client_secret.encode('utf-8'),
-            sign_string.encode('utf-8'),
-            hashlib.sha256
-        ).hexdigest()
+        sign_source = f"{body_data['merchant_id']}{body_data['amount']}{shop_id}{shop_secret}"
+        expected_sign = hashlib.md5(sign_source.encode('utf-8')).hexdigest()
 
-        if not hmac.compare_digest(expected_sign, body_data['sign']):
+        if expected_sign != body_data['signature_v2']:
             return {
                 'statusCode': 403,
                 'headers': {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'},
@@ -77,17 +71,20 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 'isBase64Encoded': False
             }
 
-        if order_id:
-            conn = get_db_connection()
-            try:
-                with conn.cursor() as cur:
-                    cur.execute(
-                        "UPDATE crocopay_orders SET status = 'Success', updated_at = now() WHERE order_uuid = %s",
-                        (order_id,)
-                    )
-                conn.commit()
-            finally:
-                conn.close()
+        payment_id = str(body_data['payment_id'])
+        status = int(body_data['status'])
+
+        conn = get_db_connection()
+        schema = get_schema()
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    f"UPDATE {schema}.oneplat_orders SET status = %s, updated_at = now() WHERE payment_id = %s",
+                    (status, payment_id)
+                )
+            conn.commit()
+        finally:
+            conn.close()
 
         return {
             'statusCode': 200,
