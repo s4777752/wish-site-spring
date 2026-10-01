@@ -64,19 +64,26 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     success_url = f'{SITE_URL}/payment-success?orderId={order_id}&amount={amount_int}&intensity={intensity}&wish={quote(str(wish))}'
     fail_url = f'{SITE_URL}/payment-cancel?orderId={order_id}'
 
-    r = requests.post(
-        PAYSWEB_URL,
-        data={
-            'amount': amount_int,
-            'merchant_order_id': order_id,
-            'use_card_payment': 'RUB',
-            'api_key': os.environ['PAYSWEB_API_KEY'].strip(),
-            'success_url': success_url,
-            'fail_url': fail_url
-        },
-        allow_redirects=False,
-        timeout=15
-    )
+    try:
+        r = requests.post(
+            PAYSWEB_URL,
+            data={
+                'amount': amount_int,
+                'merchant_order_id': order_id,
+                'use_card_payment': 'RUB',
+                'api_key': os.environ['PAYSWEB_API_KEY'].strip(),
+                'success_url': success_url,
+                'fail_url': fail_url
+            },
+            allow_redirects=False,
+            timeout=(5, 25)
+        )
+    except requests.exceptions.ConnectTimeout:
+        return resp(504, {'error': 'Paysweb не отвечает на соединение (connect timeout)'})
+    except requests.exceptions.ReadTimeout:
+        return resp(504, {'error': 'Paysweb принял запрос, но не ответил за 25 секунд (read timeout)'})
+    except requests.exceptions.RequestException as e:
+        return resp(502, {'error': f'Ошибка связи с Paysweb: {type(e).__name__}'})
 
     location = r.headers.get('Location')
     if location and r.status_code in (301, 302, 303, 307, 308):
