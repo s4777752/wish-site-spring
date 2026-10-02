@@ -1,3 +1,4 @@
 {
+  "paysweb-webhook": "https://functions.poehali.dev/21a3d9b4-a260-4cb2-875c-dab6d367b0f5",
   "paysweb-payment": "https://functions.poehali.dev/66ee48f6-a91a-4d14-bd23-1f152d2ecc04"
 }

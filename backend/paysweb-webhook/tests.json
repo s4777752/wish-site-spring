@@ -1,0 +1,7 @@
+{
+  "tests": [
+    {"name": "OPTIONS preflight", "method": "OPTIONS", "path": "/", "expectedStatus": 200},
+    {"name": "POST без данных", "method": "POST", "path": "/", "body": {}, "expectedStatus": 400, "expectedBody": {"error": "string"}, "bodyMatcher": "partial"},
+    {"name": "POST с неизвестным заказом", "method": "POST", "path": "/", "body": {"status": "successful_payment", "amount": 1000, "merchant_order_id": "no-such-order"}, "expectedStatus": 404, "expectedBody": {"error": "string"}, "bodyMatcher": "partial"}
+  ]
+}

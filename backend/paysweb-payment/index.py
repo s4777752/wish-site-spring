@@ -1,10 +1,13 @@
 import json
 import os
 import uuid
+import psycopg2
 from typing import Dict, Any
 
 SITE_URL = 'https://wish-site-spring.poehali.dev'
 MIN_AMOUNT = 1000
+SCHEMA = 't_p46634317_wish_site_spring'
+NOTICE_URL = 'https://functions.poehali.dev/21a3d9b4-a260-4cb2-875c-dab6d367b0f5'
 
 
 def resp(status: int, body: Dict[str, Any]) -> Dict[str, Any]:
@@ -61,6 +64,18 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     success_url = f'{SITE_URL}/payment-success?orderId={order_id}&amount={amount_int}&intensity={intensity}&wish={quote(str(wish))}'
     fail_url = f'{SITE_URL}/payment-cancel?orderId={order_id}'
 
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                f"INSERT INTO {SCHEMA}.paysweb_orders (order_id, amount, wish, wish_intensity, full_name) "
+                f"VALUES (%s, %s, %s, %s, %s)",
+                (order_id, amount_int, str(wish)[:5000], int(intensity) if str(intensity).isdigit() else None, str(body.get('fullName', ''))[:255])
+            )
+        conn.commit()
+    finally:
+        conn.close()
+
     return resp(200, {
         'order_id': order_id,
         'form_action': 'https://paysweb.click/api/request/',
@@ -70,6 +85,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'use_card_payment': 'RUB',
             'success_url': success_url,
             'fail_url': fail_url,
+            'notice_url': NOTICE_URL,
             'api_key': os.environ['PAYSWEB_API_KEY'].strip()
         }
     })
