@@ -62,7 +62,7 @@ const PaymentSection = ({
                 max="10"
                 value={wishIntensity}
                 onChange={(e) => {
-                  const intensity = 10;
+                  const intensity = Number(e.target.value);
                   setWishIntensity(intensity);
                   setSelectedAmount(getAmountFromIntensity(intensity));
                 }}
@@ -108,9 +108,6 @@ const PaymentSection = ({
               ))}
             </div>
 
-            <p className="text-center text-sm font-medium text-red-600">
-              Внимание: в данный момент можно выбрать только максимальную силу желания
-            </p>
           </div>
           
           {/* Визуальная карточка с силой желания */}
