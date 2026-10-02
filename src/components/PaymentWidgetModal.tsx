@@ -30,10 +30,21 @@ const PaymentWidgetModal = ({ isOpen, onClose, amount, wish, wishIntensity, full
     })
       .then(async (res) => {
         const data = await res.json();
-        if (!res.ok || !data.redirect_url) {
+        if (!res.ok || !data.form_action) {
           throw new Error(data.error || 'Не удалось создать платёж');
         }
-        window.location.href = data.redirect_url;
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = data.form_action;
+        Object.entries(data.fields as Record<string, string>).forEach(([name, value]) => {
+          const input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = name;
+          input.value = value;
+          form.appendChild(input);
+        });
+        document.body.appendChild(form);
+        form.submit();
       })
       .catch((err) => {
         setIsLoading(false);
