@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
-import PaymentWidgetModal from './PaymentWidgetModal';
+import CrocoPayModal from './CrocoPayModal';
 
 interface PaymentSectionProps {
   wish: string;
@@ -173,13 +173,17 @@ const PaymentSection = ({
               <p className="text-gray-600 mt-3 text-center text-xl font-medium">После оплаты можно будет скачать документ аффирмации ( не обязательно)</p>
             </div>
 
-            <PaymentWidgetModal
+            <CrocoPayModal
               isOpen={isPaymentOpen}
               onClose={() => setIsPaymentOpen(false)}
               amount={getAmountFromIntensity(wishIntensity)}
               wish={wish}
               wishIntensity={wishIntensity}
               fullName={fullName}
+              onPaid={(orderId) => {
+                const amount = getAmountFromIntensity(wishIntensity);
+                window.location.href = `/payment-success?orderId=${orderId}&amount=${amount}&intensity=${wishIntensity}&wish=${encodeURIComponent(wish)}`;
+              }}
             />
           </div>
         )}

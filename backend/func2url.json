@@ -1,4 +1,6 @@
 {
+  "crocopay-payment": "https://functions.poehali.dev/9098ea40-c4eb-4cf8-b738-84391ef52a3e",
+  "crocopay-webhook": "https://functions.poehali.dev/b02b4956-6217-49d6-9c93-0c8b675fbd04",
   "paysweb-webhook": "https://functions.poehali.dev/21a3d9b4-a260-4cb2-875c-dab6d367b0f5",
   "paysweb-payment": "https://functions.poehali.dev/66ee48f6-a91a-4d14-bd23-1f152d2ecc04"
 }
