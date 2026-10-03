@@ -50,28 +50,38 @@ def create_payment_link(body: Dict[str, Any]) -> Dict[str, Any]:
     amount_whole = int(round(float(amount)))
     callback_url = f'{WEBHOOK_URL}?order_id={order_id}'
 
-    resp = requests.post(
-        f'{CROCOPAY_HOST}/api/v2/h2h/invoices',
-        headers={
-            'Client-Id': client_id,
-            'Client-Secret': client_secret,
-            'Content-Type': 'application/json'
-        },
-        json={
-            'amount': amount_whole,
-            'currency': 'RUB',
-            'payment_option': payment_option,
-            'callback_url': callback_url
-        },
-        timeout=15
-    )
+    try:
+        resp = requests.post(
+            f'{CROCOPAY_HOST}/api/v2/h2h/invoices',
+            headers={
+                'Client-Id': client_id,
+                'Client-Secret': client_secret,
+                'Content-Type': 'application/json'
+            },
+            json={
+                'amount': amount_whole,
+                'currency': 'RUB',
+                'payment_option': payment_option,
+                'callback_url': callback_url
+            },
+            timeout=15
+        )
+    except requests.exceptions.Timeout:
+        return {'statusCode': 504, 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
+                'body': json.dumps({'error': 'Платёжная система не успела выдать реквизиты. Попробуйте ещё раз через минуту.'}), 'isBase64Encoded': False}
 
-    data = resp.json()
+    try:
+        data = resp.json()
+    except ValueError:
+        data = {}
 
     if resp.status_code != 200:
+        message = data.get('message', '')
+        if 'Requisites not found' in message:
+            message = 'Сейчас нет свободных реквизитов для этого способа оплаты. Попробуйте другой способ или повторите позже.'
         return {'statusCode': resp.status_code,
                 'headers': {**cors_headers(), 'Content-Type': 'application/json'},
-                'body': json.dumps({'error': data.get('message', 'Не удалось создать счёт')}), 'isBase64Encoded': False}
+                'body': json.dumps({'error': message or 'Не удалось создать счёт'}), 'isBase64Encoded': False}
 
     invoice_id = data.get('id')
     card = data.get('card')
