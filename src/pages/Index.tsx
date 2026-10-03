@@ -17,7 +17,7 @@ const Index = () => {
   const [wish, setWish] = useState('');
   const [showPayment, setShowPayment] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState<number | null>(null);
-  const [wishIntensity, setWishIntensity] = useState(10);
+  const [wishIntensity, setWishIntensity] = useState(1);
   const [showConfetti, setShowConfetti] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
   const [showPaymentAnimation, setShowPaymentAnimation] = useState(false);
@@ -124,7 +124,7 @@ const Index = () => {
     // Сбрасываем форму для нового желания
     setWish('');
     setShowPayment(false);
-    setWishIntensity(10);
+    setWishIntensity(1);
   };
 
 
@@ -203,7 +203,7 @@ const Index = () => {
                 setShowSplash(true);
                 setWish('');
                 setShowPayment(false);
-                setWishIntensity(10);
+                setWishIntensity(1);
               }}
             >
               <PaymentMethods
