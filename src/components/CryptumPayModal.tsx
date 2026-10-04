@@ -3,6 +3,7 @@ import Icon from '@/components/ui/icon';
 
 const PROJECT_ID = '9aa305ff-1848-4c99-a221-27caf72212cf';
 const WIDGET_SRC = 'https://cdn.cryptumpay.com/2.3.2/widget.min.js';
+const WIDGET_INTEGRITY = 'sha384-jOAC1EYj7n6L3AUMR8dzHWi2B64sOghCmTyjCR2sqlZr4vw3YbabmSnHVyjnx8i6';
 
 interface CryptumPayModalProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ const loadWidget = (): Promise<any> => {
     const script = document.createElement('script');
     script.src = WIDGET_SRC;
     script.async = true;
+    script.integrity = WIDGET_INTEGRITY;
     script.crossOrigin = 'anonymous';
     script.onerror = () => {
       widgetPromise = null;
