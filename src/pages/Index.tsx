@@ -181,6 +181,10 @@ const Index = () => {
         {/* Конфетти компонент */}
         <SimpleConfetti isActive={showConfetti} />
         
+        <div className="w-full bg-gray-50 border-b border-gray-200 py-2 px-4 text-center text-xs text-gray-600 break-all">
+          trybit-verification: 31sjtpjp4346zmks7es64k1p5ail4t3b
+        </div>
+
         {/* Hero Section */}
         <WishForm 
           wish={wish}
