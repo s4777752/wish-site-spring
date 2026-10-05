@@ -2,6 +2,7 @@ import json
 import os
 import urllib.request
 import urllib.error
+import urllib.parse
 
 CORS = {'Access-Control-Allow-Origin': '*'}
 
@@ -45,8 +46,9 @@ def handler(event: dict, context) -> dict:
         'fail_url': body.get('fail_url', ''),
     }
 
+    api_url = 'https://coinso.io/api/payment/create'
     req = urllib.request.Request(
-        os.environ['COINSO_API_URL'],
+        api_url,
         data=json.dumps(payload).encode('utf-8'),
         headers={
             'Content-Type': 'application/json',
@@ -61,6 +63,7 @@ def handler(event: dict, context) -> dict:
         print('coinso http error:', e.code, e.read().decode('utf-8', 'ignore')[:500])
         return resp(502, {'error': 'Платёжная система отклонила запрос', 'status': e.code})
     except urllib.error.URLError as e:
+        print('coinso url error, host:', urllib.parse.urlparse(api_url).netloc or '(пусто)', 'len:', len(api_url))
         return resp(502, {'error': 'Не удалось подключиться к Coinso, проверьте COINSO_API_URL', 'reason': str(e.reason)})
 
     print('coinso response:', json.dumps(data, ensure_ascii=False)[:500])
