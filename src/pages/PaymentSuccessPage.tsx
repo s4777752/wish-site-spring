@@ -36,7 +36,9 @@ const PaymentSuccessPage: React.FC = () => {
       stored = {};
     }
 
-    if (!orderId || !stored.invoiceId || stored.orderId !== orderId) {
+    const invoiceId = searchParams.get('invoice_id') || (stored.orderId === orderId ? stored.invoiceId : '');
+
+    if (!orderId || !invoiceId) {
       setPayState('unpaid');
       return;
     }
@@ -45,7 +47,7 @@ const PaymentSuccessPage: React.FC = () => {
       attempts += 1;
       try {
         const r = await fetch(
-          `${func2url['coinso-status']}?invoice_id=${encodeURIComponent(stored.invoiceId!)}&order_id=${encodeURIComponent(orderId)}`
+          `${func2url['coinso-status']}?invoice_id=${encodeURIComponent(invoiceId)}&order_id=${encodeURIComponent(orderId)}`
         );
         const data = await r.json();
         if (cancelled) return;
