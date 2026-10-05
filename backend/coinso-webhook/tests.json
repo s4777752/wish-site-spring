@@ -1,0 +1,1 @@
+{"tests": [{"name": "Ignores other events", "method": "POST", "path": "/", "body": {"event": "payment.pending"}, "expectedStatus": 200, "expectedBody": {"ok": true}, "bodyMatcher": "partial"}]}
