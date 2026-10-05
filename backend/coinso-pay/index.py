@@ -59,6 +59,8 @@ def handler(event: dict, context) -> dict:
             data = json.loads(r.read().decode('utf-8'))
     except urllib.error.HTTPError as e:
         return resp(502, {'error': 'Платёжная система отклонила запрос', 'status': e.code})
+    except urllib.error.URLError as e:
+        return resp(502, {'error': 'Не удалось подключиться к Coinso, проверьте COINSO_API_URL', 'reason': str(e.reason)})
 
     if not data.get('success') or not data.get('payment_url'):
         return resp(502, {'error': 'Не удалось создать счёт'})
