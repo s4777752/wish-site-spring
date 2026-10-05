@@ -1,0 +1,1 @@
+{"tests": [{"name": "Rejects bad invoice id", "method": "GET", "path": "/?invoice_id=!", "expectedStatus": 400, "expectedBody": {"paid": false}, "bodyMatcher": "partial"}]}

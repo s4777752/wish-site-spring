@@ -44,6 +44,7 @@ const CoinsoPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fullName
       .then((r) => r.json())
       .then((data) => {
         if (data.payment_url) {
+          localStorage.setItem('coinso_order', JSON.stringify({ orderId, invoiceId: data.invoice_id }));
           window.location.href = data.payment_url;
         } else {
           throw new Error('no url');

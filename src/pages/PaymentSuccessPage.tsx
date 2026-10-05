@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 import { generateAndDownloadDocument, DocumentData } from '@/components/DocumentGenerator';
+import func2url from '../../backend/func2url.json';
 
 const PaymentSuccessPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -21,8 +22,56 @@ const PaymentSuccessPage: React.FC = () => {
   const [documentData, setDocumentData] = useState<DocumentData | null>(null);
   const [emailSent, setEmailSent] = useState(false);
 
-  // Автоматически генерируем данные документа при загрузке страницы
+  const [payState, setPayState] = useState<'checking' | 'paid' | 'unpaid' | 'error'>('checking');
+
   useEffect(() => {
+    let cancelled = false;
+    let attempts = 0;
+    let timer: ReturnType<typeof setTimeout>;
+
+    let stored: { orderId?: string; invoiceId?: string } = {};
+    try {
+      stored = JSON.parse(localStorage.getItem('coinso_order') || '{}');
+    } catch {
+      stored = {};
+    }
+
+    if (!orderId || !stored.invoiceId || stored.orderId !== orderId) {
+      setPayState('unpaid');
+      return;
+    }
+
+    const check = async () => {
+      attempts += 1;
+      try {
+        const r = await fetch(
+          `${func2url['coinso-status']}?invoice_id=${encodeURIComponent(stored.invoiceId!)}&order_id=${encodeURIComponent(orderId)}`
+        );
+        const data = await r.json();
+        if (cancelled) return;
+        if (data.paid) {
+          setPayState('paid');
+          return;
+        }
+        if (attempts < 6) {
+          timer = setTimeout(check, 3000);
+        } else {
+          setPayState('unpaid');
+        }
+      } catch {
+        if (!cancelled) setPayState('error');
+      }
+    };
+    check();
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [orderId]);
+
+  useEffect(() => {
+    if (payState !== 'paid') return;
     if (wish && amount) {
       const docData: DocumentData = {
         wish: decodeURIComponent(wish),
@@ -38,7 +87,7 @@ const PaymentSuccessPage: React.FC = () => {
       // Автоматически отправляем документ на email
       sendDocumentByEmail(docData);
     }
-  }, [wish, amount, intensity, email, phone, orderId]);
+  }, [payState, wish, amount, intensity, email, phone, orderId]);
 
   const sendDocumentByEmail = async (docData: DocumentData) => {
     if (emailSent || isEmailSending) return;
@@ -93,6 +142,43 @@ const PaymentSuccessPage: React.FC = () => {
   const handleBackToHome = () => {
     navigate('/');
   };
+
+  if (payState !== 'paid') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+          {payState === 'checking' ? (
+            <>
+              <div className="animate-spin w-10 h-10 mx-auto mb-4 border-4 border-purple-600 border-t-transparent rounded-full"></div>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">Проверяем оплату...</h1>
+              <p className="text-gray-600">Это займёт несколько секунд</p>
+            </>
+          ) : (
+            <>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                {payState === 'error' ? 'Не удалось проверить оплату' : 'Оплата не найдена'}
+              </h1>
+              <p className="text-gray-600 mb-6">
+                Если вы уже оплатили, подождите минуту и обновите страницу.
+              </p>
+              <button
+                onClick={() => window.location.reload()}
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-xl mb-3"
+              >
+                Проверить ещё раз
+              </button>
+              <button
+                onClick={handleBackToHome}
+                className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-xl"
+              >
+                Вернуться на главную
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
