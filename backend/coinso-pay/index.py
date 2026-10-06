@@ -2,7 +2,7 @@ import json
 import os
 import urllib.request
 import urllib.error
-import urllib.parse
+import time
 
 CORS = {'Access-Control-Allow-Origin': '*'}
 
@@ -56,15 +56,23 @@ def handler(event: dict, context) -> dict:
         },
         method='POST',
     )
-    try:
-        with urllib.request.urlopen(req, timeout=4) as r:
-            data = json.loads(r.read().decode('utf-8'))
-    except urllib.error.HTTPError as e:
-        print('coinso http error:', e.code, e.read().decode('utf-8', 'ignore')[:500])
-        return resp(502, {'error': 'Платёжная система отклонила запрос', 'status': e.code})
-    except urllib.error.URLError as e:
-        print('coinso url error, host:', urllib.parse.urlparse(api_url).netloc or '(пусто)', 'len:', len(api_url))
-        return resp(502, {'error': 'Не удалось подключиться к Coinso, проверьте COINSO_API_URL', 'reason': str(e.reason)})
+    data = None
+    last_reason = ''
+    for attempt in range(1, 4):
+        try:
+            with urllib.request.urlopen(req, timeout=3) as r:
+                data = json.loads(r.read().decode('utf-8'))
+            break
+        except urllib.error.HTTPError as e:
+            print('coinso http error:', e.code, e.read().decode('utf-8', 'ignore')[:500])
+            return resp(502, {'error': 'Платёжная система отклонила запрос', 'status': e.code})
+        except (urllib.error.URLError, OSError) as e:
+            last_reason = str(getattr(e, 'reason', e))
+            print(f'coinso network error, attempt {attempt}:', last_reason)
+            time.sleep(0.4)
+
+    if data is None:
+        return resp(502, {'error': 'Не удалось подключиться к Coinso, попробуйте ещё раз', 'reason': last_reason})
 
     print('coinso response:', json.dumps(data, ensure_ascii=False)[:500])
 
