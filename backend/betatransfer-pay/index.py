@@ -46,8 +46,9 @@ def handler(event: dict, context) -> dict:
         'currency': str(body.get('currency', 'RUB')),
         'orderId': str(body.get('orderId', ''))[:100],
     }
-    if body.get('paymentSystem'):
-        data['paymentSystem'] = str(body['paymentSystem'])
+    for field in ('paymentSystem', 'urlResult', 'urlSuccess', 'urlFail'):
+        if body.get(field):
+            data[field] = str(body[field])
 
     data['sign'] = hashlib.md5((''.join(data.values()) + secret).encode('utf-8')).hexdigest()
 
@@ -72,4 +73,11 @@ def handler(event: dict, context) -> dict:
     except ValueError:
         return resp(502, {'error': 'Непонятный ответ платёжной системы', 'details': raw[:500]})
 
-    return resp(200, {'result': parsed})
+    if not isinstance(parsed, dict) or not parsed.get('url'):
+        return resp(502, {'error': 'Не удалось создать счёт', 'details': parsed})
+
+    return resp(200, {
+        'payment_url': parsed['url'],
+        'invoice_id': parsed.get('id'),
+        'order_id': parsed.get('orderId'),
+    })
