@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Icon from '@/components/ui/icon';
 import Fireworks from '@/components/Fireworks';
 
 interface FinalScreenProps {
@@ -33,7 +34,17 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
       ))}
       <Fireworks />
       <div className="relative text-center max-w-md">
-        <div className="text-6xl mb-6">✨</div>
+        <div className="flex items-center justify-center gap-3 mb-6">
+          {[0, 0.4, 0.8].map((d) => (
+            <Icon
+              key={d}
+              name="Star"
+              size={44}
+              className="animate-star-glow fill-current"
+              style={{ animationDelay: `${d}s` }}
+            />
+          ))}
+        </div>
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Ваше желание отправлено во Вселенную</h1>
         <p className="text-lg text-indigo-100 mb-8">
           Документ аффирмации сохранён. Верьте, отпустите и ждите — всё сбудется.
