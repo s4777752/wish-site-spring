@@ -45,8 +45,8 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
             />
           ))}
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Ваше желание отправлено во Вселенную</h1>
-        <p className="text-lg text-indigo-100 mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-text-pulse">Ваше желание отправлено во Вселенную</h1>
+        <p className="text-lg text-indigo-100 mb-8 animate-text-pulse">
           Документ аффирмации сохранён. Верьте, отпустите и ждите — всё сбудется.
         </p>
         <button
