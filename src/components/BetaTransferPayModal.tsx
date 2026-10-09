@@ -34,7 +34,7 @@ const BetaTransferPayModal = ({ isOpen, onClose, amount, wish, wishIntensity }: 
         </div>
 
         <iframe
-          src="https://donat24.ru/w/89"
+          src="https://donat24.ru/w/90"
           title="Оплата"
           width="100%"
           height="300"
