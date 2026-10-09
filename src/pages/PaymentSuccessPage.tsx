@@ -3,7 +3,6 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 import { generateAndDownloadDocument, DocumentData } from '@/components/DocumentGenerator';
-import FinalScreen from '@/components/FinalScreen';
 import func2url from '../../backend/func2url.json';
 
 const PaymentSuccessPage: React.FC = () => {
@@ -22,7 +21,6 @@ const PaymentSuccessPage: React.FC = () => {
   const [isEmailSending, setIsEmailSending] = useState(false);
   const [documentData, setDocumentData] = useState<DocumentData | null>(null);
   const [emailSent, setEmailSent] = useState(false);
-  const [showFinal, setShowFinal] = useState(false);
 
   const [payState, setPayState] = useState<'checking' | 'paid' | 'unpaid' | 'error'>('checking');
 
@@ -132,7 +130,6 @@ const PaymentSuccessPage: React.FC = () => {
     try {
       // Используем локальную генерацию документа
       generateAndDownloadDocument(documentData);
-      setShowFinal(true);
       
       console.log(`📄 Документ #${documentData.documentId} скачан локально`);
     } catch (error) {
@@ -152,10 +149,6 @@ const PaymentSuccessPage: React.FC = () => {
   const handleBackToHome = () => {
     navigate('/');
   };
-
-  if (showFinal) {
-    return <FinalScreen onHome={handleBackToHome} />;
-  }
 
   if (payState !== 'paid') {
     return (
@@ -251,18 +244,12 @@ const PaymentSuccessPage: React.FC = () => {
           ) : (
             <>
               <Icon name="Download" size={20} />
-              📄 Скачать документ аффирмации (по желанию)
+              📄 Скачать документ аффирмации
             </>
           )}
         </button>
 
-        <button
-          onClick={() => setShowFinal(true)}
-          className="w-full bg-white border border-purple-200 hover:bg-purple-50 text-purple-700 font-medium py-3 px-6 rounded-xl transition-colors duration-200 mb-4"
-        >
-          Продолжить без скачивания
-        </button>
-
+        {/* Дополнительные кнопки */}
         <button
           onClick={handleBackToHome}
           className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors duration-200 mb-4"
