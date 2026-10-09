@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
-import CoinsoPayModal from './CoinsoPayModal';
+import BetaTransferPayModal from './BetaTransferPayModal';
 
 interface PaymentSectionProps {
   wish: string;
@@ -173,7 +173,7 @@ const PaymentSection = ({
               <p className="text-gray-600 mt-3 text-center text-xl font-medium">После оплаты можно будет скачать документ аффирмации ( не обязательно)</p>
             </div>
 
-            <CoinsoPayModal
+            <BetaTransferPayModal
               isOpen={isPaymentOpen}
               onClose={() => setIsPaymentOpen(false)}
               amount={getAmountFromIntensity(wishIntensity)}
