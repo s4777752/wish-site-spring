@@ -251,12 +251,18 @@ const PaymentSuccessPage: React.FC = () => {
           ) : (
             <>
               <Icon name="Download" size={20} />
-              📄 Скачать документ аффирмации
+              📄 Скачать документ аффирмации (по желанию)
             </>
           )}
         </button>
 
-        {/* Дополнительные кнопки */}
+        <button
+          onClick={() => setShowFinal(true)}
+          className="w-full bg-white border border-purple-200 hover:bg-purple-50 text-purple-700 font-medium py-3 px-6 rounded-xl transition-colors duration-200 mb-4"
+        >
+          Продолжить без скачивания
+        </button>
+
         <button
           onClick={handleBackToHome}
           className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors duration-200 mb-4"
