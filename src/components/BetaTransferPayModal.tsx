@@ -9,8 +9,13 @@ interface PayWidgetModalProps {
   fullName: string;
 }
 
-const BetaTransferPayModal = ({ isOpen, onClose, amount }: PayWidgetModalProps) => {
+const BetaTransferPayModal = ({ isOpen, onClose, amount, wish, wishIntensity }: PayWidgetModalProps) => {
   if (!isOpen) return null;
+
+  const handlePaid = () => {
+    const orderId = `order-${Date.now()}`;
+    window.location.href = `/payment-success?manual=1&orderId=${orderId}&amount=${amount}&intensity=${wishIntensity}&wish=${encodeURIComponent(wish)}`;
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
@@ -35,6 +40,13 @@ const BetaTransferPayModal = ({ isOpen, onClose, amount }: PayWidgetModalProps) 
           height="300"
           frameBorder="0"
         />
+
+        <button
+          onClick={handlePaid}
+          className="w-full mt-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl"
+        >
+          Я оплатил
+        </button>
       </div>
     </div>
   );

@@ -38,6 +38,11 @@ const PaymentSuccessPage: React.FC = () => {
 
     const invoiceId = searchParams.get('invoice_id') || (stored.orderId === orderId ? stored.invoiceId : '');
 
+    if (searchParams.get('manual') === '1' && orderId) {
+      setPayState('paid');
+      return;
+    }
+
     if (!orderId || !invoiceId) {
       setPayState('unpaid');
       return;
