@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Fireworks from '@/components/Fireworks';
 
 interface FinalScreenProps {
   onHome: () => void;
@@ -30,6 +31,7 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
           }}
         />
       ))}
+      <Fireworks />
       <div className="relative text-center max-w-md">
         <div className="text-6xl mb-6">✨</div>
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Ваше желание отправлено во Вселенную</h1>
