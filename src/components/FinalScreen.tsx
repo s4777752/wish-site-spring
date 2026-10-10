@@ -51,7 +51,7 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
         </p>
         <button
           onClick={onHome}
-          className="bg-white text-indigo-900 font-semibold py-3 px-8 rounded-xl hover:bg-indigo-50 transition-colors"
+          className="bg-white text-indigo-900 font-semibold text-sm py-1.5 px-4 rounded-lg hover:bg-indigo-50 transition-colors"
         >
           Вернуться на главную
         </button>
