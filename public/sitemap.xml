@@ -1,50 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
-        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" 
-        xmlns:xhtml="http://www.w3.org/1999/xhtml" 
-        xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" 
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" 
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-  
-  <!-- Главная страница -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://wish-site-spring.poehali.dev/</loc>
-    <lastmod>2024-12-15</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
-    <mobile:mobile/>
-    <image:image>
-      <image:loc>https://cdn.poehali.dev/internal/img/og.png</image:loc>
-      <image:title>САЙТ ЖЕЛАНИЙ - Исполнение желаний онлайн</image:title>
-      <image:caption>Загадайте желание и исполните мечту уже сегодня</image:caption>
-    </image:image>
   </url>
-  
-  <!-- Страница аффирмаций -->
-  <url>
-    <loc>https://wish-site-spring.poehali.dev/affirmation</loc>
-    <lastmod>2024-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <mobile:mobile/>
-  </url>
-  
-  <!-- Страница документа -->
-  <url>
-    <loc>https://wish-site-spring.poehali.dev/document</loc>
-    <lastmod>2024-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-    <mobile:mobile/>
-  </url>
-  
-  <!-- Пользовательское соглашение -->
   <url>
     <loc>https://wish-site-spring.poehali.dev/terms</loc>
-    <lastmod>2024-12-20</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
-    <mobile:mobile/>
   </url>
-  
 </urlset>
