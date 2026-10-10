@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import Icon from '@/components/ui/icon';
 import { sendWishAffirmationDocument } from '@/components/DocumentEmailService';
 import { generateAndDownloadDocument, DocumentData } from '@/components/DocumentGenerator';
+import SimpleConfetti from '@/components/SimpleConfetti';
 import FinalScreen from '@/components/FinalScreen';
 import func2url from '../../backend/func2url.json';
 
@@ -197,6 +198,7 @@ const PaymentSuccessPage: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
+      <SimpleConfetti isActive={true} />
       <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
         {/* Иконка успеха */}
         <div className="w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
@@ -206,7 +208,7 @@ const PaymentSuccessPage: React.FC = () => {
         </div>
 
         {/* Заголовок */}
-        <h1 className="text-lg md:text-xl font-bold italic mb-6 leading-snug bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+        <h1 className="animate-pulse text-lg md:text-xl font-bold italic mb-6 leading-snug bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
           Документ начнёт действовать после оплаты силы
         </h1>
 
