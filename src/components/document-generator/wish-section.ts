@@ -1,7 +1,9 @@
 import { DocumentData } from './types';
-import { wrapText } from './utils';
+import { wrapText, TOP_BLOCKS_OFFSET } from './utils';
 
 export function drawWishSection(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, documentData: DocumentData) {
+  ctx.save();
+  ctx.translate(0, TOP_BLOCKS_OFFSET);
   const wishBox = {
     x: 120,
     y: 300,
@@ -37,11 +39,13 @@ export function drawWishSection(ctx: CanvasRenderingContext2D, canvas: HTMLCanva
     ctx.fillText(line, canvas.width/2, wishBox.y + 90 + (index * 28));
   });
   
-  const paramsY = wishBox.y + wishBox.height + 80;
+  const paramsY = wishBox.y + wishBox.height + 50;
   ctx.fillStyle = '#60a5fa';
   ctx.font = 'bold 24px sans-serif';
   ctx.fillText(`Уровень силы: ${documentData.intensity}/10`, canvas.width/2, paramsY);
   ctx.fillText(`Энергетический вклад: ${documentData.amount} ₽`, canvas.width/2, paramsY + 40);
   
-  return paramsY + 100;
+  ctx.restore();
+
+  return paramsY + TOP_BLOCKS_OFFSET + 80;
 }

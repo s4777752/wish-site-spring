@@ -16,3 +16,5 @@ export function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: 
   lines.push(currentLine);
   return lines;
 }
+
+export const TOP_BLOCKS_OFFSET = 114;

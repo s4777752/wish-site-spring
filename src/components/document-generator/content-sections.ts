@@ -10,7 +10,7 @@ export function drawAffirmationsSection(ctx: CanvasRenderingContext2D, canvas: H
   ctx.textAlign = 'center';
   ctx.fillText('ПЕРСОНАЛЬНЫЕ АФФИРМАЦИИ', canvas.width/2, affirmationY);
   
-  affirmationY += 80;
+  affirmationY += 60;
   
   affirmationLines.forEach((line, index) => {
     if (line.trim()) {
@@ -34,7 +34,7 @@ export function drawAffirmationsSection(ctx: CanvasRenderingContext2D, canvas: H
           ctx.fillText(wrappedLine, canvas.width/2, affirmationY + (lineIndex * 28));
         });
         
-        affirmationY += wrappedLines.length * 28 + 50;
+        affirmationY += wrappedLines.length * 28 + 30;
       }
     }
   });

@@ -1,4 +1,8 @@
+import { TOP_BLOCKS_OFFSET } from './utils';
+
 export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, documentId: string, activationDateStr: string, userName?: string) {
+  ctx.save();
+  ctx.translate(0, TOP_BLOCKS_OFFSET);
   const titleBg = ctx.createLinearGradient(0, 120, 0, 280);
   titleBg.addColorStop(0, 'rgba(30, 64, 175, 0.4)');
   titleBg.addColorStop(0.5, 'rgba(59, 130, 246, 0.6)');
@@ -52,4 +56,5 @@ export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElem
   ctx.moveTo(200, lineY);
   ctx.lineTo(canvas.width - 200, lineY);
   ctx.stroke();
+  ctx.restore();
 }
