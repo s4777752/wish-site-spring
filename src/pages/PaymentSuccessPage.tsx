@@ -206,7 +206,7 @@ const PaymentSuccessPage: React.FC = () => {
         </div>
 
         {/* Заголовок */}
-        <h1 className="text-xl md:text-2xl font-bold italic mb-6 leading-snug bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+        <h1 className="text-lg md:text-xl font-bold italic mb-6 leading-snug bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
           Документ начнёт действовать после оплаты силы
         </h1>
 
