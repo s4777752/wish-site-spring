@@ -18,4 +18,4 @@ export function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: 
 }
 
 export const TOP_BLOCKS_OFFSET = 114;
-export const WISH_EXTRA_OFFSET = 0;
+export const WISH_EXTRA_OFFSET = 60;

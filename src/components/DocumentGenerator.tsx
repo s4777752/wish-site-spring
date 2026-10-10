@@ -7,7 +7,7 @@ import {
   drawBorders, 
   drawCornerDecorations 
 } from './document-generator/canvas-setup';
-import { drawHeader, drawDocumentLabel } from './document-generator/header-section';
+import { drawHeader, drawDocumentLabel, drawStarsBetweenBlocks } from './document-generator/header-section';
 import { drawWishSection } from './document-generator/wish-section';
 import { drawAffirmationsSection } from './document-generator/content-sections';
 import { drawFooterInfo, drawSeal, drawBottomText } from './document-generator/footer-section';
@@ -45,6 +45,7 @@ export const generateAndDownloadDocument = (documentData: DocumentData) => {
   drawCornerDecorations(ctx, canvas);
   drawHeader(ctx, canvas, documentId, activationDateStr, documentData.userName);
   drawDocumentLabel(ctx, canvas);
+  drawStarsBetweenBlocks(ctx, canvas);
   
   const affirmationStartY = drawWishSection(ctx, canvas, documentData);
   drawAffirmationsSection(ctx, canvas, documentData.wish, affirmationStartY);

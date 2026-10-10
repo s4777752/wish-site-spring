@@ -78,15 +78,19 @@ export function drawDocumentLabel(ctx: CanvasRenderingContext2D, canvas: HTMLCan
   ctx.save();
   ctx.fillStyle = '#ffffff';
   ctx.textAlign = 'center';
-  ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
-  ctx.shadowBlur = 10;
-
-  drawStar(ctx, canvas.width / 2, 120, 16);
-  drawStar(ctx, canvas.width / 2 - 290, 165, 16);
-  drawStar(ctx, canvas.width / 2 + 290, 165, 16);
-
-  ctx.shadowBlur = 0;
   ctx.font = 'bold 72px serif';
   ctx.fillText('ДОКУМЕНТ', canvas.width / 2, 190);
+  ctx.restore();
+}
+
+export function drawStarsBetweenBlocks(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+  const top = 120 + 160 + TOP_BLOCKS_OFFSET;
+  ctx.save();
+  ctx.fillStyle = '#ffffff';
+  ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
+  ctx.shadowBlur = 8;
+  drawStar(ctx, canvas.width / 2, top + 40, 16);
+  drawStar(ctx, 140, top + 40, 16);
+  drawStar(ctx, canvas.width - 140, top + 40, 16);
   ctx.restore();
 }
