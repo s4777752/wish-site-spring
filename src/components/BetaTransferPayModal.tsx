@@ -20,9 +20,10 @@ const BetaTransferPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fu
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg p-6 max-w-lg w-full max-h-[95vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4">
+        <div className="relative mb-4 text-center">
           <h3 className="text-2xl font-bold text-gray-800">Оплата</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <p className="text-xs text-gray-500">донат</p>
+          <button onClick={onClose} className="absolute top-0 right-0 text-gray-400 hover:text-gray-600">
             <Icon name="X" size={24} />
           </button>
         </div>
