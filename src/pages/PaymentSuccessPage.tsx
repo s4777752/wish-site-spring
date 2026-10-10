@@ -17,6 +17,7 @@ const PaymentSuccessPage: React.FC = () => {
   const email = searchParams.get('email') || '';
   const phone = searchParams.get('phone') || '';
   const orderId = searchParams.get('orderId') || '';
+  const userName = searchParams.get('name') || 'Пользователь';
 
   const [isDownloading, setIsDownloading] = useState(false);
   const [isEmailSending, setIsEmailSending] = useState(false);
@@ -87,7 +88,7 @@ const PaymentSuccessPage: React.FC = () => {
         intensity: parseInt(intensity),
         amount: parseInt(amount),
         email: email || 'user@example.com',
-        userName: 'Пользователь',
+        userName,
         documentId: orderId || `WD${Date.now()}${Math.random().toString(36).substring(2, 7).toUpperCase()}`
       };
       
@@ -96,7 +97,7 @@ const PaymentSuccessPage: React.FC = () => {
       // Автоматически отправляем документ на email
       sendDocumentByEmail(docData);
     }
-  }, [payState, wish, amount, intensity, email, phone, orderId]);
+  }, [payState, wish, amount, intensity, email, phone, orderId, userName]);
 
   const sendDocumentByEmail = async (docData: DocumentData) => {
     if (emailSent || isEmailSending) return;

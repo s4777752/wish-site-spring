@@ -28,7 +28,7 @@ const CoinsoPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fullName
 
     const orderId = `order-${Date.now()}`;
     const origin = window.location.origin;
-    const successUrl = `${origin}/payment-success?orderId=${orderId}&amount=${amount}&intensity=${wishIntensity}&wish=${encodeURIComponent(wish)}`;
+    const successUrl = `${origin}/payment-success?orderId=${orderId}&amount=${amount}&intensity=${wishIntensity}&wish=${encodeURIComponent(wish)}&name=${encodeURIComponent(fullName)}`;
 
     fetch(func2url['coinso-pay'], {
       method: 'POST',

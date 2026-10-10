@@ -5,13 +5,13 @@ export function drawFooterInfo(ctx: CanvasRenderingContext2D, canvas: HTMLCanvas
   const docInfoY = canvas.height - 280;
   
   ctx.fillStyle = '#000000';
-  ctx.font = 'bold 24px serif';
+  ctx.font = 'bold 32px serif';
   ctx.textAlign = 'left';
-  ctx.fillText(`Документ №: ${documentId}`, docInfoX, docInfoY - 20);
+  ctx.fillText(`Документ №: ${documentId}`, docInfoX, docInfoY - 30);
   
-  ctx.font = '20px serif';
+  ctx.font = '28px serif';
   ctx.fillText(`Дата активации:`, docInfoX, docInfoY + 20);
-  ctx.fillText(activationDateStr, docInfoX, docInfoY + 50);
+  ctx.fillText(activationDateStr, docInfoX, docInfoY + 58);
 }
 
 export function drawSeal(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, documentId: string, currentDate: string) {
@@ -96,7 +96,7 @@ export function drawSeal(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElemen
 
 export function drawBottomText(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, documentData: DocumentData) {
   ctx.fillStyle = '#ef4444';
-  ctx.font = 'bold 22px serif';
+  ctx.font = 'bold 30px serif';
   ctx.textAlign = 'center';
   ctx.fillText('⚠️ ДОКУМЕНТ ДЕЙСТВУЕТ ПОСЛЕ ОПЛАТЫ СИЛЫ ⚠️', canvas.width/2, canvas.height - 100);
 }
