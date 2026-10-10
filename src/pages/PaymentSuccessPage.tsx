@@ -208,7 +208,11 @@ const PaymentSuccessPage: React.FC = () => {
         </div>
 
         {/* Заголовок */}
-        <h1 className="animate-pulse text-lg md:text-xl font-bold italic mb-6 leading-snug bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+        <style>{`@keyframes grow-shrink{0%,100%{transform:scale(0.92)}50%{transform:scale(1.08)}}`}</style>
+        <h1
+          style={{ animation: 'grow-shrink 2s ease-in-out infinite' }}
+          className="text-lg md:text-xl font-bold italic mb-6 leading-snug bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
+        >
           Документ начнёт действовать после оплаты силы
         </h1>
 
