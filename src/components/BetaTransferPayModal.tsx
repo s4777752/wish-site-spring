@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Icon from '@/components/ui/icon';
 
 interface PayWidgetModalProps {
@@ -11,14 +10,7 @@ interface PayWidgetModalProps {
 }
 
 const BetaTransferPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fullName }: PayWidgetModalProps) => {
-  const [copied, setCopied] = useState<'amount' | 'name' | null>(null);
   if (!isOpen) return null;
-
-  const copy = (value: string, key: 'amount' | 'name') => {
-    navigator.clipboard?.writeText(value);
-    setCopied(key);
-    setTimeout(() => setCopied(null), 1500);
-  };
 
   const handlePaid = () => {
     const orderId = `order-${Date.now()}`;
@@ -35,47 +27,41 @@ const BetaTransferPayModal = ({ isOpen, onClose, amount, wish, wishIntensity, fu
           </button>
         </div>
 
-        <div className="bg-gray-50 p-3 rounded-lg mb-4 space-y-3">
-          <div className="flex items-center justify-between gap-3">
-            <div>
-              <p className="text-sm text-gray-600">Сумма к оплате:</p>
-              <p className="text-2xl font-bold text-purple-600">{amount} ₽</p>
-            </div>
-            <button
-              onClick={() => copy(String(amount), 'amount')}
-              className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800"
-            >
-              <Icon name={copied === 'amount' ? 'Check' : 'Copy'} size={16} />
-              {copied === 'amount' ? 'Скопировано' : 'Копировать'}
-            </button>
-          </div>
-          <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-3">
-            <div className="min-w-0">
-              <p className="text-sm text-gray-600">Имя:</p>
-              <p className="text-lg font-semibold text-gray-800 truncate">{fullName}</p>
-            </div>
-            <button
-              onClick={() => copy(fullName, 'name')}
-              className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800 shrink-0"
-            >
-              <Icon name={copied === 'name' ? 'Check' : 'Copy'} size={16} />
-              {copied === 'name' ? 'Скопировано' : 'Копировать'}
-            </button>
-          </div>
-          <p className="text-xs text-gray-500">Вставьте имя и сумму в окне оплаты ниже</p>
-        </div>
-
-        <iframe
-          src="https://donat24.ru/w/90"
-          title="Оплата"
-          width="100%"
-          height="300"
-          frameBorder="0"
-        />
+        <form
+          action="https://donat24.ru/index.php"
+          method="post"
+          target="_blank"
+          className="space-y-3"
+        >
+          <input type="hidden" name="url" value="w" />
+          <input type="hidden" name="p" value="90" />
+          <input type="hidden" name="widget" value="90" />
+          <input
+            type="text"
+            name="name"
+            defaultValue={fullName}
+            placeholder="Ваше имя"
+            className="w-full border border-gray-300 rounded-lg px-4 py-3"
+          />
+          <input
+            type="number"
+            name="total"
+            defaultValue={amount}
+            placeholder="Сумма оплаты"
+            required
+            className="w-full border border-gray-300 rounded-lg px-4 py-3"
+          />
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl"
+          >
+            Оплатить {amount} ₽
+          </button>
+        </form>
 
         <button
           onClick={handlePaid}
-          className="w-full mt-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-xl"
+          className="w-full mt-4 border border-purple-600 text-purple-700 hover:bg-purple-50 font-semibold py-3 px-6 rounded-xl"
         >
           Я оплатил
         </button>
