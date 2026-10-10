@@ -1,9 +1,9 @@
 import { DocumentData } from './types';
-import { wrapText, TOP_BLOCKS_OFFSET } from './utils';
+import { wrapText, TOP_BLOCKS_OFFSET, WISH_EXTRA_OFFSET } from './utils';
 
 export function drawWishSection(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement, documentData: DocumentData) {
   ctx.save();
-  ctx.translate(0, TOP_BLOCKS_OFFSET);
+  ctx.translate(0, TOP_BLOCKS_OFFSET + WISH_EXTRA_OFFSET);
   const wishBox = {
     x: 120,
     y: 300,
@@ -47,5 +47,5 @@ export function drawWishSection(ctx: CanvasRenderingContext2D, canvas: HTMLCanva
   
   ctx.restore();
 
-  return paramsY + TOP_BLOCKS_OFFSET + 80;
+  return paramsY + TOP_BLOCKS_OFFSET + WISH_EXTRA_OFFSET + 80;
 }

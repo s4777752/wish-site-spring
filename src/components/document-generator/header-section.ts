@@ -58,3 +58,36 @@ export function drawHeader(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElem
   ctx.stroke();
   ctx.restore();
 }
+
+function drawStar(ctx: CanvasRenderingContext2D, cx: number, cy: number, outer: number) {
+  const inner = outer * 0.45;
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const r = i % 2 === 0 ? outer : inner;
+    const a = -Math.PI / 2 + (Math.PI * i) / 5;
+    const x = cx + Math.cos(a) * r;
+    const y = cy + Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+export function drawDocumentLabel(ctx: CanvasRenderingContext2D, canvas: HTMLCanvasElement) {
+  const top = 120 + 160 + TOP_BLOCKS_OFFSET;
+  ctx.save();
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
+  ctx.shadowBlur = 8;
+
+  drawStar(ctx, canvas.width / 2, top + 22, 14);
+  drawStar(ctx, 140, top + 45, 14);
+  drawStar(ctx, canvas.width - 140, top + 45, 14);
+
+  ctx.shadowBlur = 0;
+  ctx.font = 'bold 28px serif';
+  ctx.fillText('ДОКУМЕНТ', canvas.width / 2, top + 62);
+  ctx.restore();
+}
