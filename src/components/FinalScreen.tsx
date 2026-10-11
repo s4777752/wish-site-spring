@@ -44,14 +44,16 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
         >
           АКТИВАЦИЯ ЖЕЛАНИЯ
         </h1>
-        <p className="text-lg text-indigo-100 mb-8 animate-text-pulse">
-        </p>
-        <button
-          onClick={onHome}
-          className="bg-white text-indigo-900 font-medium text-xs py-1 px-3 rounded-md hover:bg-indigo-50 transition-colors"
+        <p
+          className="text-xl sm:text-2xl md:text-3xl font-semibold whitespace-nowrap bg-clip-text text-transparent"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, #e2e8f0, #93a8e8, #a78bdb, #93a8e8, #e2e8f0)',
+            backgroundSize: '300% 100%',
+            animation: 'soft-shimmer 6s ease-in-out infinite, grow-shrink 2s ease-in-out infinite',
+          }}
         >
-          Вернутьсяна главную
-        </button>
+          Ваше желание будет активировано после оплаты
+        </p>
       </div>
     </div>
   );
