@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Icon from '@/components/ui/icon';
 import Fireworks from '@/components/Fireworks';
 
 interface FinalScreenProps {
@@ -33,19 +32,18 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
         />
       ))}
       <Fireworks />
-      <div className="relative text-center max-w-md">
-        <div className="flex items-center justify-center gap-3 mb-6">
-          {[0, 0.4, 0.8].map((d) => (
-            <Icon
-              key={d}
-              name="Star"
-              size={44}
-              className="animate-star-glow fill-current"
-              style={{ animationDelay: `${d}s` }}
-            />
-          ))}
-        </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 animate-text-pulse">АКТИВАЦИЯ ЖЕЛАНИЯ</h1>
+      <div className="relative text-center max-w-4xl">
+        <style>{`@keyframes soft-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}`}</style>
+        <h1
+          className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent"
+          style={{
+            backgroundImage: 'linear-gradient(90deg, #e2e8f0, #93a8e8, #a78bdb, #93a8e8, #e2e8f0)',
+            backgroundSize: '300% 100%',
+            animation: 'soft-shimmer 6s ease-in-out infinite',
+          }}
+        >
+          АКТИВАЦИЯ ЖЕЛАНИЯ
+        </h1>
         <p className="text-lg text-indigo-100 mb-8 animate-text-pulse">
         </p>
         <button
