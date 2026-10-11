@@ -17,7 +17,7 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
   );
 
   return (
-    <div className="fixed inset-0 z-50 bg-gradient-to-b from-slate-950 via-indigo-950 to-purple-950 flex items-center justify-center px-6 animate-fade-in">
+    <div onClick={onHome} className="fixed inset-0 z-50 cursor-pointer bg-gradient-to-b from-slate-950 via-indigo-950 to-purple-950 flex items-center justify-center px-6 animate-fade-in">
       {stars.map((s) => (
         <div
           key={s.id}
