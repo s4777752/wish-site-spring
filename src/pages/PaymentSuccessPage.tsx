@@ -20,15 +20,6 @@ const PaymentSuccessPage: React.FC = () => {
   const orderId = searchParams.get('orderId') || '';
   const userName = searchParams.get('name') || 'Пользователь';
 
-  const [stars] = useState(() =>
-    Array.from({ length: 120 }, (_, i) => ({
-      id: i,
-      left: Math.random() * 100,
-      top: Math.random() * 100,
-      delay: Math.random() * 3,
-      size: Math.random() * 2 + 1,
-    }))
-  );
   const [isDownloading, setIsDownloading] = useState(false);
   const [isEmailSending, setIsEmailSending] = useState(false);
   const [documentData, setDocumentData] = useState<DocumentData | null>(null);
@@ -206,45 +197,57 @@ const PaymentSuccessPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4 py-10 relative overflow-hidden">
-      <style>{`@keyframes grow-shrink{0%,100%{transform:scale(0.92)}50%{transform:scale(1.08)}}@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}`}</style>
-      {stars.map((s) => (
-        <div
-          key={s.id}
-          className="absolute rounded-full bg-white"
-          style={{
-            left: `${s.left}%`,
-            top: `${s.top}%`,
-            width: s.size,
-            height: s.size,
-            animation: `twinkle 3s ease-in-out ${s.delay}s infinite`,
-          }}
-        />
-      ))}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center px-4">
       <SimpleConfetti isActive={true} />
-      <div className="relative max-w-xl w-full text-center">
-        <h2 className="text-3xl md:text-5xl font-bold tracking-wide mb-6 bg-gradient-to-r from-emerald-500 to-emerald-300 bg-clip-text text-transparent">
-          ИСПОЛНЕНИЕ ЖЕЛАНИЯ
-        </h2>
+      <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+        {/* Иконка успеха */}
+        <div className="w-20 h-20 mx-auto mb-6 bg-green-100 rounded-full flex items-center justify-center">
+          <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+            <Icon name="Check" className="w-6 h-6 text-white" />
+          </div>
+        </div>
+
+        {/* Заголовок */}
+        <style>{`@keyframes grow-shrink{0%,100%{transform:scale(0.92)}50%{transform:scale(1.08)}}`}</style>
         <h1
           style={{ animation: 'grow-shrink 2s ease-in-out infinite' }}
-          className="text-xl md:text-2xl font-semibold mb-4 text-emerald-300"
+          className="text-lg md:text-xl font-bold italic mb-6 leading-snug bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"
         >
           Документ начнёт действовать после оплаты силы
         </h1>
-        <p className="text-gray-300 mb-2">Ваш документ аффирмации готов!</p>
-        <p className="text-sm text-gray-400 mb-8">
-          {amount} ₽{orderId && ` • Заказ #${orderId}`}
-        </p>
 
+        {/* Информация об оплате */}
+        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+          <div className="text-lg font-semibold text-gray-800 mb-1">
+            {amount} ₽
+          </div>
+          <div className="text-sm text-gray-600">
+            {orderId && `Заказ #${orderId}`}
+          </div>
+          <div className="text-sm text-gray-500 mt-2">
+            Исполнение желания
+          </div>
+        </div>
+
+        {/* Информация о документе */}
+        <div className="mb-6">
+          <p className="text-gray-600 mb-2">
+            Ваш документ аффирмации готов!
+          </p>
+          <p className="text-sm text-gray-500">
+            Персональный документ для исполнения вашего желания
+          </p>
+        </div>
+
+        {/* Кнопка скачивания */}
         <button
           onClick={handleDownloadDocument}
           disabled={isDownloading || !documentData}
-          className="w-full bg-emerald-500 hover:bg-emerald-400 text-black font-semibold py-4 px-6 rounded-xl transition-colors mb-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 mb-4 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isDownloading ? (
             <>
-              <div className="animate-spin w-5 h-5 border-2 border-black border-t-transparent rounded-full"></div>
+              <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
               Подготовка документа...
             </>
           ) : !documentData ? (
@@ -255,28 +258,37 @@ const PaymentSuccessPage: React.FC = () => {
           ) : (
             <>
               <Icon name="Download" size={20} />
-              Скачать документ аффирмации (по желанию)
+              📄 Скачать документ аффирмации (по желанию)
             </>
           )}
         </button>
 
         <button
           onClick={() => setShowFinal(true)}
-          className="w-full bg-transparent border border-emerald-400 hover:bg-emerald-400/10 text-emerald-300 font-medium py-3 px-6 rounded-xl transition-colors mb-4"
+          className="w-full bg-white border border-purple-200 hover:bg-purple-50 text-purple-700 font-medium py-3 px-6 rounded-xl transition-colors duration-200 mb-4"
         >
           Продолжить без скачивания
         </button>
 
         <button
           onClick={handleBackToHome}
-          className="w-full bg-white/10 hover:bg-white/20 text-gray-200 font-medium py-3 px-6 rounded-xl transition-colors mb-6"
+          className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-xl transition-colors duration-200 mb-4"
         >
           Вернуться на главную
         </button>
 
-        <div className="text-xs text-gray-500 space-y-1">
+        {/* Информация */}
+        <div className="text-xs text-gray-400 space-y-1">
           <p>Документ сохранится в папке "Загрузки"</p>
           <p>Формат: PDF • Размер: ~200 КБ</p>
+        </div>
+
+        {/* Декоративные элементы */}
+        <div className="absolute top-4 right-4 text-6xl opacity-10">
+          🎉
+        </div>
+        <div className="absolute bottom-4 left-4 text-4xl opacity-10">
+          ✨
         </div>
       </div>
     </div>
