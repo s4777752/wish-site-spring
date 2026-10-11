@@ -33,7 +33,7 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
       ))}
       <Fireworks />
       <div className="relative text-center max-w-4xl">
-        <style>{`@keyframes grow-shrink{0%,100%{transform:scale(0.92)}50%{transform:scale(1.08)}}@keyframes soft-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}`}</style>
+        <style>{`@keyframes grow-shrink{0%,100%{transform:scale(0.96)}50%{transform:scale(1.04)}}@keyframes soft-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}`}</style>
         <h1
           className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 whitespace-nowrap bg-clip-text text-transparent"
           style={{
