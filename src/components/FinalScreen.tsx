@@ -35,7 +35,7 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
       <div className="relative text-center max-w-4xl">
         <style>{`@keyframes grow-shrink{0%,100%{transform:scale(0.92)}50%{transform:scale(1.08)}}@keyframes soft-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}`}</style>
         <h1
-          className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 whitespace-nowrap bg-clip-text text-transparent"
+          className="text-2xl sm:text-4xl md:text-5xl font-bold mb-4 whitespace-nowrap bg-clip-text text-transparent"
           style={{
             backgroundImage: 'linear-gradient(90deg, #e2e8f0, #93a8e8, #a78bdb, #93a8e8, #e2e8f0)',
             backgroundSize: '300% 100%',
@@ -45,7 +45,7 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
           АКТИВАЦИЯ ЖЕЛАНИЯ
         </h1>
         <p
-          className="text-xl sm:text-2xl md:text-3xl font-semibold whitespace-nowrap bg-clip-text text-transparent"
+          className="text-lg sm:text-xl md:text-2xl font-semibold whitespace-nowrap bg-clip-text text-transparent"
           style={{
             backgroundImage: 'linear-gradient(90deg, #e2e8f0, #93a8e8, #a78bdb, #93a8e8, #e2e8f0)',
             backgroundSize: '300% 100%',
