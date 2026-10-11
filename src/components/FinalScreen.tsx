@@ -54,6 +54,23 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
         >
           Ваше желание будет активировано после оплаты
         </p>
+        <p className="mt-8 text-base sm:text-lg text-white">Ожидайте... Магия уже начинает действовать</p>
+        <div className="mt-6 flex items-center justify-center gap-3">
+          <div
+            className="w-9 h-9 rounded-full animate-spin"
+            style={{ border: '3px solid rgba(147,168,232,0.25)', borderTopColor: '#a78bdb', borderRightColor: '#93a8e8' }}
+          />
+          <span
+            className="text-xs sm:text-sm bg-clip-text text-transparent"
+            style={{
+              backgroundImage: 'linear-gradient(90deg, #e2e8f0, #93a8e8, #a78bdb, #93a8e8, #e2e8f0)',
+              backgroundSize: '300% 100%',
+              animation: 'soft-shimmer 6s ease-in-out infinite',
+            }}
+          >
+            Подготовка
+          </span>
+        </div>
       </div>
     </div>
   );
