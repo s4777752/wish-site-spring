@@ -33,13 +33,13 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
       ))}
       <Fireworks />
       <div className="relative text-center max-w-4xl">
-        <style>{`@keyframes soft-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}`}</style>
+        <style>{`@keyframes grow-shrink{0%,100%{transform:scale(0.92)}50%{transform:scale(1.08)}}@keyframes soft-shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}`}</style>
         <h1
-          className="text-5xl md:text-7xl font-bold mb-4 bg-clip-text text-transparent"
+          className="text-3xl sm:text-5xl md:text-6xl font-bold mb-4 whitespace-nowrap bg-clip-text text-transparent"
           style={{
             backgroundImage: 'linear-gradient(90deg, #e2e8f0, #93a8e8, #a78bdb, #93a8e8, #e2e8f0)',
             backgroundSize: '300% 100%',
-            animation: 'soft-shimmer 6s ease-in-out infinite',
+            animation: 'soft-shimmer 6s ease-in-out infinite, grow-shrink 2s ease-in-out infinite',
           }}
         >
           АКТИВАЦИЯ ЖЕЛАНИЯ
