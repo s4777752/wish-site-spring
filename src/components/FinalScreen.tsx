@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Fireworks from '@/components/Fireworks';
 
 interface FinalScreenProps {
@@ -15,6 +15,11 @@ const FinalScreen = ({ onHome }: FinalScreenProps) => {
       size: Math.random() * 2 + 1,
     }))
   );
+
+  useEffect(() => {
+    const t = setTimeout(onHome, 30000);
+    return () => clearTimeout(t);
+  }, [onHome]);
 
   return (
     <div onClick={onHome} className="fixed inset-0 z-50 cursor-pointer bg-gradient-to-b from-slate-950 via-indigo-950 to-purple-950 flex items-center justify-center px-6 animate-fade-in">
