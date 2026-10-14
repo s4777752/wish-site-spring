@@ -14,7 +14,7 @@ const WishForm = ({ wish, setWish, onSubmit, showPayment, paymentSection, onConf
   return (
     <section className="flex flex-col items-center justify-center min-h-screen px-4" aria-labelledby="main-heading">
       <div className="text-center max-w-2xl mx-auto">
-        <h1 id="main-heading" className="text-[45px] sm:text-[72px] md:text-[90px] whitespace-nowrap font-bold text-black mb-8 animate-fade-in">
+        <h1 id="main-heading" className="text-[34px] sm:text-[54px] md:text-[68px] whitespace-nowrap font-bold text-black mb-8 animate-fade-in">
           САЙТ ЖЕЛАНИЙ
         </h1>
         
